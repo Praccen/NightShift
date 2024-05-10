@@ -92,37 +92,37 @@ export default class Card {
 		);
 		switch (box.color) {
 			case COLOR.RED:
-				graphComp.object.emissionColor = vec3.fromValues(1, 0, 0);
+				graphComp.bundle.emissionColor = vec3.fromValues(1, 0, 0);
 				break;
 			case COLOR.GREEN:
-				graphComp.object.emissionColor = vec3.fromValues(0, 1, 0);
+				graphComp.bundle.emissionColor = vec3.fromValues(0, 1, 0);
 				break;
 			case COLOR.BLUE:
-				graphComp.object.emissionColor = vec3.fromValues(0, 0, 1);
+				graphComp.bundle.emissionColor = vec3.fromValues(0, 0, 1);
 				break;
 			case COLOR.ORANGE:
-				graphComp.object.emissionColor = vec3.fromValues(1, 1, 0);
+				graphComp.bundle.emissionColor = vec3.fromValues(1, 1, 0);
 				break;
 			case COLOR.PINK:
-				graphComp.object.emissionColor = vec3.fromValues(1, 0, 0);
+				graphComp.bundle.emissionColor = vec3.fromValues(1, 0, 0);
 				break;
 			case COLOR.PURPLE:
-				graphComp.object.emissionColor = vec3.fromValues(1, 0, 1);
+				graphComp.bundle.emissionColor = vec3.fromValues(1, 0, 1);
 				break;
 		}
 		switch (cardNr) {
 			case 0:
 				vec3.scale(
-					graphComp.object.emissionColor,
-					graphComp.object.emissionColor,
+					graphComp.bundle.emissionColor,
+					graphComp.bundle.emissionColor,
 					0.8
 				);
 				break;
 			case 1:
-				graphComp.object.emissionColor;
+				graphComp.bundle.emissionColor;
 				vec3.scale(
-					graphComp.object.emissionColor,
-					graphComp.object.emissionColor,
+					graphComp.bundle.emissionColor,
+					graphComp.bundle.emissionColor,
 					0.9
 				);
 				break;
