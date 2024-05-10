@@ -151,7 +151,7 @@ export default class MeshStore {
 			let octPath =
 				"Assets/octrees/" + path.split("/").pop().split(".")[0] + ".oct";
 			let fetched = false;
-			try { 
+			try {
 				const response = await fetch(octPath);
 				if (response.ok) {
 					fetched = true;
@@ -167,11 +167,8 @@ export default class MeshStore {
 					octree.octree.parseOct(octContent);
 					octree.triangles.length = 0;
 				}
-			}
-			catch(e) {
+			} catch (e) {}
 
-			} 
-			
 			if (!fetched) {
 				console.log(
 					"Did not find an octree to load from " +
@@ -248,7 +245,16 @@ export default class MeshStore {
 			normalIndex: number;
 			mtlIndex: number;
 		}>();
-		let mtls = new Map<string, {diffuseColor: vec3, specularColor: vec3, emissionColor: vec3, dissolve: number, spriteIndex: number}>();
+		let mtls = new Map<
+			string,
+			{
+				diffuseColor: vec3;
+				specularColor: vec3;
+				emissionColor: vec3;
+				dissolve: number;
+				spriteIndex: number;
+			}
+		>();
 		let usingMtl: string = "";
 
 		for (let line of lines) {
@@ -259,7 +265,8 @@ export default class MeshStore {
 					return element != "mtllib";
 				});
 				if (mtlName.length == 1) {
-					let mtlPath = meshPath.substring(0, meshPath.lastIndexOf("/") + 1) + mtlName;
+					let mtlPath =
+						meshPath.substring(0, meshPath.lastIndexOf("/") + 1) + mtlName;
 					try {
 						const mtlResponse = await fetch(mtlPath);
 
@@ -267,41 +274,58 @@ export default class MeshStore {
 							const mtlContent = await mtlResponse.text();
 							let lastMtl: string = "";
 							let index = 0;
-	
+
 							for (const row of mtlContent.split("\n")) {
 								if (row.startsWith("newmtl")) {
 									let splitRow = row.split(/\s+/);
 									if (splitRow.length > 1) {
 										lastMtl = splitRow[1];
-										mtls.set(lastMtl, {diffuseColor: vec3.create(), specularColor: vec3.create(), emissionColor: vec3.create(), dissolve: 1.0, spriteIndex: index});
+										mtls.set(lastMtl, {
+											diffuseColor: vec3.create(),
+											specularColor: vec3.create(),
+											emissionColor: vec3.create(),
+											dissolve: 1.0,
+											spriteIndex: index,
+										});
 										index++;
-									} 
-								}
-								else if (row.startsWith("Kd") && lastMtl != "") {
+									}
+								} else if (row.startsWith("Kd") && lastMtl != "") {
 									const colorValues = row.split(/\s+/).filter((element) => {
 										return element != "Kd";
 									});
 									if (colorValues.length > 2) {
-										vec3.set(mtls.get(lastMtl).diffuseColor, parseFloat(colorValues[0]), parseFloat(colorValues[1]), parseFloat(colorValues[2]));
+										vec3.set(
+											mtls.get(lastMtl).diffuseColor,
+											parseFloat(colorValues[0]),
+											parseFloat(colorValues[1]),
+											parseFloat(colorValues[2])
+										);
 									}
-								}
-								else if (row.startsWith("Ks") && lastMtl != "") {
+								} else if (row.startsWith("Ks") && lastMtl != "") {
 									const colorValues = row.split(/\s+/).filter((element) => {
 										return element != "Ks";
 									});
 									if (colorValues.length > 2) {
-										vec3.set(mtls.get(lastMtl).specularColor, parseFloat(colorValues[0]), parseFloat(colorValues[1]), parseFloat(colorValues[2]));
+										vec3.set(
+											mtls.get(lastMtl).specularColor,
+											parseFloat(colorValues[0]),
+											parseFloat(colorValues[1]),
+											parseFloat(colorValues[2])
+										);
 									}
-								}
-								else if (row.startsWith("Ke") && lastMtl != "") {
+								} else if (row.startsWith("Ke") && lastMtl != "") {
 									const colorValues = row.split(/\s+/).filter((element) => {
 										return element != "Ke";
 									});
 									if (colorValues.length > 2) {
-										vec3.set(mtls.get(lastMtl).emissionColor, parseFloat(colorValues[0]), parseFloat(colorValues[1]), parseFloat(colorValues[2]));
+										vec3.set(
+											mtls.get(lastMtl).emissionColor,
+											parseFloat(colorValues[0]),
+											parseFloat(colorValues[1]),
+											parseFloat(colorValues[2])
+										);
 									}
-								}
-								else if (row.startsWith("d") && lastMtl != "") {
+								} else if (row.startsWith("d") && lastMtl != "") {
 									const colorValues = row.split(/\s+/).filter((element) => {
 										return element != "d";
 									});
@@ -310,50 +334,61 @@ export default class MeshStore {
 									}
 								}
 							}
-	
+
 							let diffuseTextureData = new Uint8Array(index * 4);
 							for (let mtl of mtls) {
-								diffuseTextureData[mtl[1].spriteIndex * 4 + 0] = mtl[1].diffuseColor[0] * 255;
-								diffuseTextureData[mtl[1].spriteIndex * 4 + 1] = mtl[1].diffuseColor[1] * 255;
-								diffuseTextureData[mtl[1].spriteIndex * 4 + 2] = mtl[1].diffuseColor[2] * 255;
-								diffuseTextureData[mtl[1].spriteIndex * 4 + 3] = mtl[1].dissolve * 255;
+								diffuseTextureData[mtl[1].spriteIndex * 4 + 0] =
+									mtl[1].diffuseColor[0] * 255;
+								diffuseTextureData[mtl[1].spriteIndex * 4 + 1] =
+									mtl[1].diffuseColor[1] * 255;
+								diffuseTextureData[mtl[1].spriteIndex * 4 + 2] =
+									mtl[1].diffuseColor[2] * 255;
+								diffuseTextureData[mtl[1].spriteIndex * 4 + 3] =
+									mtl[1].dissolve * 255;
 							}
 							let tempTexture = new Texture(false);
 							tempTexture.setTextureData(diffuseTextureData, index, 1);
 							this.textureStore.setTexture(mtlPath, tempTexture);
-	
+
 							let specularTextureData = new Uint8Array(index * 4);
 							for (let mtl of mtls) {
-								specularTextureData[mtl[1].spriteIndex * 4 + 0] = mtl[1].specularColor[0] * 255;
-								specularTextureData[mtl[1].spriteIndex * 4 + 1] = mtl[1].specularColor[1] * 255;
-								specularTextureData[mtl[1].spriteIndex * 4 + 2] = mtl[1].specularColor[2] * 255;
+								specularTextureData[mtl[1].spriteIndex * 4 + 0] =
+									mtl[1].specularColor[0] * 255;
+								specularTextureData[mtl[1].spriteIndex * 4 + 1] =
+									mtl[1].specularColor[1] * 255;
+								specularTextureData[mtl[1].spriteIndex * 4 + 2] =
+									mtl[1].specularColor[2] * 255;
 								specularTextureData[mtl[1].spriteIndex * 4 + 3] = 255;
 							}
 							tempTexture = new Texture(false);
 							tempTexture.setTextureData(specularTextureData, index, 1);
-							this.textureStore.setTexture(mtlPath.substring(0, mtlPath.length - 4) + "_spec.mtl", tempTexture);
-	
+							this.textureStore.setTexture(
+								mtlPath.substring(0, mtlPath.length - 4) + "_spec.mtl",
+								tempTexture
+							);
+
 							let emissionTextureData = new Uint8Array(index * 4);
 							for (let mtl of mtls) {
-								emissionTextureData[mtl[1].spriteIndex * 4 + 0] = mtl[1].emissionColor[0] * 255;
-								emissionTextureData[mtl[1].spriteIndex * 4 + 1] = mtl[1].emissionColor[1] * 255;
-								emissionTextureData[mtl[1].spriteIndex * 4 + 2] = mtl[1].emissionColor[2] * 255;
+								emissionTextureData[mtl[1].spriteIndex * 4 + 0] =
+									mtl[1].emissionColor[0] * 255;
+								emissionTextureData[mtl[1].spriteIndex * 4 + 1] =
+									mtl[1].emissionColor[1] * 255;
+								emissionTextureData[mtl[1].spriteIndex * 4 + 2] =
+									mtl[1].emissionColor[2] * 255;
 								emissionTextureData[mtl[1].spriteIndex * 4 + 3] = 255;
 							}
 							tempTexture = new Texture(false);
 							tempTexture.setTextureData(emissionTextureData, index, 1);
-							this.textureStore.setTexture(mtlPath.substring(0, mtlPath.length - 4) + "_emission.mtl", tempTexture);
+							this.textureStore.setTexture(
+								mtlPath.substring(0, mtlPath.length - 4) + "_emission.mtl",
+								tempTexture
+							);
 						}
-					}
-					catch(e) {
-
-					}
+					} catch (e) {}
 				}
-			}
-			else if (line.startsWith("usemtl") && mtls.size > 0) {
+			} else if (line.startsWith("usemtl") && mtls.size > 0) {
 				usingMtl = line.split(/\s+/)[1];
-			}
-			else if (line.startsWith("vt")) {
+			} else if (line.startsWith("vt")) {
 				// Texture coordinates
 				const coords = line.split(/\s+/).filter((element) => {
 					return element != "vt";
@@ -370,7 +405,7 @@ export default class MeshStore {
 					vec3.fromValues(
 						parseFloat(coords[0]),
 						parseFloat(coords[1]),
-						parseFloat(coords[2]),
+						parseFloat(coords[2])
 					)
 				);
 			} else if (line.startsWith("v")) {
@@ -382,7 +417,7 @@ export default class MeshStore {
 					vec3.fromValues(
 						parseFloat(coords[0]),
 						parseFloat(coords[1]),
-						parseFloat(coords[2]),
+						parseFloat(coords[2])
 					)
 				);
 			} else if (line.startsWith("f")) {
@@ -399,7 +434,7 @@ export default class MeshStore {
 							posIndex: NaN,
 							texCoordIndex: NaN,
 							normalIndex: NaN,
-							mtlIndex: NaN
+							mtlIndex: NaN,
 						});
 						if (indices.length > 0) {
 							vertices[last - 1].posIndex = parseInt(indices[0]) - 1;
@@ -417,8 +452,7 @@ export default class MeshStore {
 							const mtl = mtls.get(usingMtl);
 							if (mtl != undefined) {
 								vertices[last - 1].mtlIndex = mtl.spriteIndex;
-							}
-							else {
+							} else {
 								console.warn("usemtl " + usingMtl + ", there is no such mtl");
 							}
 						}
@@ -456,10 +490,10 @@ export default class MeshStore {
 			}
 
 			if (!isNaN(vertices[i].mtlIndex)) {
-				returnArr[i * 8 + 6] = vertices[i].mtlIndex / mtls.size + (0.5 / mtls.size);
+				returnArr[i * 8 + 6] =
+					vertices[i].mtlIndex / mtls.size + 0.5 / mtls.size;
 				returnArr[i * 8 + 7] = 0.5;
-			}
-			else if (!isNaN(vertices[i].texCoordIndex)) {
+			} else if (!isNaN(vertices[i].texCoordIndex)) {
 				returnArr[i * 8 + 6] = vertexTexCoords[vertices[i].texCoordIndex][0];
 				returnArr[i * 8 + 7] = vertexTexCoords[vertices[i].texCoordIndex][1];
 			} else {

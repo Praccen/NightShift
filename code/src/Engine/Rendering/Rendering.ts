@@ -98,7 +98,9 @@ export default class Rendering {
 		) {
 			textureArray.push(this.geometryRenderPass.outputFramebuffer.textures[i]);
 		}
-		textureArray.push(this.directionalShadowRenderPass.shadowBuffer.depthTexture);
+		textureArray.push(
+			this.directionalShadowRenderPass.shadowBuffer.depthTexture
+		);
 		this.lightingRenderPass = new LightingRenderPass(textureArray);
 		// ----------------------------
 
@@ -210,26 +212,29 @@ export default class Rendering {
 		offscreenCanvas.height = gl.canvas.height;
 		var ctx = offscreenCanvas.getContext("2d");
 
-		ctx.drawImage(gl.canvas,0,0);
+		ctx.drawImage(gl.canvas, 0, 0);
 
-		const saveBlob = (function() {
-			const a = document.createElement('a');
+		const saveBlob = (function () {
+			const a = document.createElement("a");
 			document.body.appendChild(a);
-			a.style.display = 'none';
+			a.style.display = "none";
 			return function saveData(blob, fileName) {
-			   const url = window.URL.createObjectURL(blob);
-			   a.href = url;
-			   a.download = fileName;
-			   a.click();
+				const url = window.URL.createObjectURL(blob);
+				a.href = url;
+				a.download = fileName;
+				a.click();
 			};
-		  }());
+		})();
 
 		offscreenCanvas.toBlob((blob) => {
 			saveBlob(blob, screenshotName);
-		})
+		});
 	}
 
-	draw(saveScreenshot: boolean = false, screenshotName: string = "screencapture") {
+	draw(
+		saveScreenshot: boolean = false,
+		screenshotName: string = "screencapture"
+	) {
 		if (
 			this.resolutionWidth != windowInfo.resolutionWidth ||
 			this.resolutionHeight != windowInfo.resolutionHeight

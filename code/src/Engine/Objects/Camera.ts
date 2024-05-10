@@ -27,7 +27,7 @@ export default class Camera {
 		this.projectionMatrix = mat4.create();
 		this.projMatrixNeedsUpdate = true;
 		this.ratio = 16.0 / 9.0;
-		this.fov = 85.0 * Math.PI / 180;
+		this.fov = (85.0 * Math.PI) / 180;
 		this.farPlaneDistance = 1000.0;
 		// ------------
 
@@ -89,17 +89,27 @@ export default class Camera {
 	}
 
 	setPitchJawDegrees(pitch: number, jaw: number) {
-		vec3.set(this.dir,Math.cos(pitch * Math.PI/180) * Math.sin(jaw * Math.PI/180), Math.sin(pitch * Math.PI/180), Math.cos(pitch * Math.PI/180) * Math.cos(jaw * Math.PI/180));
+		vec3.set(
+			this.dir,
+			Math.cos((pitch * Math.PI) / 180) * Math.sin((jaw * Math.PI) / 180),
+			Math.sin((pitch * Math.PI) / 180),
+			Math.cos((pitch * Math.PI) / 180) * Math.cos((jaw * Math.PI) / 180)
+		);
 		this.viewMatrixNeedsUpdate = true;
 	}
 
 	setPitchJawRadians(pitch: number, jaw: number) {
-		vec3.set(this.dir,Math.cos(pitch) * Math.sin(jaw), Math.sin(pitch), Math.cos(pitch) * Math.cos(jaw));
+		vec3.set(
+			this.dir,
+			Math.cos(pitch) * Math.sin(jaw),
+			Math.sin(pitch),
+			Math.cos(pitch) * Math.cos(jaw)
+		);
 		this.viewMatrixNeedsUpdate = true;
 	}
 
 	setFOV(fov: number) {
-		this.fov = fov * Math.PI / 180.0;
+		this.fov = (fov * Math.PI) / 180.0;
 		this.projMatrixNeedsUpdate = true;
 	}
 
@@ -110,13 +120,14 @@ export default class Camera {
 
 	setFarPlaneDistance(distance: number) {
 		this.farPlaneDistance = distance;
-		this.projMatrixNeedsUpdate
+		this.projMatrixNeedsUpdate;
 	}
 
 	private updateViewProjMatrix() {
 		let updateViewProj = false;
 		if (this.viewMatrixNeedsUpdate) {
-			mat4.lookAt(this.viewMatrix, 
+			mat4.lookAt(
+				this.viewMatrix,
 				this.pos,
 				vec3.add(vec3.create(), this.pos, this.dir),
 				this.up
@@ -126,7 +137,13 @@ export default class Camera {
 		}
 
 		if (this.projMatrixNeedsUpdate) {
-			mat4.perspective(this.projectionMatrix, this.fov, this.ratio, 0.01, this.farPlaneDistance);
+			mat4.perspective(
+				this.projectionMatrix,
+				this.fov,
+				this.ratio,
+				0.01,
+				this.farPlaneDistance
+			);
 			this.projMatrixNeedsUpdate = false;
 			updateViewProj = true;
 		}
@@ -143,8 +160,17 @@ export default class Camera {
 		this.updateViewProjMatrix();
 
 		if (skybox) {
-			let tempViewMatrix = mat4.lookAt(mat4.create(), vec3.create(), this.dir, this.up);
-			let tempViewProj = mat4.mul(mat4.create(), this.projectionMatrix, tempViewMatrix);
+			let tempViewMatrix = mat4.lookAt(
+				mat4.create(),
+				vec3.create(),
+				this.dir,
+				this.up
+			);
+			let tempViewProj = mat4.mul(
+				mat4.create(),
+				this.projectionMatrix,
+				tempViewMatrix
+			);
 
 			gl.uniformMatrix4fv(uniformLocation, false, tempViewProj);
 		} else {

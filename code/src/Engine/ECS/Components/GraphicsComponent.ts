@@ -26,15 +26,47 @@ export default class GraphicsComponent extends Component {
 		for (let i = 1; i < parentDiv.children.length; i++) {
 			if (parentDiv.children[i].textString == ComponentTypeEnum[this.type]) {
 				// Next should be a div that should hold the text edits
-				if ((<Div>(parentDiv.children[i+1])).children.length == 0) {
-					this.addTextEdit(overlayRendering, <Div> parentDiv.children[i+1], "EmissionR", ["object","emissionColor"], 0);
-					this.addTextEdit(overlayRendering, <Div> parentDiv.children[i+1], "EmissionG", ["object","emissionColor"], 1);
-					this.addTextEdit(overlayRendering, <Div> parentDiv.children[i+1], "EmissionB", ["object","emissionColor"], 2);
-				}
-				else {
-					this.updateTextEdit(<Div> parentDiv.children[i+1], "EmissionR", ["object","emissionColor"], 0);
-					this.updateTextEdit(<Div> parentDiv.children[i+1], "EmissionG", ["object","emissionColor"], 1);
-					this.updateTextEdit(<Div> parentDiv.children[i+1], "EmissionB", ["object","emissionColor"], 2);
+				if ((<Div>parentDiv.children[i + 1]).children.length == 0) {
+					this.addTextEdit(
+						overlayRendering,
+						<Div>parentDiv.children[i + 1],
+						"EmissionR",
+						["object", "emissionColor"],
+						0
+					);
+					this.addTextEdit(
+						overlayRendering,
+						<Div>parentDiv.children[i + 1],
+						"EmissionG",
+						["object", "emissionColor"],
+						1
+					);
+					this.addTextEdit(
+						overlayRendering,
+						<Div>parentDiv.children[i + 1],
+						"EmissionB",
+						["object", "emissionColor"],
+						2
+					);
+				} else {
+					this.updateTextEdit(
+						<Div>parentDiv.children[i + 1],
+						"EmissionR",
+						["object", "emissionColor"],
+						0
+					);
+					this.updateTextEdit(
+						<Div>parentDiv.children[i + 1],
+						"EmissionG",
+						["object", "emissionColor"],
+						1
+					);
+					this.updateTextEdit(
+						<Div>parentDiv.children[i + 1],
+						"EmissionB",
+						["object", "emissionColor"],
+						2
+					);
 				}
 			}
 		}

@@ -49,11 +49,13 @@ export default class GameMachine extends StateMachine {
 		this.initializeOptions();
 		this.stateAccessible = new StateAccessible();
 		this.stateAccessible.textureStore = new TextureStore();
-		this.stateAccessible.meshStore = new MeshStore(this.stateAccessible.textureStore);
-		this.stateAccessible.audioPlayer= new AudioPlayer(),
-		this.stateAccessible.restartGame= false,
-		this.stateAccessible.localGame= true,
-		this.stateAccessible.audioPlayer.setMusicVolume(options.musicVolume);
+		this.stateAccessible.meshStore = new MeshStore(
+			this.stateAccessible.textureStore
+		);
+		(this.stateAccessible.audioPlayer = new AudioPlayer()),
+			(this.stateAccessible.restartGame = false),
+			(this.stateAccessible.localGame = true),
+			this.stateAccessible.audioPlayer.setMusicVolume(options.musicVolume);
 		this.stateAccessible.audioPlayer.setSoundEffectVolume(options.effectVolume);
 
 		let game = Game.getInstance(this.stateAccessible);
@@ -91,7 +93,7 @@ export default class GameMachine extends StateMachine {
 		);
 		this.addState(StatesEnum.GAME, Game, 1.0 / 144.0, game);
 		this.stateAccessible.restartGame = true;
-		
+
 		this.addState(
 			StatesEnum.DEBUGMODE,
 			DebugMode,
@@ -114,7 +116,10 @@ export default class GameMachine extends StateMachine {
 		WebUtils.SetCookie("useBloom", options.useBloom.valueOf().toString());
 		WebUtils.SetCookie("volume", options.musicVolume.toString());
 		WebUtils.SetCookie("effectVolume", options.effectVolume.toString());
-		WebUtils.SetCookie("foldableGrass",	options.foldableGrass.valueOf().toString());
+		WebUtils.SetCookie(
+			"foldableGrass",
+			options.foldableGrass.valueOf().toString()
+		);
 		WebUtils.SetCookie("grassDensity", options.grassDensity.toString());
 
 		for (let s of this.states) {

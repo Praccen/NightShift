@@ -19,8 +19,16 @@ class TreeNode {
 		this.position = position;
 		let halfSize = size * 0.5;
 		this.obb.setMinAndMaxVectors(
-			vec3.add(vec3.create(), vec3.fromValues(-halfSize, -halfSize, -halfSize), this.position),
-			vec3.add(vec3.create(), vec3.fromValues(halfSize, halfSize, halfSize), this.position)
+			vec3.add(
+				vec3.create(),
+				vec3.fromValues(-halfSize, -halfSize, -halfSize),
+				this.position
+			),
+			vec3.add(
+				vec3.create(),
+				vec3.fromValues(halfSize, halfSize, halfSize),
+				this.position
+			)
 		);
 
 		this.children = new Array<TreeNode>();
@@ -41,11 +49,15 @@ class TreeNode {
 						this.children.push(
 							new TreeNode(
 								halfSize,
-								vec3.add(vec3.create(), vec3.fromValues(
-									x * quarterSize,
-									y * quarterSize,
-									z * quarterSize,
-								), this.position)
+								vec3.add(
+									vec3.create(),
+									vec3.fromValues(
+										x * quarterSize,
+										y * quarterSize,
+										z * quarterSize
+									),
+									this.position
+								)
 							)
 						);
 					}
@@ -59,16 +71,16 @@ class TreeNode {
 	}
 
 	private checkIfContains(shape: Shape) {
-		let minVec = vec3.subtract(vec3.create(), this.position,vec3.fromValues(
-			this.size / 2.0,
-			this.size / 2.0,
-			this.size / 2.0,
-		));
-		let maxVec = vec3.add(vec3.create(), this.position, vec3.fromValues(
-			this.size / 2.0,
-			this.size / 2.0,
-			this.size / 2.0,
-		));
+		let minVec = vec3.subtract(
+			vec3.create(),
+			this.position,
+			vec3.fromValues(this.size / 2.0, this.size / 2.0, this.size / 2.0)
+		);
+		let maxVec = vec3.add(
+			vec3.create(),
+			this.position,
+			vec3.fromValues(this.size / 2.0, this.size / 2.0, this.size / 2.0)
+		);
 		let shapeVertices = shape.getTransformedVertices();
 		for (let vertex of shapeVertices) {
 			let returnVal = true;
@@ -160,9 +172,23 @@ class TreeNode {
 		shapeArray: Array<Shape>,
 		maxTime: number = Infinity
 	) {
-		if (IntersectionTester.doContinousIntersection([boundingBox], velocity1, [this.obb], velocity2, maxTime)[0] >= 0.0) {
+		if (
+			IntersectionTester.doContinousIntersection(
+				[boundingBox],
+				velocity1,
+				[this.obb],
+				velocity2,
+				maxTime
+			)[0] >= 0.0
+		) {
 			for (const child of this.children) {
-				child.getShapesForContinousCollision(boundingBox, velocity1, velocity2, shapeArray, maxTime);
+				child.getShapesForContinousCollision(
+					boundingBox,
+					velocity1,
+					velocity2,
+					shapeArray,
+					maxTime
+				);
 			}
 
 			for (const shape of this.content) {
@@ -255,8 +281,20 @@ export default class Octree {
 		this.baseNode.getShapesForCollision(boundingBox, shapeArray);
 	}
 
-	getShapesForContinousCollision(boundingBox: OBB, velocity1: vec3, velocity2: vec3, shapeArray: Array<Shape>, maxTime: number = Infinity) {
-		this.baseNode.getShapesForContinousCollision(boundingBox, velocity1, velocity2, shapeArray, maxTime);
+	getShapesForContinousCollision(
+		boundingBox: OBB,
+		velocity1: vec3,
+		velocity2: vec3,
+		shapeArray: Array<Shape>,
+		maxTime: number = Infinity
+	) {
+		this.baseNode.getShapesForContinousCollision(
+			boundingBox,
+			velocity1,
+			velocity2,
+			shapeArray,
+			maxTime
+		);
 	}
 
 	getShapesForRayCast(
@@ -329,19 +367,22 @@ export default class Octree {
 				let tri = new Triangle();
 
 				tri.setVertices(
-					vec3.fromValues.apply(null, 
+					vec3.fromValues.apply(
+						null,
 						points[0]
 							.substring(1, points[0].length - 1)
 							.split(",")
 							.map((n) => parseFloat(n))
 					),
-					vec3.fromValues.apply(null, 
+					vec3.fromValues.apply(
+						null,
 						points[1]
 							.substring(1, points[1].length - 1)
 							.split(",")
 							.map((n) => parseFloat(n))
 					),
-					vec3.fromValues.apply(null, 
+					vec3.fromValues.apply(
+						null,
 						points[2]
 							.substring(1, points[2].length - 1)
 							.split(",")

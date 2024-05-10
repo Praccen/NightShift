@@ -37,9 +37,11 @@ export default class Triangle extends Shape {
 		this.originalVertices.push(vertex1);
 		this.originalVertices.push(vertex2);
 		this.originalVertices.push(vertex3);
-		vec3.normalize(this.originalNormal, 
-			vec3.cross(this.originalNormal, 
-				vec3.subtract(vec3.create(), vertex2, vertex1), 
+		vec3.normalize(
+			this.originalNormal,
+			vec3.cross(
+				this.originalNormal,
+				vec3.subtract(vec3.create(), vertex2, vertex1),
 				vec3.subtract(vec3.create(), vertex3, vertex2)
 			)
 		);
@@ -74,7 +76,15 @@ export default class Triangle extends Shape {
 			this.transformedVertices.length = 0;
 
 			for (const originalVertex of this.originalVertices) {
-				let transformedVertex = vec3.transformMat4(vec3.create(), vec3.fromValues(originalVertex[0], originalVertex[1], originalVertex[2]), this.transformMatrix);
+				let transformedVertex = vec3.transformMat4(
+					vec3.create(),
+					vec3.fromValues(
+						originalVertex[0],
+						originalVertex[1],
+						originalVertex[2]
+					),
+					this.transformMatrix
+				);
 				this.transformedVertices.push(transformedVertex);
 			}
 			this.verticesNeedsUpdate = false;
@@ -86,7 +96,14 @@ export default class Triangle extends Shape {
 		if (this.normalNeedsUpdate) {
 			this.transformedNormals.length = 0;
 			this.transformedNormals.push(
-				vec3.normalize(vec3.create(), vec3.transformMat3(vec3.create(), this.originalNormal, mat3.normalFromMat4(mat3.create(), this.transformMatrix)))
+				vec3.normalize(
+					vec3.create(),
+					vec3.transformMat3(
+						vec3.create(),
+						this.originalNormal,
+						mat3.normalFromMat4(mat3.create(), this.transformMatrix)
+					)
+				)
 			);
 
 			this.normalNeedsUpdate = false;
@@ -100,13 +117,34 @@ export default class Triangle extends Shape {
 			this.transformedEdges.length = 0;
 
 			this.transformedEdges.push(
-				vec3.normalize(vec3.create(), vec3.subtract(vec3.create(), this.transformedVertices[1], this.transformedVertices[0]))
+				vec3.normalize(
+					vec3.create(),
+					vec3.subtract(
+						vec3.create(),
+						this.transformedVertices[1],
+						this.transformedVertices[0]
+					)
+				)
 			);
 			this.transformedEdges.push(
-				vec3.normalize(vec3.create(), vec3.subtract(vec3.create(), this.transformedVertices[2], this.transformedVertices[1]))
+				vec3.normalize(
+					vec3.create(),
+					vec3.subtract(
+						vec3.create(),
+						this.transformedVertices[2],
+						this.transformedVertices[1]
+					)
+				)
 			);
 			this.transformedEdges.push(
-				vec3.normalize(vec3.create(), vec3.subtract(vec3.create(), this.transformedVertices[0], this.transformedVertices[2]))
+				vec3.normalize(
+					vec3.create(),
+					vec3.subtract(
+						vec3.create(),
+						this.transformedVertices[0],
+						this.transformedVertices[2]
+					)
+				)
 			);
 
 			this.edgesNeedsUpdate = false;
@@ -121,13 +159,34 @@ export default class Triangle extends Shape {
 			this.transformedEdgeNormals.length = 0;
 
 			this.transformedEdgeNormals.push(
-				vec3.normalize(vec3.create(), vec3.cross(vec3.create(), this.transformedEdges[0], this.transformedNormals[0]))
+				vec3.normalize(
+					vec3.create(),
+					vec3.cross(
+						vec3.create(),
+						this.transformedEdges[0],
+						this.transformedNormals[0]
+					)
+				)
 			);
 			this.transformedEdgeNormals.push(
-				vec3.normalize(vec3.create(), vec3.cross(vec3.create(), this.transformedEdges[1], this.transformedNormals[0]))
+				vec3.normalize(
+					vec3.create(),
+					vec3.cross(
+						vec3.create(),
+						this.transformedEdges[1],
+						this.transformedNormals[0]
+					)
+				)
 			);
 			this.transformedEdgeNormals.push(
-				vec3.normalize(vec3.create(), vec3.cross(vec3.create(), this.transformedEdges[2], this.transformedNormals[0]))
+				vec3.normalize(
+					vec3.create(),
+					vec3.cross(
+						vec3.create(),
+						this.transformedEdges[2],
+						this.transformedNormals[0]
+					)
+				)
 			);
 
 			this.edgeNormalsNeedsUpdate = false;

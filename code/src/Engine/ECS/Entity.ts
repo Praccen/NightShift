@@ -8,7 +8,7 @@ export default class Entity {
 		this.id = id;
 		this.components = new Array<Component>();
 	}
-	
+
 	hasComponent(type: ComponentTypeEnum): boolean {
 		return this.components.some((c) => c.type == type);
 	}

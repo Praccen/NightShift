@@ -99,7 +99,7 @@ export default class GrassSpawner extends GraphicsObject {
 		if (particleIndex > this.numGrassStraws) {
 			return false;
 		}
-		this.bufferSubDataUpdate(particleIndex * 7 + 4,  <Float32Array>offset);
+		this.bufferSubDataUpdate(particleIndex * 7 + 4, <Float32Array>offset);
 		return true;
 	}
 

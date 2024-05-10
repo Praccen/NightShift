@@ -39,7 +39,10 @@ export default class Game extends State {
 	private constructor(sa: StateAccessible) {
 		super();
 		this.stateAccessible = sa;
-		this.objectPlacer = new ObjectPlacer(this.stateAccessible.meshStore, this.stateAccessible.textureStore);
+		this.objectPlacer = new ObjectPlacer(
+			this.stateAccessible.meshStore,
+			this.stateAccessible.textureStore
+		);
 		this.oWasPressed = true;
 
 		this.overlayRendering = new OverlayRendering();
@@ -75,8 +78,16 @@ export default class Game extends State {
 			this.scene
 		);
 		this.ecsManager = new ECSManager(this.rendering);
-		this.createPointLight(vec3.fromValues(-14.0, -5.0, 7.0), true, vec3.fromValues(3.0, 0.8, 0.0));
-		this.createPointLight(vec3.fromValues(5.0, -5.0, -9.0), true, vec3.fromValues(0.0, 0.8, 3.0));
+		this.createPointLight(
+			vec3.fromValues(-14.0, -5.0, 7.0),
+			true,
+			vec3.fromValues(3.0, 0.8, 0.0)
+		);
+		this.createPointLight(
+			vec3.fromValues(5.0, -5.0, -9.0),
+			true,
+			vec3.fromValues(0.0, 0.8, 3.0)
+		);
 		// this.createPointLight(vec3.fromValues(-20.0, -5.0, -14.0), true, vec3.fromValues(0.0, 2.0, 0.8));
 		// this.createPointLight(vec3.fromValues(10.0, -5.0, -15.0), true, vec3.fromValues(2.0, 0.0, 0.8));
 		// this.createPointLight(vec3.fromValues(10.0, -5.0, 15.0), true, vec3.fromValues(0.8, 2.0, 0.0));
@@ -112,7 +123,11 @@ export default class Game extends State {
 
 		this.rendering.setSkybox("Assets/textures/skyboxes/NightSky");
 
-		await this.objectPlacer.load(this.scene, this.ecsManager, this.stateAccessible.level);
+		await this.objectPlacer.load(
+			this.scene,
+			this.ecsManager,
+			this.stateAccessible.level
+		);
 
 		this.rendering.camera.setPosition(vec3.fromValues(0.0, 2.0, 0.0));
 		this.overlayRendering.setCamera(this.rendering.camera);
@@ -152,8 +167,7 @@ export default class Game extends State {
 				WebUtils.SetCookie("debug", "true");
 			}
 			this.oWasPressed = true;
-		}
-		else {
+		} else {
 			this.oWasPressed = false;
 		}
 

@@ -129,28 +129,32 @@ export default class Texture {
 					a = parseInt(colorValue.slice(7, 9), 16);
 				}
 			}
-		}
-		else if (colorValue.startsWith("rgba(")) {
+		} else if (colorValue.startsWith("rgba(")) {
 			let rfindResult = colorValue.lastIndexOf(")");
-			let values = colorValue.substring("rgba(".length, rfindResult).split(",").map((value) => {
-				return parseFloat(value);
-			});
+			let values = colorValue
+				.substring("rgba(".length, rfindResult)
+				.split(",")
+				.map((value) => {
+					return parseFloat(value);
+				});
 			r = values[0];
 			g = values[1];
 			b = values[2];
 			a = values[3] * 255;
-		}
-		else if (colorValue.startsWith("rgb(")) {
+		} else if (colorValue.startsWith("rgb(")) {
 			let rfindResult = colorValue.lastIndexOf(")");
-			let values = colorValue.substring("rgb(".length, rfindResult).split(",").map((value) => {
-				return parseInt(value);
-			});
+			let values = colorValue
+				.substring("rgb(".length, rfindResult)
+				.split(",")
+				.map((value) => {
+					return parseInt(value);
+				});
 			r = values[0];
 			g = values[1];
 			b = values[2];
 		}
 
-		this.setTextureData(new Uint8Array([r,g,b,a]), 1, 1);
+		this.setTextureData(new Uint8Array([r, g, b, a]), 1, 1);
 	}
 
 	setTexParameterI(a: number, b: number) {

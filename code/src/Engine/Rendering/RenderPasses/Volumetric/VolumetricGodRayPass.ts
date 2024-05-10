@@ -39,7 +39,7 @@ export default class VolumetricGodRayPass {
 		gl.uniform1f(
 			volumetricGodRayShaderProgram.getUniformLocation("fov")[0],
 			camera.getFov()
-		)
+		);
 		// Point lights
 		gl.uniform1i(
 			volumetricGodRayShaderProgram.getUniformLocation("nrOfPointLights")[0],
@@ -54,13 +54,13 @@ export default class VolumetricGodRayPass {
 				counter++;
 			}
 		}
-	
-		// Then bind the point light depth maps 
+
+		// Then bind the point light depth maps
 		counter = 0;
 		for (const pointLight of scene.pointLights) {
 			if (counter >= pointShadowsToAllocate) {
-                break;
-            }
+				break;
+			}
 			if (pointLight.castShadow) {
 				pointLight.pointShadowDepthMap.bind(counter++);
 			}

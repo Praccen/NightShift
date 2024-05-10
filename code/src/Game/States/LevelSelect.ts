@@ -14,20 +14,20 @@ export default class LevelSelect extends State {
 		this.sa = sa;
 		this.overlayRendering = new OverlayRendering();
 
-        for (let i = 1; i <= numLevels; i++) {
-            let level1Button = this.overlayRendering.getNewButton();
-            level1Button.position[0] = 0.5;
-            level1Button.position[1] = 0.2 + i * 0.1;
-            level1Button.center = true;
-            level1Button.textString = "Level " + i;
+		for (let i = 1; i <= numLevels; i++) {
+			let level1Button = this.overlayRendering.getNewButton();
+			level1Button.position[0] = 0.5;
+			level1Button.position[1] = 0.2 + i * 0.1;
+			level1Button.center = true;
+			level1Button.textString = "Level " + i;
 
-            let self = this;
-            level1Button.onClick(function () {
-                self.gotoState = StatesEnum.GAME;
-                self.sa.level = "Assets/placements/Level" + i + ".txt";
-                self.sa.restartGame = true;
-            });
-        }
+			let self = this;
+			level1Button.onClick(function () {
+				self.gotoState = StatesEnum.GAME;
+				self.sa.level = "Assets/placements/Level" + i + ".txt";
+				self.sa.restartGame = true;
+			});
+		}
 
 		let backButton = this.overlayRendering.getNewButton();
 		backButton.position[0] = 0.5;
@@ -39,7 +39,6 @@ export default class LevelSelect extends State {
 		backButton.onClick(function () {
 			self.gotoState = StatesEnum.MAINMENU;
 		});
-
 	}
 
 	async init() {

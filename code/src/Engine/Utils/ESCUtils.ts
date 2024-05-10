@@ -12,7 +12,6 @@ import MovementComponent from "../ECS/Components/MovementComponent";
 import Shape from "../Physics/Shapes/Shape";
 
 export module ECSUtils {
-
 	/**
 	 * Calculates the position given all position effecting components (like PositionComponent, PositionParentComponent)
 	 * @param entity The entity for which to calculate the position
@@ -40,7 +39,11 @@ export module ECSUtils {
 			posComp.calculateMatrix(tempMatrix);
 		}
 
-		let posVector = vec3.transformMat4(vec3.create(), vec3.create(), tempMatrix);
+		let posVector = vec3.transformMat4(
+			vec3.create(),
+			vec3.create(),
+			tempMatrix
+		);
 		return vec3.fromValues(posVector[0], posVector[1], posVector[2]);
 	}
 
@@ -50,7 +53,10 @@ export module ECSUtils {
 	 * @param entities Array of entities to test against
 	 * @returns Object with distance and entity ID of the closest hit
 	 */
-	export function RayCastAgainstEntityList(ray: Ray, entities: Array<Entity>): {distance: number, eId: number} {
+	export function RayCastAgainstEntityList(
+		ray: Ray,
+		entities: Array<Entity>
+	): { distance: number; eId: number } {
 		let closest = Infinity;
 		let eId = -1;
 
@@ -72,12 +78,14 @@ export module ECSUtils {
 			if (dist >= 0 && dist < closest) {
 				// Boundingbox is closer than current closest hit
 				// Ray cast against mesh if there is one, only caring about hits closer than the previous closest
-				
+
 				let meshColComp = e.getComponent(
 					ComponentTypeEnum.MESHCOLLISION
 				) as MeshCollisionComponent;
 				if (meshColComp != undefined) {
-					ray.setInverseMatrix(mat4.invert(mat4.create(), bbComp.boundingBox.getTransformMatrix()));
+					ray.setInverseMatrix(
+						mat4.invert(mat4.create(), bbComp.boundingBox.getTransformMatrix())
+					);
 					let shapeArray = new Array<Triangle>();
 					meshColComp.octree.getShapesForRayCast(ray, shapeArray, closest);
 					dist = IntersectionTester.doRayCast(ray, shapeArray, closest);
@@ -93,7 +101,7 @@ export module ECSUtils {
 			}
 		}
 
-		return {distance: closest, eId: eId};
+		return { distance: closest, eId: eId };
 	}
 
 	/**
@@ -105,14 +113,22 @@ export module ECSUtils {
 	 * @param allow0Collision If collisions happening right now should be included in the test
 	 * @returns Object with time for collision, entity ID for which entity the collision will be with, and an intersecton vector with the normal of the surface entity will collide with.
 	 */
-	export function CalculateCollisionTime(entityA: Entity, entityAVel: ReadonlyVec3, entities: Array<Entity>, max: number, allow0Collision: boolean = true): {time: number, eId: number, intersectionVec: vec3} {
+	export function CalculateCollisionTime(
+		entityA: Entity,
+		entityAVel: ReadonlyVec3,
+		entities: Array<Entity>,
+		max: number,
+		allow0Collision: boolean = true
+	): { time: number; eId: number; intersectionVec: vec3 } {
 		let earliest = Infinity;
 		let eId = -1;
 		let intersectionVec = null;
 
-		let entityABBComp = entityA.getComponent(ComponentTypeEnum.BOUNDINGBOX) as BoundingBoxComponent;
+		let entityABBComp = entityA.getComponent(
+			ComponentTypeEnum.BOUNDINGBOX
+		) as BoundingBoxComponent;
 		if (entityABBComp == undefined) {
-			return {time: earliest, eId: eId, intersectionVec: intersectionVec};
+			return { time: earliest, eId: eId, intersectionVec: intersectionVec };
 		}
 
 		entityABBComp.boundingBox.setUpdateNeeded();
@@ -129,7 +145,9 @@ export module ECSUtils {
 				continue;
 			}
 
-			let entityBMovComp = entityB.getComponent(ComponentTypeEnum.MOVEMENT) as MovementComponent;
+			let entityBMovComp = entityB.getComponent(
+				ComponentTypeEnum.MOVEMENT
+			) as MovementComponent;
 			let entityBVel = vec3.create();
 			if (entityBMovComp != undefined) {
 				vec3.copy(entityBVel, entityBMovComp.velocity);
@@ -147,23 +165,25 @@ export module ECSUtils {
 			if (dist >= 0.0 && dist < earliest) {
 				// Boundingbox collisions are closer than current closest hit
 				// Continous collision check against mesh if there is one, only caring about hits closer than the previous closest
-				
+
 				let shapeBArray = new Array<Shape>();
 
 				const entityBMeshColComp = entityB.getComponent(
 					ComponentTypeEnum.MESHCOLLISION
 				) as MeshCollisionComponent;
 
-
 				if (entityBMeshColComp != undefined) {
-					const inverseMatrix = mat4.invert(mat4.create(), entityBBBComp.boundingBox.getTransformMatrix());
-					
+					const inverseMatrix = mat4.invert(
+						mat4.create(),
+						entityBBBComp.boundingBox.getTransformMatrix()
+					);
+
 					entityABBComp.boundingBox.setInverseMatrix(inverseMatrix);
 
 					let localShapeArray = new Array<Shape>();
-					
+
 					entityBMeshColComp.octree.getShapesForContinousCollision(
-						entityABBComp.boundingBox, 
+						entityABBComp.boundingBox,
 						// Use velocities in local space for entity B
 						vec3.transformMat4(vec3.create(), entityAVel, inverseMatrix),
 						vec3.transformMat4(vec3.create(), entityBVel, inverseMatrix),
@@ -176,26 +196,33 @@ export module ECSUtils {
 					for (let shape of localShapeArray) {
 						let index = shapeBArray.push(new Triangle()) - 1;
 						let shapeOriginalVertices = shape.getOriginalVertices();
-						(<Triangle>shapeBArray[index]).setVertices(shapeOriginalVertices[0], shapeOriginalVertices[1], shapeOriginalVertices[2]);
-						(<Triangle>shapeBArray[index]).setTransformMatrix(entityBBBComp.boundingBox.getTransformMatrix());
+						(<Triangle>shapeBArray[index]).setVertices(
+							shapeOriginalVertices[0],
+							shapeOriginalVertices[1],
+							shapeOriginalVertices[2]
+						);
+						(<Triangle>shapeBArray[index]).setTransformMatrix(
+							entityBBBComp.boundingBox.getTransformMatrix()
+						);
 					}
-				}
-				else {
+				} else {
 					shapeBArray.push(entityBBBComp.boundingBox);
 				}
-
 
 				let shapeAArray = new Array<Shape>();
 
 				if (entityAMeshColComp != undefined) {
-					const inverseMatrix = mat4.invert(mat4.create(), entityABBComp.boundingBox.getTransformMatrix());
-					
+					const inverseMatrix = mat4.invert(
+						mat4.create(),
+						entityABBComp.boundingBox.getTransformMatrix()
+					);
+
 					entityBBBComp.boundingBox.setInverseMatrix(inverseMatrix);
 
 					let localShapeArray = new Array<Shape>();
-					
+
 					entityAMeshColComp.octree.getShapesForContinousCollision(
-						entityBBBComp.boundingBox, 
+						entityBBBComp.boundingBox,
 						// Use velocities in local space for entity B
 						vec3.transformMat4(vec3.create(), entityBVel, inverseMatrix),
 						vec3.transformMat4(vec3.create(), entityAVel, inverseMatrix),
@@ -208,11 +235,16 @@ export module ECSUtils {
 					for (let shape of localShapeArray) {
 						let index = shapeAArray.push(new Triangle()) - 1;
 						let shapeOriginalVertices = shape.getOriginalVertices();
-						(<Triangle>shapeAArray[index]).setVertices(shapeOriginalVertices[0], shapeOriginalVertices[1], shapeOriginalVertices[2]);
-						(<Triangle>shapeAArray[index]).setTransformMatrix(entityABBComp.boundingBox.getTransformMatrix());
+						(<Triangle>shapeAArray[index]).setVertices(
+							shapeOriginalVertices[0],
+							shapeOriginalVertices[1],
+							shapeOriginalVertices[2]
+						);
+						(<Triangle>shapeAArray[index]).setTransformMatrix(
+							entityABBComp.boundingBox.getTransformMatrix()
+						);
 					}
-				}
-				else {
+				} else {
 					shapeAArray.push(entityABBComp.boundingBox);
 				}
 
@@ -225,7 +257,10 @@ export module ECSUtils {
 					allow0Collision
 				);
 
-				if (((allow0Collision && dist >= 0.0) || dist > 0.0) && (dist < earliest|| dist > 0.0)) {
+				if (
+					((allow0Collision && dist >= 0.0) || dist > 0.0) &&
+					(dist < earliest || dist > 0.0)
+				) {
 					// Hit is still closer than current closest
 					// Update the closest information and save the object for editing
 					earliest = dist;
@@ -235,7 +270,7 @@ export module ECSUtils {
 			}
 		}
 
-		return {time: earliest, eId: eId, intersectionVec: intersectionVec};
+		return { time: earliest, eId: eId, intersectionVec: intersectionVec };
 	}
 
 	/**
@@ -244,19 +279,30 @@ export module ECSUtils {
 	 * @param entityB entityB
 	 * @returns Intersection information array, all intersections will point from EntityB to EntityA
 	 */
-	export function GetIntersectionInformation(entityA: Entity, entityB: Entity): Array<IntersectionTester.IntersectionInformation> {
-		let entityABBComp = entityA.getComponent(ComponentTypeEnum.BOUNDINGBOX) as BoundingBoxComponent;
+	export function GetIntersectionInformation(
+		entityA: Entity,
+		entityB: Entity
+	): Array<IntersectionTester.IntersectionInformation> {
+		let entityABBComp = entityA.getComponent(
+			ComponentTypeEnum.BOUNDINGBOX
+		) as BoundingBoxComponent;
 		if (entityABBComp == undefined) {
 			return null;
 		}
 
-		let entityBBBComp = entityB.getComponent(ComponentTypeEnum.BOUNDINGBOX) as BoundingBoxComponent;
+		let entityBBBComp = entityB.getComponent(
+			ComponentTypeEnum.BOUNDINGBOX
+		) as BoundingBoxComponent;
 		if (entityBBBComp == undefined) {
 			return null;
 		}
 
 		let info = new Array<IntersectionTester.IntersectionInformation>();
-		IntersectionTester.identifyIntersectionInformation([entityABBComp.boundingBox], [entityBBBComp.boundingBox], info);
+		IntersectionTester.identifyIntersectionInformation(
+			[entityABBComp.boundingBox],
+			[entityBBBComp.boundingBox],
+			info
+		);
 		return info;
 	}
 }

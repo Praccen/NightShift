@@ -47,17 +47,16 @@ export default class Framebuffer {
 		for (let i = 0; i < this.textures.length; i++) {
 			this.textures[i].setTextureData(null, this.width, this.height);
 			if (this.textures[i].textureTarget == gl.TEXTURE_CUBE_MAP) {
-				// This is a cube map, set the positive x as target and rendering loop will take care of switching target to the correct side 
+				// This is a cube map, set the positive x as target and rendering loop will take care of switching target to the correct side
 				gl.framebufferTexture2D(
 					gl.FRAMEBUFFER,
 					gl.COLOR_ATTACHMENT0 + i,
 					gl.TEXTURE_CUBE_MAP_POSITIVE_X,
 					this.textures[i].texture,
 					0
-				);	
+				);
 				attachments.push(gl.COLOR_ATTACHMENT0 + i);
-			}
-			else {
+			} else {
 				// This is a normal 2D texture, set TexParameters to something fitting for a framebuffer target, and set up the target.
 				this.textures[i].setTexParameterI(gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 				this.textures[i].setTexParameterI(gl.TEXTURE_MAG_FILTER, gl.LINEAR);
@@ -72,7 +71,6 @@ export default class Framebuffer {
 				);
 				attachments.push(gl.COLOR_ATTACHMENT0 + i);
 			}
-			
 		}
 
 		// Attach drawing targets
@@ -83,16 +81,15 @@ export default class Framebuffer {
 			this.depthTexture.setTextureData(null, this.width, this.height);
 
 			if (this.depthTexture.textureTarget == gl.TEXTURE_CUBE_MAP) {
-				// The depth texture is a cube map, set the positive x as target and rendering loop will take care of switching target to the correct side 
+				// The depth texture is a cube map, set the positive x as target and rendering loop will take care of switching target to the correct side
 				gl.framebufferTexture2D(
 					gl.FRAMEBUFFER,
 					gl.DEPTH_ATTACHMENT,
 					gl.TEXTURE_CUBE_MAP_POSITIVE_X,
 					this.depthTexture.texture,
 					0
-				);	
-			}
-			else {
+				);
+			} else {
 				// The depth texture is a normal 2D texture, set up the appropriate target
 				gl.framebufferTexture2D(
 					gl.FRAMEBUFFER,
@@ -100,7 +97,7 @@ export default class Framebuffer {
 					gl.TEXTURE_2D,
 					this.depthTexture.texture,
 					0
-				);	
+				);
 			}
 		} else {
 			// We have no defined depth texture, use a render buffer instead

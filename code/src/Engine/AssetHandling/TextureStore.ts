@@ -25,8 +25,7 @@ export default class TextureStore {
 		if (path.startsWith(CSSPrefix)) {
 			// Hex value color
 			newTexture.createFromCSSColorValue(path.substring(CSSPrefix.length));
-		}
-		else {
+		} else {
 			newTexture.loadFromFile(path);
 		}
 

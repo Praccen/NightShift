@@ -55,10 +55,7 @@ export default class ObjectPlacer {
 
 	game: Game;
 
-	constructor(
-		meshStore: MeshStore,
-		textureStore: TextureStore
-	) {
+	constructor(meshStore: MeshStore, textureStore: TextureStore) {
 		this.meshStore = meshStore;
 		this.textureStore = textureStore;
 		this.placements = new Map<string, Placement>();
@@ -67,7 +64,11 @@ export default class ObjectPlacer {
 		this.lastFileName = "";
 	}
 
-	async load(scene: Scene, ecsManager: ECSManager, placementsFile: string = "Assets/placements/Placements.txt") {
+	async load(
+		scene: Scene,
+		ecsManager: ECSManager,
+		placementsFile: string = "Assets/placements/Placements.txt"
+	) {
 		this.scene = scene;
 		this.ecsManager = ecsManager;
 		this.game = Game.getInstanceNoSa();
@@ -75,7 +76,9 @@ export default class ObjectPlacer {
 		await this.reload(placementsFile);
 	}
 
-	async reload(placementsFile: string = "Assets/placements/Placements.txt"): Promise<void> {
+	async reload(
+		placementsFile: string = "Assets/placements/Placements.txt"
+	): Promise<void> {
 		this.downloadTransforms();
 
 		if (this.ecsManager && this.game) {
@@ -121,10 +124,22 @@ export default class ObjectPlacer {
 
 						this.placeObject(
 							currentPlacementType,
-							vec3.fromValues.apply(null, p.split(",").map((n) => parseFloat(n))),
-							vec3.fromValues.apply(null, s.split(",").map((n) => parseFloat(n))),
-							quat.fromValues.apply(null, r.split(",").map((n) => parseFloat(n))),
-							vec3.fromValues.apply(null, o.split(",").map((n) => parseFloat(n)))
+							vec3.fromValues.apply(
+								null,
+								p.split(",").map((n) => parseFloat(n))
+							),
+							vec3.fromValues.apply(
+								null,
+								s.split(",").map((n) => parseFloat(n))
+							),
+							quat.fromValues.apply(
+								null,
+								r.split(",").map((n) => parseFloat(n))
+							),
+							vec3.fromValues.apply(
+								null,
+								o.split(",").map((n) => parseFloat(n))
+							)
 						);
 					}
 				}
@@ -139,7 +154,9 @@ export default class ObjectPlacer {
 	undo() {}
 
 	getEntitiesOfType(type: string): Array<Entity> {
-		let types = type.split("||").map((value) => {return value.trim()})
+		let types = type.split("||").map((value) => {
+			return value.trim();
+		});
 
 		let entities = new Array<Entity>();
 		for (let e of this.entityPlacements) {
@@ -156,8 +173,7 @@ export default class ObjectPlacer {
 		let ep = this.entityPlacements.get(entityId);
 		if (ep != undefined) {
 			return ep;
-		}
-		else {
+		} else {
 			return "";
 		}
 	}
@@ -240,7 +256,7 @@ export default class ObjectPlacer {
 
 			testEntities.push(e);
 		}
-		
+
 		return ECSUtils.RayCastAgainstEntityList(ray, testEntities).distance;
 	}
 
@@ -257,8 +273,7 @@ export default class ObjectPlacer {
 		let rayCastResult = ECSUtils.RayCastAgainstEntityList(ray, testEntities);
 		if (rayCastResult.eId >= 0) {
 			this.currentlyEditingEntityId = rayCastResult.eId;
-		}
-		else {
+		} else {
 			this.currentlyEditingEntityId = null;
 		}
 	}
@@ -288,8 +303,21 @@ export default class ObjectPlacer {
 					return;
 				}
 
-				quat.mul(posComp.rotation, posComp.rotation, quat.fromEuler(quat.create(), rotationChange[0], rotationChange[1], rotationChange[2]));
-				vec3.add(posComp.scale, posComp.scale, vec3.fromValues(scaleChange, scaleChange, scaleChange));
+				quat.mul(
+					posComp.rotation,
+					posComp.rotation,
+					quat.fromEuler(
+						quat.create(),
+						rotationChange[0],
+						rotationChange[1],
+						rotationChange[2]
+					)
+				);
+				vec3.add(
+					posComp.scale,
+					posComp.scale,
+					vec3.fromValues(scaleChange, scaleChange, scaleChange)
+				);
 				if (scaleChange != 0) {
 					posComp.scale[0] = Math.round(posComp.scale[0] * 10000) / 10000;
 					posComp.scale[1] = Math.round(posComp.scale[1] * 10000) / 10000;
@@ -374,7 +402,7 @@ export default class ObjectPlacer {
 			if (!placement.saveToTransforms) {
 				continue;
 			}
-			
+
 			for (let ep of this.entityPlacements) {
 				if (ep[1] == placementString) {
 					let entity = this.ecsManager.getEntity(ep[0]);

@@ -89,7 +89,7 @@ export default class LoadingScreen extends State {
 		this.meshesLoaded = 0;
 
 		// Heightmaps to load
-		let heightmaps: (string | boolean| number)[][] = [
+		let heightmaps: (string | boolean | number)[][] = [
 			// ["Assets/heightmaps/heightmap.png", false, 200, 200, 1.0, 1.0],
 		];
 		this.heightmapsRequested = heightmaps.length;
@@ -124,8 +124,8 @@ export default class LoadingScreen extends State {
 
 		// Load heightmaps
 		for (const heightmapInfo of heightmaps) {
-			this.sa.meshStore
-				.loadHeightmap.apply(this.sa.meshStore,	heightmapInfo)
+			this.sa.meshStore.loadHeightmap
+				.apply(this.sa.meshStore, heightmapInfo)
 				.then(() => {
 					this.heightmapsLoaded++;
 				});

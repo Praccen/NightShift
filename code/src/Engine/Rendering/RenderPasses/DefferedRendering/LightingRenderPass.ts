@@ -2,7 +2,10 @@ import { gl } from "../../../../main";
 import Camera from "../../../Objects/Camera";
 import Framebuffer from "../../Framebuffers/Framebuffer";
 import ScreenQuad from "../../../Objects/GraphicsObjects/ScreenQuad";
-import { lightingPass, pointShadowsToAllocate } from "../../ShaderPrograms/DeferredRendering/LightingPass";
+import {
+	lightingPass,
+	pointShadowsToAllocate,
+} from "../../ShaderPrograms/DeferredRendering/LightingPass";
 import Texture from "../../Textures/Texture";
 import Scene from "../../Scene";
 import { vec3 } from "gl-matrix";
@@ -42,7 +45,7 @@ export default class LightingRenderPass {
 			lightingPass.getUniformLocation("nrOfPointLights")[0],
 			scene.pointLights.length
 		);
-		
+
 		// Bind pointLights, with counter as depthMapIndex
 		let counter = 0;
 		for (let i = 0; i < scene.pointLights.length; i++) {
@@ -56,13 +59,13 @@ export default class LightingRenderPass {
 		for (let i = 0; i < this.screenQuad.textures.length; i++) {
 			this.screenQuad.textures[i].bind(i);
 		}
-	
-		// Then bind the point light depth maps 
+
+		// Then bind the point light depth maps
 		counter = this.screenQuad.textures.length;
 		for (const pointLight of scene.pointLights) {
 			if (counter - this.screenQuad.textures.length >= pointShadowsToAllocate) {
-                break;
-            }
+				break;
+			}
 			if (pointLight.castShadow) {
 				pointLight.pointShadowDepthMap.bind(counter++);
 			}

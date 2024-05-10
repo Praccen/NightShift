@@ -29,17 +29,19 @@ export default class CameraFocusSystem extends System {
 
 			let tempMatrix = mat4.create();
 			posComp.calculateMatrix(tempMatrix);
-			let camPosVector = vec3.transformMat4(vec3.create(), vec3.create(), tempMatrix);
+			let camPosVector = vec3.transformMat4(
+				vec3.create(),
+				vec3.create(),
+				tempMatrix
+			);
 			let camPos = vec3.add(
-				vec3.create(), vec3.add(
-					vec3.create(), camPosVector, 
-					camFocusComp.focusPoint)
-				, camFocusComp.offset);
+				vec3.create(),
+				vec3.add(vec3.create(), camPosVector, camFocusComp.focusPoint),
+				camFocusComp.offset
+			);
 
 			this.camera.setPosition(camPos);
-			this.camera.setDir(
-				vec3.negate(vec3.create(), camFocusComp.offset)
-			);
+			this.camera.setDir(vec3.negate(vec3.create(), camFocusComp.offset));
 		}
 	}
 }

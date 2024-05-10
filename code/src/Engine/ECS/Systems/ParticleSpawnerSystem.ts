@@ -46,7 +46,11 @@ export default class ParticleSpawnerSystem extends System {
 						particleComp.particleSpawner.setParticleStartPosition(
 							currentParticle %
 								particleComp.particleSpawner.getNumberOfParticles(),
-							vec3.add(vec3.create(), ECSUtils.CalculatePosition(e), particleComp.offset)
+							vec3.add(
+								vec3.create(),
+								ECSUtils.CalculatePosition(e),
+								particleComp.offset
+							)
 						);
 					}
 				}

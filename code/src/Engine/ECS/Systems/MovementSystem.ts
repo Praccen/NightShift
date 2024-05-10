@@ -25,8 +25,20 @@ export default class MovementSystem extends System {
 			let oldVel = vec3.clone(movComp.velocity);
 
 			// Do movement calculations
-			vec3.add(movComp.velocity, movComp.velocity, vec3.scale(vec3.create(), movComp.accelerationDirection, movComp.acceleration * dt));
-			vec3.add(movComp.velocity, movComp.velocity, vec3.scale(vec3.create(), movComp.constantAcceleration, dt));
+			vec3.add(
+				movComp.velocity,
+				movComp.velocity,
+				vec3.scale(
+					vec3.create(),
+					movComp.accelerationDirection,
+					movComp.acceleration * dt
+				)
+			);
+			vec3.add(
+				movComp.velocity,
+				movComp.velocity,
+				vec3.scale(vec3.create(), movComp.constantAcceleration, dt)
+			);
 
 			movComp.jumpAllowed = movComp.jumpAllowed || movComp.onGround;
 
@@ -41,7 +53,15 @@ export default class MovementSystem extends System {
 			let dragVec = vec3.scale(vec3.create(), movComp.velocity, -1.0);
 			dragVec[1] = 0.0;
 			let magnitude = vec3.len(dragVec);
-			vec3.add(movComp.velocity, movComp.velocity, vec3.scale(dragVec, vec3.normalize(dragVec, dragVec), Math.min(movComp.drag * dt, magnitude)));
+			vec3.add(
+				movComp.velocity,
+				movComp.velocity,
+				vec3.scale(
+					dragVec,
+					vec3.normalize(dragVec, dragVec),
+					Math.min(movComp.drag * dt, magnitude)
+				)
+			);
 
 			//stop if velocity is too slow
 			const accelerating =
@@ -51,7 +71,11 @@ export default class MovementSystem extends System {
 				vec3.scale(movComp.velocity, movComp.velocity, 0.0);
 			}
 
-			let displacement = vec3.scale(vec3.create(), vec3.add(vec3.create(), movComp.velocity, oldVel), 0.5 * dt);
+			let displacement = vec3.scale(
+				vec3.create(),
+				vec3.add(vec3.create(), movComp.velocity, oldVel),
+				0.5 * dt
+			);
 
 			if (Math.abs(displacement[0]) > 0.001) {
 				posComp.position[0] += displacement[0];
@@ -66,7 +90,12 @@ export default class MovementSystem extends System {
 			}
 
 			vec3.set(movComp.accelerationDirection, 0.0, 0.0, 0.0);
-			quat.slerp(posComp.rotation, posComp.rotation, quat.mul(quat.create(), posComp.rotation, movComp.momentum), dt);
+			quat.slerp(
+				posComp.rotation,
+				posComp.rotation,
+				quat.mul(quat.create(), posComp.rotation, movComp.momentum),
+				dt
+			);
 		}
 	}
 }

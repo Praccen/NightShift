@@ -29,18 +29,27 @@ export default class PointLight {
 		// this.depthMapGenerated = false;
 		// this.radius = (-this.linear + Math.sqrt(this.linear * this.linear - 4.0 * this.quadratic * (this.constant - (256.0 / 5.0)))) / (2.0 * this.quadratic);
 
-		this.pointShadowDepthMap = new CubeMap(false, gl.DEPTH_COMPONENT32F, gl.DEPTH_COMPONENT, gl.FLOAT);
+		this.pointShadowDepthMap = new CubeMap(
+			false,
+			gl.DEPTH_COMPONENT32F,
+			gl.DEPTH_COMPONENT,
+			gl.FLOAT
+		);
 		this.pointShadowDepthMap.setTextureData(null, 1024, 1024);
 
 		this.pointShadowBuffer = new Framebuffer(
-            1024,
-            1024,
-            [],
-            this.pointShadowDepthMap
-        );
+			1024,
+			1024,
+			[],
+			this.pointShadowDepthMap
+		);
 	}
 
-	bind(lightIndex: number, depthMapIndex: number, shaderProgram: ShaderProgram) {
+	bind(
+		lightIndex: number,
+		depthMapIndex: number,
+		shaderProgram: ShaderProgram
+	) {
 		let ul = shaderProgram.getUniformLocation(
 			"pointLights[" + lightIndex + "].position"
 		);
@@ -77,7 +86,7 @@ export default class PointLight {
 			"pointLights[" + lightIndex + "].pointDepthMapIndex"
 		);
 		if (ul[1]) {
-			gl.uniform1i(ul[0], this.castShadow? depthMapIndex: -1);
+			gl.uniform1i(ul[0], this.castShadow ? depthMapIndex : -1);
 		}
 	}
 }

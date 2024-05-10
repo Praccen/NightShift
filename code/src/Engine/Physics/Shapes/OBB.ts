@@ -94,10 +94,16 @@ export default class OBB extends Shape {
 		if (this.verticesNeedsUpdate) {
 			this.transformedVertices.length = 0;
 
-			let resultingMatrix = mat4.mul(mat4.create(), this.inverseMatrix, this.transformMatrix);
+			let resultingMatrix = mat4.mul(
+				mat4.create(),
+				this.inverseMatrix,
+				this.transformMatrix
+			);
 
 			for (const originalVertex of this.originalVertices) {
-				this.transformedVertices.push(vec3.transformMat4(vec3.create(), originalVertex, resultingMatrix));
+				this.transformedVertices.push(
+					vec3.transformMat4(vec3.create(), originalVertex, resultingMatrix)
+				);
 			}
 			this.verticesNeedsUpdate = false;
 		}
@@ -107,10 +113,17 @@ export default class OBB extends Shape {
 	getTransformedNormals(): Array<vec3> {
 		if (this.normalsNeedsUpdate) {
 			this.transformedNormals.length = 0;
-			
+
 			for (const originalNormal of this.originalNormals) {
 				this.transformedNormals.push(
-					vec3.normalize(vec3.create(), vec3.transformMat3(vec3.create(), originalNormal, mat3.normalFromMat4(mat3.create(), this.transformMatrix)))
+					vec3.normalize(
+						vec3.create(),
+						vec3.transformMat3(
+							vec3.create(),
+							originalNormal,
+							mat3.normalFromMat4(mat3.create(), this.transformMatrix)
+						)
+					)
 				);
 			}
 

@@ -31,17 +31,17 @@ export default class Heightmap extends Mesh {
 				vec3.fromValues(
 					this.vertices[this.indices[i] * 8],
 					this.vertices[this.indices[i] * 8 + 1],
-					this.vertices[this.indices[i] * 8 + 2],
+					this.vertices[this.indices[i] * 8 + 2]
 				),
 				vec3.fromValues(
 					this.vertices[this.indices[i + 1] * 8],
 					this.vertices[this.indices[i + 1] * 8 + 1],
-					this.vertices[this.indices[i + 1] * 8 + 2],
+					this.vertices[this.indices[i + 1] * 8 + 2]
 				),
 				vec3.fromValues(
 					this.vertices[this.indices[i + 2] * 8],
 					this.vertices[this.indices[i + 2] * 8 + 1],
-					this.vertices[this.indices[i + 2] * 8 + 2],
+					this.vertices[this.indices[i + 2] * 8 + 2]
 				)
 			);
 		}
@@ -71,7 +71,7 @@ export default class Heightmap extends Mesh {
 		let middlePos = vec3.fromValues(
 			0.0,
 			this.vertices[z * this.xResolution * 8 + x * 8 + 1],
-			0.0,
+			0.0
 		);
 
 		let offsets = [
@@ -95,7 +95,7 @@ export default class Heightmap extends Mesh {
 							(x + offsets[first][0]) * 8 +
 							1
 					],
-					offsets[first][1] * this.zQuadSize,
+					offsets[first][1] * this.zQuadSize
 				),
 				middlePos,
 				vec3.fromValues(
@@ -105,10 +105,14 @@ export default class Heightmap extends Mesh {
 							(x + offsets[second][0]) * 8 +
 							1
 					],
-					offsets[second][1] * this.zQuadSize,
+					offsets[second][1] * this.zQuadSize
 				)
 			);
-			vec3.add(resultingNormal, resultingNormal, tempTriangle.getTransformedNormals()[0]);
+			vec3.add(
+				resultingNormal,
+				resultingNormal,
+				tempTriangle.getTransformedNormals()[0]
+			);
 		}
 
 		vec3.normalize(resultingNormal, resultingNormal);
@@ -255,12 +259,13 @@ export default class Heightmap extends Mesh {
 		}
 
 		// Take the world position and transform it into heightmap local coordinates
-		let transformedPos = vec3.transformMat4(vec3.create(), vec3.fromValues(worldPosition[0], worldPosition[1], worldPosition[2]), invertedMatrix);
-
-		return this.getNormal(
-			transformedPos[0],
-			transformedPos[2]
+		let transformedPos = vec3.transformMat4(
+			vec3.create(),
+			vec3.fromValues(worldPosition[0], worldPosition[1], worldPosition[2]),
+			invertedMatrix
 		);
+
+		return this.getNormal(transformedPos[0], transformedPos[2]);
 	}
 
 	getHeightFromWorldPosition(
@@ -277,13 +282,19 @@ export default class Heightmap extends Mesh {
 		}
 
 		// Take the world position and transform it into heightmap local coordinates
-		let transformedPos = vec4.transformMat4(vec4.create(), vec4.fromValues(worldPosition[0], worldPosition[1], worldPosition[2], 1.0), invertedTransformMatrix);
+		let transformedPos = vec4.transformMat4(
+			vec4.create(),
+			vec4.fromValues(
+				worldPosition[0],
+				worldPosition[1],
+				worldPosition[2],
+				1.0
+			),
+			invertedTransformMatrix
+		);
 
 		// Get the height of the heightmap at the corresponding position
-		let height = this.getHeight(
-			transformedPos[0],
-			transformedPos[2]
-		);
+		let height = this.getHeight(transformedPos[0], transformedPos[2]);
 
 		if (height == null) {
 			return null;
@@ -292,7 +303,11 @@ export default class Heightmap extends Mesh {
 		transformedPos[1] = height; // set the y coord to the heightmap height
 		transformedPos[3] = 1.0; // set the w to 1 to be able to transform the position back into world space
 
-		vec4.transformMat4(transformedPos, transformedPos, heightmapTransformMatrix); // To world space! :D
+		vec4.transformMat4(
+			transformedPos,
+			transformedPos,
+			heightmapTransformMatrix
+		); // To world space! :D
 
 		return transformedPos[1];
 	}
@@ -395,7 +410,7 @@ export default class Heightmap extends Mesh {
 		let normal = vec3.fromValues(
 			this.vertices[zCoord * this.xResolution * 8 + xCoord * 8 + 3],
 			this.vertices[zCoord * this.xResolution * 8 + xCoord * 8 + 4],
-			this.vertices[zCoord * this.xResolution * 8 + xCoord * 8 + 5],
+			this.vertices[zCoord * this.xResolution * 8 + xCoord * 8 + 5]
 		);
 
 		return normal;

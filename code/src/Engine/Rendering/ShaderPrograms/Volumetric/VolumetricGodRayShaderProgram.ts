@@ -1,5 +1,8 @@
 import { gl } from "../../../../main";
-import { pointLightsToAllocate, pointShadowsToAllocate } from "../DeferredRendering/LightingPass";
+import {
+	pointLightsToAllocate,
+	pointShadowsToAllocate,
+} from "../DeferredRendering/LightingPass";
 import ShaderProgram from "../ShaderProgram";
 
 const volumetricGodRayVertexShaderSrc: string = `#version 300 es
@@ -36,7 +39,6 @@ void main() {
 
 let volumetricGodRayFragmentShaderSrc: string;
 
-
 class VolumetricGodRaysShaderProgram extends ShaderProgram {
 	constructor() {
 		super(
@@ -55,12 +57,12 @@ class VolumetricGodRaysShaderProgram extends ShaderProgram {
 		this.setUniformLocation("fov");
 
 		this.setUniformLocation("nrOfPointLights");
-		
-        for (let i = 0; i < pointShadowsToAllocate; i++) {
+
+		for (let i = 0; i < pointShadowsToAllocate; i++) {
 			this.setUniformLocation("pointDepthMaps[" + i + "]");
-			gl.uniform1i(this.getUniformLocation("pointDepthMaps["+ i +"]")[0], i);
+			gl.uniform1i(this.getUniformLocation("pointDepthMaps[" + i + "]")[0], i);
 		}
-		
+
 		for (let i = 0; i < pointLightsToAllocate; i++) {
 			this.setUniformLocation("pointLights[" + i + "].position");
 			this.setUniformLocation("pointLights[" + i + "].colour");
@@ -84,16 +86,16 @@ class VolumetricGodRaysShaderProgram extends ShaderProgram {
 export let volumetricGodRayShaderProgram: VolumetricGodRaysShaderProgram = null;
 
 export let createVolumetricGodRayShaderProgram = function () {
-
-volumetricGodRayFragmentShaderSrc = `#version 300 es
+	volumetricGodRayFragmentShaderSrc =
+		`#version 300 es
 precision highp float;
 
 #define NR_POINT_LIGHTS ` +
-	pointLightsToAllocate +
-`
+		pointLightsToAllocate +
+		`
 #define NR_POINT_SHADOWS ` +
-	pointShadowsToAllocate +
-`
+		pointShadowsToAllocate +
+		`
 in vec3 fragPos;
 flat in float numberPlanes;
 flat in float fogMD;
@@ -130,24 +132,34 @@ float CalcPointShadow(PointLight light, vec3 fragmentPos) {
 	fragToLight.y *= -1.0;
 	fragToLight.z *= -1.0;
     // use the light to fragment vector to sample from the depth map
-    float closestDepth = 1.0;`
+    float closestDepth = 1.0;`;
 	// Below is ugly, but I have to unroll the loop to be able to acces the pointDepthMaps array with a compile time index, as run-time index is not allowed to access a sampler
 	for (let i = 0; i < pointShadowsToAllocate; i++) {
 		if (i == 0) {
-			volumetricGodRayFragmentShaderSrc += `
-	if (light.pointDepthMapIndex == ` + i + `) {
-		closestDepth = texture(pointDepthMaps[` + i + `], fragToLight).r;
+			volumetricGodRayFragmentShaderSrc +=
+				`
+	if (light.pointDepthMapIndex == ` +
+				i +
+				`) {
+		closestDepth = texture(pointDepthMaps[` +
+				i +
+				`], fragToLight).r;
 	}
-	`
+	`;
 		} else {
-			volumetricGodRayFragmentShaderSrc += `
-	else if (light.pointDepthMapIndex == ` + i + `) {
-		closestDepth = texture(pointDepthMaps[` + i + `], fragToLight).r;
+			volumetricGodRayFragmentShaderSrc +=
+				`
+	else if (light.pointDepthMapIndex == ` +
+				i +
+				`) {
+		closestDepth = texture(pointDepthMaps[` +
+				i +
+				`], fragToLight).r;
 	}
-	`
+	`;
 		}
 	}
-	
+
 	volumetricGodRayFragmentShaderSrc += `
     // it is currently in linear range between [0,1]. Re-transform back to original value
     closestDepth *= far_plane;

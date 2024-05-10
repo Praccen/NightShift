@@ -43,7 +43,11 @@ export default class GraphicsSystem extends System {
 			);
 
 			if (pointLightComp && (posComp || posParentComp)) {
-				vec3.add(pointLightComp.pointLight.position, ECSUtils.CalculatePosition(e), pointLightComp.posOffset);
+				vec3.add(
+					pointLightComp.pointLight.position,
+					ECSUtils.CalculatePosition(e),
+					pointLightComp.posOffset
+				);
 			}
 		}
 	}

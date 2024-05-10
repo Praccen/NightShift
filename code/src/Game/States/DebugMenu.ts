@@ -29,7 +29,11 @@ export default class DebugMenu {
 	mouseOverGuiElement: boolean;
 	actionText: TextObject2D;
 
-	constructor(stateAccessible: StateAccessible, game: Game, debugMode: DebugMode) {
+	constructor(
+		stateAccessible: StateAccessible,
+		game: Game,
+		debugMode: DebugMode
+	) {
 		this.overlay = new OverlayRendering();
 		this.stateAccessible = stateAccessible;
 		this.game = game;
@@ -134,7 +138,6 @@ export default class DebugMenu {
 			this.movingEntitiesBox = true;
 		};
 
-		
 		this.propsBox = this.overlay.getNewDiv();
 		this.propsBox.getElement().style.backgroundColor = "gray";
 		this.propsBox.getElement().style.opacity = "70%";
@@ -166,7 +169,9 @@ export default class DebugMenu {
 		};
 
 		this.propsVisibleMemory = new Map<ComponentTypeEnum, boolean>();
-		for (let comp of Object.keys(ComponentTypeEnum).filter((v) => isNaN(Number(v)))) {
+		for (let comp of Object.keys(ComponentTypeEnum).filter((v) =>
+			isNaN(Number(v))
+		)) {
 			let compBtn = this.overlay.getNewButton(this.propsBox);
 			compBtn.textString = comp;
 			compBtn.textSize = 20;
@@ -193,11 +198,13 @@ export default class DebugMenu {
 		consoleCommandsTextEdit.getElement().style.width = "80%";
 		consoleCommandsTextEdit.getInputElement().style.width = "100%";
 
-		consoleCommandsTextEdit.getInputElement().addEventListener("change", (ev) => {
-			self.parseConsoleInput(consoleCommandsTextEdit.getInputElement().value);
-			consoleCommandsTextEdit.getInputElement().value = "";
-		});
-		
+		consoleCommandsTextEdit
+			.getInputElement()
+			.addEventListener("change", (ev) => {
+				self.parseConsoleInput(consoleCommandsTextEdit.getInputElement().value);
+				consoleCommandsTextEdit.getInputElement().value = "";
+			});
+
 		consoleCommandsTextEdit.getElement().onmouseenter = () => {
 			this.mouseOverGuiElement = true;
 		};
@@ -223,20 +230,26 @@ export default class DebugMenu {
 	}
 
 	private parseConsoleInput(input: string) {
-		if (input.startsWith("r ")) { // r x 45.2  should rotate current object by 45.2 degrees around x axis
+		if (input.startsWith("r ")) {
+			// r x 45.2  should rotate current object by 45.2 degrees around x axis
 			const args = input.split(" ");
 			if (args.length == 3) {
-				const index = ["x", "y", "z"].findIndex((string) => {return string == args[1]});
+				const index = ["x", "y", "z"].findIndex((string) => {
+					return string == args[1];
+				});
 				if (index != -1) {
 					const degrees = parseFloat(args[2]);
 					let rotChange = vec3.create();
 					rotChange[index] = degrees;
-					this.game.objectPlacer.updateCurrentlyEditingObject(rotChange, 0, null);
+					this.game.objectPlacer.updateCurrentlyEditingObject(
+						rotChange,
+						0,
+						null
+					);
 				}
 			}
 		}
 	}
-
 
 	update(dt: number) {
 		// Moving of boxes
@@ -247,15 +260,27 @@ export default class DebugMenu {
 		}
 
 		if (this.movingPlacementBox) {
-			vec2.set(this.placementMenu.position, input.mousePositionOnCanvas.x / windowInfo.resolutionWidth, input.mousePositionOnCanvas.y / windowInfo.resolutionHeight);
+			vec2.set(
+				this.placementMenu.position,
+				input.mousePositionOnCanvas.x / windowInfo.resolutionWidth,
+				input.mousePositionOnCanvas.y / windowInfo.resolutionHeight
+			);
 		}
 
 		if (this.movingEntitiesBox) {
-			vec2.set(this.entitiesBox.position,	input.mousePositionOnCanvas.x / windowInfo.resolutionWidth, input.mousePositionOnCanvas.y / windowInfo.resolutionHeight);
+			vec2.set(
+				this.entitiesBox.position,
+				input.mousePositionOnCanvas.x / windowInfo.resolutionWidth,
+				input.mousePositionOnCanvas.y / windowInfo.resolutionHeight
+			);
 		}
 
 		if (this.movingPropsBox) {
-			vec2.set(this.propsBox.position, input.mousePositionOnCanvas.x / windowInfo.resolutionWidth, input.mousePositionOnCanvas.y / windowInfo.resolutionHeight);
+			vec2.set(
+				this.propsBox.position,
+				input.mousePositionOnCanvas.x / windowInfo.resolutionWidth,
+				input.mousePositionOnCanvas.y / windowInfo.resolutionHeight
+			);
 		}
 
 		// Update the placement menu if it is not synced with placements (+1 is because there is a text child as well)
@@ -327,24 +352,35 @@ export default class DebugMenu {
 		}
 
 		if (this.game.objectPlacer.currentlyEditingEntityId != undefined) {
-			let entity = this.game.ecsManager.getEntity(this.game.objectPlacer.currentlyEditingEntityId);
+			let entity = this.game.ecsManager.getEntity(
+				this.game.objectPlacer.currentlyEditingEntityId
+			);
 
-			for (let i = 1; i < this.propsBox.children.length; i+=2) {
-				if (entity != undefined && entity.hasComponent(ComponentTypeEnum[this.propsBox.children[i].textString])) {
+			for (let i = 1; i < this.propsBox.children.length; i += 2) {
+				if (
+					entity != undefined &&
+					entity.hasComponent(
+						ComponentTypeEnum[this.propsBox.children[i].textString]
+					)
+				) {
 					this.propsBox.children[i].setHidden(false);
-					let hiddenStatus = this.propsVisibleMemory.get(ComponentTypeEnum[this.propsBox.children[i].textString]);
+					let hiddenStatus = this.propsVisibleMemory.get(
+						ComponentTypeEnum[this.propsBox.children[i].textString]
+					);
 					if (hiddenStatus != undefined) {
-						this.propsBox.children[i+1].setHidden(hiddenStatus);
+						this.propsBox.children[i + 1].setHidden(hiddenStatus);
 					}
-					entity.getComponent(ComponentTypeEnum[this.propsBox.children[i].textString]).updateGui(this.overlay, this.propsBox, this.game.objectPlacer);
-				}
-				else {
+					entity
+						.getComponent(
+							ComponentTypeEnum[this.propsBox.children[i].textString]
+						)
+						.updateGui(this.overlay, this.propsBox, this.game.objectPlacer);
+				} else {
 					this.propsBox.children[i].setHidden(true);
-					this.propsBox.children[i+1].setHidden(true);
+					this.propsBox.children[i + 1].setHidden(true);
 				}
 			}
-		}
-		else {
+		} else {
 			for (let i = 1; i < this.propsBox.children.length; i++) {
 				this.propsBox.children[i].setHidden(true);
 			}

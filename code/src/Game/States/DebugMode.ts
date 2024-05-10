@@ -26,7 +26,10 @@ export default class DebugMode extends State {
 		this.game = game;
 		this.debugMenu = new DebugMenu(this.stateAccessible, this.game, this);
 
-		this.lastMousePos = vec2.fromValues(input.mousePosition.x, input.mousePosition.y,);
+		this.lastMousePos = vec2.fromValues(
+			input.mousePosition.x,
+			input.mousePosition.y
+		);
 
 		this.oWasPressed = true;
 		this.pWasPressed = true;
@@ -44,9 +47,11 @@ export default class DebugMode extends State {
 			let coords = posCookie.split(",");
 			if (coords.length == 3) {
 				this.game.rendering.camera.setPosition(
-					vec3.fromValues(parseFloat(coords[0]),
-					parseFloat(coords[1]),
-					parseFloat(coords[2]))
+					vec3.fromValues(
+						parseFloat(coords[0]),
+						parseFloat(coords[1]),
+						parseFloat(coords[2])
+					)
 				);
 			}
 		}
@@ -56,9 +61,11 @@ export default class DebugMode extends State {
 			let coords = dirCookie.split(",");
 			if (coords.length == 3) {
 				this.game.rendering.camera.setDir(
-					vec3.fromValues(parseFloat(coords[0]),
-					parseFloat(coords[1]),
-					parseFloat(coords[2]))
+					vec3.fromValues(
+						parseFloat(coords[0]),
+						parseFloat(coords[1]),
+						parseFloat(coords[2])
+					)
 				);
 			}
 		}
@@ -139,7 +146,8 @@ export default class DebugMode extends State {
 			(input.mousePosition.x != input.mousePosition.previousX ||
 				input.mousePosition.y != input.mousePosition.previousY)
 		) {
-			vec2.set(rotVec,
+			vec2.set(
+				rotVec,
 				(input.mousePosition.previousY - input.mousePosition.y) * 0.2,
 				(input.mousePosition.previousX - input.mousePosition.x) * 0.2
 			);
@@ -150,18 +158,29 @@ export default class DebugMode extends State {
 		if (rotate) {
 			let rotMatrix = mat4.create();
 			let rotAmount: number = 90.0;
-			let rightVec = vec3.copy(vec3.create(), this.game.rendering.camera.getRight());
+			let rightVec = vec3.copy(
+				vec3.create(),
+				this.game.rendering.camera.getRight()
+			);
 			if (rotVec[1]) {
-				mat4.rotate(rotMatrix, rotMatrix, rotAmount * rotVec[1] * dt * Math.PI / 180.0, vec3.fromValues(0.0, 1.0, 0.0));
+				mat4.rotate(
+					rotMatrix,
+					rotMatrix,
+					(rotAmount * rotVec[1] * dt * Math.PI) / 180.0,
+					vec3.fromValues(0.0, 1.0, 0.0)
+				);
 			}
 			if (rotVec[0]) {
-				mat4.rotate(rotMatrix, rotMatrix, rotAmount * rotVec[0] * dt * Math.PI / 180.0, rightVec);
+				mat4.rotate(
+					rotMatrix,
+					rotMatrix,
+					(rotAmount * rotVec[0] * dt * Math.PI) / 180.0,
+					rightVec
+				);
 			}
 			let oldDir = this.game.rendering.camera.getDir();
 			let newDir = vec3.transformMat4(vec3.create(), oldDir, rotMatrix);
-			this.game.rendering.camera.setDir(
-				newDir
-			);
+			this.game.rendering.camera.setDir(newDir);
 		}
 
 		if (input.mouseClicked && !this.debugMenu.mouseOverGuiElement) {
@@ -182,20 +201,22 @@ export default class DebugMode extends State {
 				}
 				edited = true;
 				this.actionString = "Rotating";
-			} 
-			else if(input.keys["T"]) {
+			} else if (input.keys["T"]) {
 				let ray = MousePicking.GetRay(this.game.rendering.camera);
 				let dist: number = Infinity;
 
 				dist = this.game.objectPlacer.rayCastToNonSelectedObjects(ray);
-				
+
 				if (dist >= 0.0 && dist < Infinity) {
-					newPosition = vec3.add(vec3.create(), this.game.rendering.camera.getPosition(), vec3.scale(vec3.create(), ray.getDir(), dist));
+					newPosition = vec3.add(
+						vec3.create(),
+						this.game.rendering.camera.getPosition(),
+						vec3.scale(vec3.create(), ray.getDir(), dist)
+					);
 				}
 				this.actionString = "Moving";
 				edited = true;
-			}
-			else if (input.keys["Y"]) {
+			} else if (input.keys["Y"]) {
 				scaleChange = (this.lastMousePos[1] - input.mousePosition.y) * 0.001;
 				edited = true;
 				this.actionString = "Scaling";
@@ -250,20 +271,24 @@ export default class DebugMode extends State {
 			this.handleInput(dt);
 		}
 
-		vec2.set(this.lastMousePos, 
-			input.mousePosition.x,
-			input.mousePosition.y);
-			
+		vec2.set(this.lastMousePos, input.mousePosition.x, input.mousePosition.y);
+
 		let camPos = this.game.rendering.camera.getPosition();
-		WebUtils.SetCookie("debugPos", camPos[0] + "," + camPos[1] + "," + camPos[2]);
+		WebUtils.SetCookie(
+			"debugPos",
+			camPos[0] + "," + camPos[1] + "," + camPos[2]
+		);
 		let camDir = this.game.rendering.camera.getDir();
-		WebUtils.SetCookie("debugDir", camDir[0] + "," + camDir[1] + "," + camDir[2]);
+		WebUtils.SetCookie(
+			"debugDir",
+			camDir[0] + "," + camDir[1] + "," + camDir[2]
+		);
 
 		this.debugMenu.actionText.textString =
 			this.actionString + " " + this.game.objectPlacer.getCurrentObjectType();
 
 		this.debugMenu.update(dt);
-		
+
 		this.game.ecsManager.update(0.0);
 
 		if (this.checkpointNeeded && !this.checkpointTriggeredThisFrame) {

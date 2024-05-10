@@ -68,7 +68,7 @@ export module SAT {
 		shapeAVertices: Array<vec3>,
 		shapeBVertices: Array<vec3>,
 		relativeVelocity: vec3,
-		info: { first: number; last: number; max: number; intersectionVec: vec3}
+		info: { first: number; last: number; max: number; intersectionVec: vec3 }
 	): boolean {
 		let minA = Infinity,
 			minB = Infinity;
@@ -252,8 +252,7 @@ export module SAT {
 
 			if (maxAPoints.length == 1) {
 				vec3.copy(intersectionPoint, shapeAVertices[maxAPoints[0]]);
-			}
-			else if (minBPoints.length == 1) {
+			} else if (minBPoints.length == 1) {
 				vec3.copy(intersectionPoint, shapeBVertices[minBPoints[0]]);
 			}
 		} else {
@@ -269,8 +268,7 @@ export module SAT {
 
 			if (minAPoints.length == 1) {
 				vec3.copy(intersectionPoint, shapeAVertices[minAPoints[0]]);
-			}
-			else if (maxBPoints.length == 1) {
+			} else if (maxBPoints.length == 1) {
 				vec3.copy(intersectionPoint, shapeBVertices[maxBPoints[0]]);
 			}
 		}
@@ -350,7 +348,11 @@ export module SAT {
 
 		if (shapeANormals.length == 1 && shapeBNormals.length == 1) {
 			// Coplanar possible
-			let crossVector = vec3.cross(vec3.create(), shapeANormals[0], shapeBNormals[0]);
+			let crossVector = vec3.cross(
+				vec3.create(),
+				shapeANormals[0],
+				shapeBNormals[0]
+			);
 
 			if (
 				crossVector[0] == 0.0 &&
@@ -408,11 +410,16 @@ export module SAT {
 		velocityA: ReadonlyVec3,
 		velocityB: ReadonlyVec3,
 		timeMax: number
-	): [number, vec3]{
+	): [number, vec3] {
 		// Treat shapeA as stationary and shapeB as moving
 		let relativeVel = vec3.subtract(vec3.create(), velocityB, velocityA);
 
-		let info = { first: 0.0, last: Infinity, max: timeMax, intersectionVec: vec3.create()};
+		let info = {
+			first: 0.0,
+			last: Infinity,
+			max: timeMax,
+			intersectionVec: vec3.create(),
+		};
 
 		let shapeAVertices = shapeA.getTransformedVertices();
 		let shapeBVertices = shapeB.getTransformedVertices();
@@ -457,7 +464,11 @@ export module SAT {
 
 		if (shapeANormals.length == 1 && shapeBNormals.length == 1) {
 			// Coplanar possible
-			let crossVector = vec3.cross(vec3.create(), shapeANormals[0], shapeBNormals[0]);
+			let crossVector = vec3.cross(
+				vec3.create(),
+				shapeANormals[0],
+				shapeBNormals[0]
+			);
 
 			if (
 				crossVector[0] == 0.0 &&

@@ -27,9 +27,12 @@ class LightingPass extends ShaderProgram {
 
 		for (let i = 0; i < pointShadowsToAllocate; i++) {
 			this.setUniformLocation("pointDepthMaps[" + i + "]");
-			gl.uniform1i(this.getUniformLocation("pointDepthMaps["+ i +"]")[0], 5 + i);
+			gl.uniform1i(
+				this.getUniformLocation("pointDepthMaps[" + i + "]")[0],
+				5 + i
+			);
 		}
-		
+
 		for (let i = 0; i < pointLightsToAllocate; i++) {
 			this.setUniformLocation("pointLights[" + i + "].position");
 			this.setUniformLocation("pointLights[" + i + "].colour");
@@ -63,18 +66,21 @@ class LightingPass extends ShaderProgram {
 export let lightingPass = null;
 
 export let createLightingPass = function () {
-	pointShadowsToAllocate = Math.min(pointShadowsToAllocate, gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS) - 5); 
+	pointShadowsToAllocate = Math.min(
+		pointShadowsToAllocate,
+		gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS) - 5
+	);
 
 	lightingFragmentShaderSrc =
-`#version 300 es
+		`#version 300 es
 precision highp float;
 
 #define NR_POINT_LIGHTS ` +
-	pointLightsToAllocate +
-	`
+		pointLightsToAllocate +
+		`
 #define NR_POINT_SHADOWS ` +
-	pointShadowsToAllocate +
-	`
+		pointShadowsToAllocate +
+		`
 
 in vec2 texCoords;
 
@@ -245,24 +251,34 @@ float CalcPointShadow(vec3 fragPos, PointLight light) {
 	fragToLight.y *= -1.0;
 	fragToLight.z *= -1.0;
     // use the light to fragment vector to sample from the depth map
-    float closestDepth = 1.0;`
+    float closestDepth = 1.0;`;
 	// Below is ugly, but I have to unroll the loop to be able to acces the pointDepthMaps array with a compile time index, as run-time index is not allowed to access a sampler
 	for (let i = 0; i < pointShadowsToAllocate; i++) {
 		if (i == 0) {
-			lightingFragmentShaderSrc += `
-	if (light.pointDepthMapIndex == ` + i + `) {
-		closestDepth = texture(pointDepthMaps[` + i + `], fragToLight).r;
+			lightingFragmentShaderSrc +=
+				`
+	if (light.pointDepthMapIndex == ` +
+				i +
+				`) {
+		closestDepth = texture(pointDepthMaps[` +
+				i +
+				`], fragToLight).r;
 	}
-	`
+	`;
 		} else {
-			lightingFragmentShaderSrc += `
-	else if (light.pointDepthMapIndex == ` + i + `) {
-		closestDepth = texture(pointDepthMaps[` + i + `], fragToLight).r;
+			lightingFragmentShaderSrc +=
+				`
+	else if (light.pointDepthMapIndex == ` +
+				i +
+				`) {
+		closestDepth = texture(pointDepthMaps[` +
+				i +
+				`], fragToLight).r;
 	}
-	`
+	`;
 		}
 	}
-	
+
 	lightingFragmentShaderSrc += `
     // it is currently in linear range between [0,1]. Re-transform back to original value
     closestDepth *= far_plane;

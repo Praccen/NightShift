@@ -7,7 +7,11 @@ import Scene from "../Engine/Rendering/Scene";
 import { options } from "./GameMachine";
 
 export default class GrassHandler {
-	private grassSpawners: Array<{ spawner: GrassSpawner; offset: vec2; grassStrawsPlaced: number}>;
+	private grassSpawners: Array<{
+		spawner: GrassSpawner;
+		offset: vec2;
+		grassStrawsPlaced: number;
+	}>;
 	private grassStrawsPerSpawner: number;
 	private grassSpawnerSide: number;
 	private grassElevationCutoff: number;
@@ -58,7 +62,7 @@ export default class GrassHandler {
 		this.grassSpawners.push({
 			spawner: bundle.graphicsObject as GrassSpawner,
 			offset: vec2.fromValues(offsetX, offsetY),
-			grassStrawsPlaced: 0
+			grassStrawsPlaced: 0,
 		});
 	}
 
@@ -79,35 +83,70 @@ export default class GrassHandler {
 
 		// Spawn as much grass as possible within deadline every frame until all grass straws have been spawned
 		for (let spawner of this.grassSpawners) {
-			// First check if we have to move the spawner 
+			// First check if we have to move the spawner
 			let middleOffset = vec2.clone(spawner.offset);
-			vec2.add(middleOffset, middleOffset, vec2.fromValues(this.grassSpawnerSide * 0.5, this.grassSpawnerSide * 0.5));
-			if (cameraPos != undefined && Math.abs(middleOffset[0] - cameraPos[0]) > this.grassSpawnerSide * 2) {
-				spawner.offset[0] = spawner.offset[0] - Math.ceil(Math.abs(middleOffset[0] - cameraPos[0]) / (this.grassSpawnerSide * 4)) * Math.sign(middleOffset[0] - cameraPos[0]) * this.grassSpawnerSide * 4;
+			vec2.add(
+				middleOffset,
+				middleOffset,
+				vec2.fromValues(
+					this.grassSpawnerSide * 0.5,
+					this.grassSpawnerSide * 0.5
+				)
+			);
+			if (
+				cameraPos != undefined &&
+				Math.abs(middleOffset[0] - cameraPos[0]) > this.grassSpawnerSide * 2
+			) {
+				spawner.offset[0] =
+					spawner.offset[0] -
+					Math.ceil(
+						Math.abs(middleOffset[0] - cameraPos[0]) /
+							(this.grassSpawnerSide * 4)
+					) *
+						Math.sign(middleOffset[0] - cameraPos[0]) *
+						this.grassSpawnerSide *
+						4;
 				spawner.grassStrawsPlaced = 0;
 			}
 
-			if (cameraPos != undefined && Math.abs(middleOffset[1] - cameraPos[2]) > this.grassSpawnerSide * 2) {
-				spawner.offset[1] = spawner.offset[1] - Math.ceil(Math.abs(middleOffset[1] - cameraPos[2]) / (this.grassSpawnerSide * 4)) * Math.sign(middleOffset[1] - cameraPos[2]) * this.grassSpawnerSide * 4;
+			if (
+				cameraPos != undefined &&
+				Math.abs(middleOffset[1] - cameraPos[2]) > this.grassSpawnerSide * 2
+			) {
+				spawner.offset[1] =
+					spawner.offset[1] -
+					Math.ceil(
+						Math.abs(middleOffset[1] - cameraPos[2]) /
+							(this.grassSpawnerSide * 4)
+					) *
+						Math.sign(middleOffset[1] - cameraPos[2]) *
+						this.grassSpawnerSide *
+						4;
 				spawner.grassStrawsPlaced = 0;
 			}
 
 			data.length = 0;
 			let startIndex = spawner.grassStrawsPlaced;
-			for (spawner.grassStrawsPlaced; spawner.grassStrawsPlaced < this.grassStrawsPerSpawner; spawner.grassStrawsPlaced++) {
+			for (
+				spawner.grassStrawsPlaced;
+				spawner.grassStrawsPlaced < this.grassStrawsPerSpawner;
+				spawner.grassStrawsPlaced++
+			) {
 				if (Date.now() - startTime >= this.grassSpawningDeadline) {
 					break;
 				}
 
 				let grassStrawPosition = vec3.fromValues(
 					// Grass position (x and z)
-					spawner.offset[0] + (spawner.grassStrawsPlaced % sqrt) * strawDist + strawDist * (Math.random() - 0.5),
+					spawner.offset[0] +
+						(spawner.grassStrawsPlaced % sqrt) * strawDist +
+						strawDist * (Math.random() - 0.5),
 					0.0,
 					spawner.offset[1] +
 						Math.floor(spawner.grassStrawsPlaced / sqrt) * strawDist +
-						strawDist * (Math.random() - 0.5),
+						strawDist * (Math.random() - 0.5)
 				);
-	
+
 				// Get the height of the heightmap at the corresponding position
 				let height = (<Heightmap>(
 					this.mapBundle.graphicsObject
@@ -116,9 +155,9 @@ export default class GrassHandler {
 					grassStrawPosition,
 					invertedMatrix
 				);
-	
+
 				let size = 0.0;
-	
+
 				if (height != null) {
 					let normal = (<Heightmap>(
 						this.mapBundle.graphicsObject
@@ -127,7 +166,7 @@ export default class GrassHandler {
 						grassStrawPosition,
 						invertedMatrix
 					);
-	
+
 					if (normal != null) {
 						if (normal[1] < 0.999999999 || height < this.grassElevationCutoff) {
 							// Given that the x and z coords of the position are on the heightmap
@@ -136,7 +175,7 @@ export default class GrassHandler {
 						}
 					}
 				}
-	
+
 				data.push(...grassStrawPosition); // Position of straw
 				data.push(size); // Size of straw
 				data.push(
@@ -152,7 +191,7 @@ export default class GrassHandler {
 				startIndex * 7,
 				new Float32Array(data)
 			);
-			
+
 			if (Date.now() - startTime >= this.grassSpawningDeadline) {
 				break;
 			}
@@ -196,12 +235,16 @@ export default class GrassHandler {
 						for (let y = middleY - 10; y < middleY + 11; y++) {
 							let dist = vec2.fromValues(
 								x * strawDist - diffX,
-								y * strawDist - diffY,
+								y * strawDist - diffY
 							);
 							if (vec2.length(dist) < 0.3) {
 								let index = Math.floor(x + y * sqrt);
 								if (index > 0 && index < this.grassStrawsPerSpawner) {
-									let offset = vec3.fromValues(doggoVelocity[0], 0.0, doggoVelocity[2]);
+									let offset = vec3.fromValues(
+										doggoVelocity[0],
+										0.0,
+										doggoVelocity[2]
+									);
 									vec3.normalize(offset, offset);
 									vec3.scale(offset, offset, 0.2);
 									offset[1] = -0.2;

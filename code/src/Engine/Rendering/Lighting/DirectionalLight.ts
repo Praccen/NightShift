@@ -45,8 +45,13 @@ export default class DirectionalLight {
 		uniformLocation: WebGLUniformLocation
 	) {
 		let cameraPos = vec3.clone(focusPos);
-		let offsetVec = vec3.scale(vec3.create(), vec3.normalize(vec3.create(), this.direction), offset);
-		let lightSpaceMatrix = mat4.ortho(mat4.create(), 
+		let offsetVec = vec3.scale(
+			vec3.create(),
+			vec3.normalize(vec3.create(), this.direction),
+			offset
+		);
+		let lightSpaceMatrix = mat4.ortho(
+			mat4.create(),
 			-this.lightProjectionBoxSideLength,
 			this.lightProjectionBoxSideLength,
 			-this.lightProjectionBoxSideLength,
@@ -55,12 +60,11 @@ export default class DirectionalLight {
 			offset * 2.0
 		); // Start by setting it to projection
 		vec3.subtract(cameraPos, cameraPos, offsetVec);
-		let lightView = mat4.lookAt(mat4.create(), 
+		let lightView = mat4.lookAt(
+			mat4.create(),
 			cameraPos,
 			focusPos,
-			vec3.fromValues(0.0,
-			1.0,
-			0.0)
+			vec3.fromValues(0.0, 1.0, 0.0)
 		); // This will make it impossible to have exactly straight down shadows, but I'm fine with that
 		mat4.mul(lightSpaceMatrix, lightSpaceMatrix, lightView);
 		gl.uniformMatrix4fv(uniformLocation, false, lightSpaceMatrix);

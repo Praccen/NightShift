@@ -37,7 +37,13 @@ export class Component {
 		objectPlacer: ObjectPlacer
 	) {}
 
-	protected addTextEdit(overlayRendering: OverlayRendering, div: Div, label: string, variable: string[], index?: number) {
+	protected addTextEdit(
+		overlayRendering: OverlayRendering,
+		div: Div,
+		label: string,
+		variable: string[],
+		index?: number
+	) {
 		let propEditText = overlayRendering.getNewEditText(div);
 		propEditText.textString = label;
 		propEditText.textSize = 20;
@@ -53,13 +59,18 @@ export class Component {
 
 		if (index == undefined) {
 			propEditText.getInputElement().value = object.toString();
-		}
-		else {
+		} else {
 			propEditText.getInputElement().value = object[index].toString();
 		}
-	};
+	}
 
-	protected addCheckbox(overlayRendering: OverlayRendering, div: Div, label: string, variable: string[], index?: number) {
+	protected addCheckbox(
+		overlayRendering: OverlayRendering,
+		div: Div,
+		label: string,
+		variable: string[],
+		index?: number
+	) {
 		let propCheckbox = overlayRendering.getNewCheckbox(div);
 		propCheckbox.textString = label;
 		propCheckbox.textSize = 20;
@@ -75,16 +86,20 @@ export class Component {
 
 		if (index == undefined) {
 			propCheckbox.getInputElement().checked = Boolean(object);
-		}
-		else {
+		} else {
 			propCheckbox.getInputElement().checked = Boolean(object[index]);
 		}
 	}
 
-	protected updateTextEdit(div: Div, label: string, variable: string[], index?: number) {
+	protected updateTextEdit(
+		div: Div,
+		label: string,
+		variable: string[],
+		index?: number
+	) {
 		for (let child of div.children) {
 			if (child.textString == label) {
-				if ((<EditText>(child)).getInputElement() != document.activeElement) {
+				if ((<EditText>child).getInputElement() != document.activeElement) {
 					let object = this;
 					for (let step of variable) {
 						object = object[step];
@@ -94,25 +109,24 @@ export class Component {
 					}
 
 					if (index == undefined) {
-						(<EditText>(child)).getInputElement().value = object.toString();
+						(<EditText>child).getInputElement().value = object.toString();
+					} else {
+						(<EditText>child).getInputElement().value =
+							object[index].toString();
 					}
-					else {
-						(<EditText>(child)).getInputElement().value = object[index].toString();
-					}
-				}
-				else {
-					let val: any = parseFloat((<EditText>(child)).getInputElement().value);
+				} else {
+					let val: any = parseFloat((<EditText>child).getInputElement().value);
 					if (input.mouseRightClicked) {
-						let mouseChange = (input.mousePosition.x - input.mousePosition.previousX);
+						let mouseChange =
+							input.mousePosition.x - input.mousePosition.previousX;
 						input.mousePosition.previousX = input.mousePosition.x;
 						if (input.keys["SHIFT"]) {
-							val += (mouseChange) * 0.01;
-						}
-						else {
-							val += (mouseChange) * 0.1;
+							val += mouseChange * 0.01;
+						} else {
+							val += mouseChange * 0.1;
 						}
 						val = Math.round(val * 100) / 100;
-						(<EditText>(child)).getInputElement().value = val.toString();
+						(<EditText>child).getInputElement().value = val.toString();
 					}
 
 					let object = this;
@@ -124,12 +138,11 @@ export class Component {
 							return;
 						}
 					}
-					
-					if (index == undefined && typeof(object) == "number") {
+
+					if (index == undefined && typeof object == "number") {
 						prev[variable[variable.length - 1]] = val;
-					}
-					else {
-						if (typeof(object[index]) == "number") {
+					} else {
+						if (typeof object[index] == "number") {
 							object[index] = val;
 						}
 					}
@@ -138,10 +151,15 @@ export class Component {
 		}
 	}
 
-	protected updateCheckbox(div: Div, label: string, variable: string[], index?: number) {
+	protected updateCheckbox(
+		div: Div,
+		label: string,
+		variable: string[],
+		index?: number
+	) {
 		for (let child of div.children) {
 			if (child.textString == label) {
-				if ((<Checkbox>(child)).getInputElement() != document.activeElement) {
+				if ((<Checkbox>child).getInputElement() != document.activeElement) {
 					let object = this;
 					for (let step of variable) {
 						object = object[step];
@@ -151,14 +169,14 @@ export class Component {
 					}
 
 					if (index == undefined) {
-						(<Checkbox>(child)).getInputElement().checked = Boolean(object);
+						(<Checkbox>child).getInputElement().checked = Boolean(object);
+					} else {
+						(<Checkbox>child).getInputElement().checked = Boolean(
+							object[index]
+						);
 					}
-					else {
-						(<Checkbox>(child)).getInputElement().checked = Boolean(object[index]);
-					}
-				}
-				else {
-					let val: any = (<Checkbox>(child)).getInputElement().checked;
+				} else {
+					let val: any = (<Checkbox>child).getInputElement().checked;
 					let object = this;
 					let prev = null;
 					for (let step of variable) {
@@ -168,12 +186,11 @@ export class Component {
 							return;
 						}
 					}
-					
-					if (index == undefined && typeof(object) == "boolean") {
+
+					if (index == undefined && typeof object == "boolean") {
 						prev[variable[variable.length - 1]] = val;
-					}
-					else {
-						if (typeof(object[index]) == "boolean") {
+					} else {
+						if (typeof object[index] == "boolean") {
 							object[index] = val;
 						}
 					}

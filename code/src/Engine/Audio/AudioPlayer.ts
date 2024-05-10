@@ -18,10 +18,8 @@ export default class AudioPlayer {
 
 		this.active = false;
 
-		const sound_effect_files = [
-		];
-		const sound_effect_volume_multilpliers_list = [
-		];
+		const sound_effect_files = [];
+		const sound_effect_volume_multilpliers_list = [];
 		let count = 0;
 		for (const file of sound_effect_files) {
 			this.sound_effects[file.split(".")[0]] = new Audio(
@@ -32,8 +30,7 @@ export default class AudioPlayer {
 			count++;
 		}
 
-		const song_files = [
-		];
+		const song_files = [];
 		const song_files_volume_multilpliers_list = [];
 		count = 0;
 		for (const file of song_files) {

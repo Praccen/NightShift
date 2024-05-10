@@ -74,10 +74,7 @@ export module WebUtils {
 	 */
 	export function DownloadExistingFile(filepath: string, filename: string) {
 		let element = document.createElement("a");
-		element.setAttribute(
-			"href",
-			filepath
-		);
+		element.setAttribute("href", filepath);
 		element.setAttribute("download", filename);
 
 		element.style.display = "none";

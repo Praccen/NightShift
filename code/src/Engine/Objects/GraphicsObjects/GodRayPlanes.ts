@@ -10,14 +10,12 @@ export default class GodRayPlanes extends GraphicsObject {
 	private vertices: Float32Array;
 	private indices: Int32Array;
 
-	constructor(
-		shaderProgram: ShaderProgram
-	) {
+	constructor(shaderProgram: ShaderProgram) {
 		super(shaderProgram);
 
 		this.numPlanes = 50;
 		this.fogMaxDistance = 100.0;
-		
+
 		this.bindVAO();
 		this.unbindVAO();
 
@@ -51,6 +49,12 @@ export default class GodRayPlanes extends GraphicsObject {
 			this.numPlanes
 		);
 
-		gl.drawElementsInstanced(gl.TRIANGLES, 6, gl.UNSIGNED_INT, 0, this.numPlanes);
+		gl.drawElementsInstanced(
+			gl.TRIANGLES,
+			6,
+			gl.UNSIGNED_INT,
+			0,
+			this.numPlanes
+		);
 	}
 }

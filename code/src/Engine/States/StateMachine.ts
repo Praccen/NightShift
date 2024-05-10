@@ -95,17 +95,14 @@ export default class StateMachine {
 	}
 
 	async runCurrentState() {
-		let currentState = this.states.get(this.currentState)
+		let currentState = this.states.get(this.currentState);
 		if (!currentState.state.initialized) {
 			await currentState.state.init();
 			currentState.state.initialized = true;
 		}
 
 		// Update the state
-		this.updateState(
-			currentState.state,
-			currentState.minUpdateRate
-		);
+		this.updateState(currentState.state, currentState.minUpdateRate);
 
 		// Check if we should change state
 		if (currentState.state.gotoState != StatesEnum.STAY) {

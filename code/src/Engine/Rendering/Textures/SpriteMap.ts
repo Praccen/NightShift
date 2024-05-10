@@ -13,11 +13,15 @@ export default class SpriteMap {
 		mat4.identity(matrix);
 		let spriteSizeX = 1.0 / Math.max(this.nrOfSprites.x, 0.000001);
 		let spriteSizeY = 1.0 / Math.max(this.nrOfSprites.y, 0.000001);
-		mat4.translate(matrix, matrix, vec3.fromValues(
-			this.currentSprite.x * spriteSizeX,
-			this.currentSprite.y * spriteSizeY,
-			0.0
-		));
+		mat4.translate(
+			matrix,
+			matrix,
+			vec3.fromValues(
+				this.currentSprite.x * spriteSizeX,
+				this.currentSprite.y * spriteSizeY,
+				0.0
+			)
+		);
 		mat4.scale(matrix, matrix, vec3.fromValues(spriteSizeX, spriteSizeY, 1.0));
 	}
 

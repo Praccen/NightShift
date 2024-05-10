@@ -61,14 +61,18 @@ void main()
 
 class PointShadowPass extends ShaderProgram {
 	constructor() {
-		super("PointShadowPass", pointShadowVertexShaderSrc, pointShadowFragmentShaderSrc);
+		super(
+			"PointShadowPass",
+			pointShadowVertexShaderSrc,
+			pointShadowFragmentShaderSrc
+		);
 
 		this.use();
 
 		this.setUniformLocation("lightSpaceMatrix");
 		this.setUniformLocation("modelMatrix");
 		this.setUniformLocation("textureMatrix");
-        this.setUniformLocation("cameraPos");
+		this.setUniformLocation("cameraPos");
 	}
 
 	setupVertexAttributePointers(): void {

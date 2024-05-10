@@ -25,17 +25,17 @@ export default class Mesh extends GraphicsObject {
 				vec3.fromValues(
 					this.vertices[i],
 					this.vertices[i + 1],
-					this.vertices[i + 2],
+					this.vertices[i + 2]
 				),
 				vec3.fromValues(
 					this.vertices[i + 8],
 					this.vertices[i + 8 + 1],
-					this.vertices[i + 8 + 2],
+					this.vertices[i + 8 + 2]
 				),
 				vec3.fromValues(
 					this.vertices[i + 16],
 					this.vertices[i + 16 + 1],
-					this.vertices[i + 16 + 2],
+					this.vertices[i + 16 + 2]
 				)
 			);
 		}
@@ -45,7 +45,11 @@ export default class Mesh extends GraphicsObject {
 		let returnArr = new Array<vec3>();
 		for (let i = 0; i < this.vertices.length; i += 8) {
 			returnArr.push(
-				vec3.fromValues(this.vertices[i], this.vertices[i + 1], this.vertices[i + 2])
+				vec3.fromValues(
+					this.vertices[i],
+					this.vertices[i + 1],
+					this.vertices[i + 2]
+				)
 			);
 		}
 		return returnArr;

@@ -4,9 +4,8 @@ import Ray from "./Shapes/Ray";
 import Shape from "./Shapes/Shape";
 
 export module IntersectionTester {
-
 	/**
-	 * 
+	 *
 	 */
 	export class IntersectionInformation {
 		axis: vec3;
@@ -37,7 +36,6 @@ export module IntersectionTester {
 			this.shapeB = shapeB;
 		}
 	}
-
 
 	/**
 	 * Will check if there is an intersection between two meshes.
@@ -181,18 +179,21 @@ export module IntersectionTester {
 					maxDistance
 				);
 
-				if (((allow0Collision && dist >= 0.0) || (dist > 0.0)) && (dist < earliestHit || earliestHit < 0)) {
+				if (
+					((allow0Collision && dist >= 0.0) || dist > 0.0) &&
+					(dist < earliestHit || earliestHit < 0)
+				) {
 					earliestHit = dist;
 					intersectionVec = iVec;
 					maxDistance = earliestHit;
-	
+
 					if (breakOnFirstHit) {
 						return [earliestHit, intersectionVec];
 					}
 				}
 			}
 		}
-		
+
 		return [earliestHit, intersectionVec];
 	}
 }

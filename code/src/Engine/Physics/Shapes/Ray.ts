@@ -1,5 +1,5 @@
 import Shape from "./Shape";
-import {ReadonlyVec3, mat3, mat4, vec3} from "gl-matrix";
+import { ReadonlyVec3, mat3, mat4, vec3 } from "gl-matrix";
 
 export default class Ray extends Shape {
 	private start: vec3;
@@ -40,16 +40,20 @@ export default class Ray extends Shape {
 
 	getTransformedNormals(): Array<vec3> {
 		let start = this.getTransformedVertices()[0];
-		let end = vec3.transformMat4(vec3.create(), vec3.add(vec3.create(), this.start, this.dir), this.inverseMatrix)
+		let end = vec3.transformMat4(
+			vec3.create(),
+			vec3.add(vec3.create(), this.start, this.dir),
+			this.inverseMatrix
+		);
 
 		return [vec3.subtract(vec3.create(), end, start)]; // Not normalized because we want to keep distances
 	}
 
 	getTransformedEdges(): Array<vec3> {
-		return [];	
-	} 
-	
+		return [];
+	}
+
 	getTransformedEdgeNormals(): Array<vec3> {
 		return [];
-	};
+	}
 }

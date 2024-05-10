@@ -40,17 +40,17 @@ export default class PhongQuad extends GraphicsObject {
 				vec3.fromValues(
 					this.vertices[this.indices[i] * 8],
 					this.vertices[this.indices[i] * 8 + 1],
-					this.vertices[this.indices[i] * 8 + 2],
+					this.vertices[this.indices[i] * 8 + 2]
 				),
 				vec3.fromValues(
 					this.vertices[this.indices[i + 1] * 8],
 					this.vertices[this.indices[i + 1] * 8 + 1],
-					this.vertices[this.indices[i + 1] * 8 + 2],
+					this.vertices[this.indices[i + 1] * 8 + 2]
 				),
 				vec3.fromValues(
 					this.vertices[this.indices[i + 2] * 8],
 					this.vertices[this.indices[i + 2] * 8 + 1],
-					this.vertices[this.indices[i + 2] * 8 + 2],
+					this.vertices[this.indices[i + 2] * 8 + 2]
 				)
 			);
 		}
@@ -60,7 +60,11 @@ export default class PhongQuad extends GraphicsObject {
 		let returnArr = new Array<vec3>();
 		for (let i = 0; i < this.vertices.length; i += 8) {
 			returnArr.push(
-				vec3.fromValues(this.vertices[i], this.vertices[i + 1], this.vertices[i + 2])
+				vec3.fromValues(
+					this.vertices[i],
+					this.vertices[i + 1],
+					this.vertices[i + 2]
+				)
 			);
 		}
 		return returnArr;

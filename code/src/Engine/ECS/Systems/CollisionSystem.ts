@@ -42,7 +42,9 @@ export default class CollisionSystem extends System {
 			);
 			bbComp.updateTransformMatrix();
 
-			let movComp = <MovementComponent>(e.getComponent(ComponentTypeEnum.MOVEMENT));
+			let movComp = <MovementComponent>(
+				e.getComponent(ComponentTypeEnum.MOVEMENT)
+			);
 			if (movComp) {
 				movComp.onGround = false;
 			}
@@ -63,18 +65,21 @@ export default class CollisionSystem extends System {
 				e1.getComponent(ComponentTypeEnum.MESHCOLLISION)
 			);
 
-			for (let j = i+1; j < this.entities.length; j++) {
+			for (let j = i + 1; j < this.entities.length; j++) {
 				const e2 = this.entities[j];
 				if (e1.id == e2.id) {
 					// Don't collide with self
 					continue;
 				}
-				
+
 				let e2CollisionComp = <CollisionComponent>(
 					e2.getComponent(ComponentTypeEnum.COLLISION)
 				);
 
-				if ((e1CollisionComp.isStatic || e1CollisionComp.isImmovable) && (e2CollisionComp.isStatic || e2CollisionComp.isImmovable)) {
+				if (
+					(e1CollisionComp.isStatic || e1CollisionComp.isImmovable) &&
+					(e2CollisionComp.isStatic || e2CollisionComp.isImmovable)
+				) {
 					continue;
 				}
 
@@ -86,7 +91,6 @@ export default class CollisionSystem extends System {
 					e2.getComponent(ComponentTypeEnum.MESHCOLLISION)
 				);
 
-				
 				information.length = 0;
 				if (e1MeshCollisionComp || e2MeshCollisionComp) {
 					// At least one of the entities have mesh collision
@@ -104,7 +108,12 @@ export default class CollisionSystem extends System {
 							// Entity 1 has mesh collision, check e2 bb versus e1 mesh octree
 
 							// By first giving e2 bb inverse matrix of e1 matrix
-							e2BoundingBoxComp.boundingBox.setInverseMatrix(mat4.invert(mat4.create(), e1BoundingBoxComp.boundingBox.getTransformMatrix()));
+							e2BoundingBoxComp.boundingBox.setInverseMatrix(
+								mat4.invert(
+									mat4.create(),
+									e1BoundingBoxComp.boundingBox.getTransformMatrix()
+								)
+							);
 
 							// Then check against mesh octree (now in e1 local coords)
 							let localE1ShapeArray = new Array<Triangle>();
@@ -120,8 +129,14 @@ export default class CollisionSystem extends System {
 							for (let shape of localE1ShapeArray) {
 								let index = e1ShapeArray.push(new Triangle()) - 1;
 								let shapeOriginalVertices = shape.getOriginalVertices();
-								(<Triangle>e1ShapeArray[index]).setVertices(shapeOriginalVertices[0], shapeOriginalVertices[1], shapeOriginalVertices[2]);
-								(<Triangle>e1ShapeArray[index]).setTransformMatrix(e1BoundingBoxComp.boundingBox.getTransformMatrix());
+								(<Triangle>e1ShapeArray[index]).setVertices(
+									shapeOriginalVertices[0],
+									shapeOriginalVertices[1],
+									shapeOriginalVertices[2]
+								);
+								(<Triangle>e1ShapeArray[index]).setTransformMatrix(
+									e1BoundingBoxComp.boundingBox.getTransformMatrix()
+								);
 							}
 						} else {
 							// Entity 1 does not have mesh collision, use the bounding box for intersection testing
@@ -132,7 +147,12 @@ export default class CollisionSystem extends System {
 							// Entity 2 has mesh collision, check e1 bb versus e2 mesh octree
 
 							// By first giving e1 bb inverse matrix of e2 matrix
-							e1BoundingBoxComp.boundingBox.setInverseMatrix(mat4.invert(mat4.create(), e2BoundingBoxComp.boundingBox.getTransformMatrix()));
+							e1BoundingBoxComp.boundingBox.setInverseMatrix(
+								mat4.invert(
+									mat4.create(),
+									e2BoundingBoxComp.boundingBox.getTransformMatrix()
+								)
+							);
 
 							// Then get the shapes from the octree (now in e2 local coords)
 							let localE2ShapeArray = new Array<Triangle>();
@@ -148,8 +168,14 @@ export default class CollisionSystem extends System {
 							for (let shape of localE2ShapeArray) {
 								let index = e2ShapeArray.push(new Triangle()) - 1;
 								let shapeOriginalVertices = shape.getOriginalVertices();
-								(<Triangle>e2ShapeArray[index]).setVertices(shapeOriginalVertices[0], shapeOriginalVertices[1], shapeOriginalVertices[2]);
-								(<Triangle>e2ShapeArray[index]).setTransformMatrix(e2BoundingBoxComp.boundingBox.getTransformMatrix());
+								(<Triangle>e2ShapeArray[index]).setVertices(
+									shapeOriginalVertices[0],
+									shapeOriginalVertices[1],
+									shapeOriginalVertices[2]
+								);
+								(<Triangle>e2ShapeArray[index]).setTransformMatrix(
+									e2BoundingBoxComp.boundingBox.getTransformMatrix()
+								);
 							}
 						} else {
 							// Entity 2 does not have mesh collision, use the bounding box for intersection testing

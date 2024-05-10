@@ -176,7 +176,9 @@ export default class ECSManager {
 	private removeComponents() {
 		for (const compEntityPair of this.componentRemovalQueue) {
 			// Remove component from entity
-			let index = compEntityPair.entity.components.findIndex((c) => c.type == compEntityPair.componentType);
+			let index = compEntityPair.entity.components.findIndex(
+				(c) => c.type == compEntityPair.componentType
+			);
 			if (index != -1) {
 				compEntityPair.entity.components[index].destructor();
 				compEntityPair.entity.components.splice(index, 1);
