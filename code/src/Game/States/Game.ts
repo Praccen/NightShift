@@ -27,7 +27,8 @@ export default class Game extends State {
 	private static instance: Game;
 
 	private player: PlayerController;
-
+	
+	private pointerLockTimer: number;
 	private oWasPressed: boolean;
 
 	public static getInstance(sa: StateAccessible): Game {
@@ -50,6 +51,8 @@ export default class Game extends State {
 			this.stateAccessible.meshStore,
 			this.stateAccessible.textureStore
 		);
+
+		this.pointerLockTimer = -1.0;
 		this.oWasPressed = true;
 
 		this.overlayRendering = new OverlayRendering();
@@ -148,6 +151,9 @@ export default class Game extends State {
 		if (WebUtils.GetCookie("debug") == "true") {
 			this.gotoState = StatesEnum.DEBUGMODE;
 		}
+		else {
+			document.getElementById("gameDiv").requestPointerLock();
+		}
 		this.oWasPressed = true;
 	}
 
@@ -164,6 +170,20 @@ export default class Game extends State {
 	}
 
 	update(dt: number) {
+		if (this.pointerLockTimer >= 0.0) {
+			this.pointerLockTimer += dt;
+
+			if (this.pointerLockTimer >= 0.2) {
+				document.getElementById("gameDiv").requestPointerLock();
+				this.pointerLockTimer = -1.0;
+			}
+		}
+
+		if (input.mouseClicked && this.pointerLockTimer < 0.0) {
+			this.pointerLockTimer = 0.0;
+		}
+
+
 		if (input.keys["O"]) {
 			if (!this.oWasPressed) {
 				this.gotoState = StatesEnum.DEBUGMODE;

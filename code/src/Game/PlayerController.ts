@@ -85,7 +85,7 @@ export default class PlayerController {
 	}
 
 	update(dt: number) {
-		if (vec2.squaredLength(this.mouseMovement) > 0.0) {
+		if (vec2.squaredLength(this.mouseMovement) > 0.0 && document.pointerLockElement == document.getElementById("gameDiv")) {
 			let sensitivity: number = 45.0; // TODO: move to options, and add a slider in options menu.
 			vec2.scaleAndAdd(
 				this.jawPitch,
