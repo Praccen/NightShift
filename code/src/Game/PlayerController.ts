@@ -99,7 +99,7 @@ export default class PlayerController {
 	}
 
 	update(dt: number) {
-        if (vec2.sqrLen(input.joystickRightDirection) > 0.001) {
+		if (vec2.sqrLen(input.joystickRightDirection) > 0.001) {
 			vec2.scaleAndAdd(
 				this.jawPitch,
 				this.jawPitch,
@@ -112,8 +112,10 @@ export default class PlayerController {
 				this.jawPitch[1],
 				this.jawPitch[0]
 			);
-        }
-        else if (vec2.squaredLength(this.mouseMovement) > 0.0 && document.pointerLockElement == document.getElementById("gameDiv")) {
+		} else if (
+			vec2.squaredLength(this.mouseMovement) > 0.0 &&
+			document.pointerLockElement == document.getElementById("gameDiv")
+		) {
 			vec2.scaleAndAdd(
 				this.jawPitch,
 				this.jawPitch,

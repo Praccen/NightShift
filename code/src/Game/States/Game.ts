@@ -25,7 +25,7 @@ export default class Game extends State {
 	private static instance: Game;
 
 	private player: PlayerController;
-	
+
 	private pointerLockTimer: number;
 	private oWasPressed: boolean;
 
@@ -146,8 +146,7 @@ export default class Game extends State {
 		this.rendering.useBloom = options.useBloom;
 		if (WebUtils.GetCookie("debug") == "true") {
 			this.gotoState = StatesEnum.DEBUGMODE;
-		}
-		else {
+		} else {
 			document.getElementById("gameDiv").requestPointerLock();
 		}
 		this.oWasPressed = true;
@@ -178,7 +177,6 @@ export default class Game extends State {
 		if (input.mouseClicked && this.pointerLockTimer < 0.0) {
 			this.pointerLockTimer = 0.0;
 		}
-
 
 		if (input.keys["O"]) {
 			if (!this.oWasPressed) {
