@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "gl-matrix": "^3.4.3",
-    "prettier": "^2.7.1"
+    "prettier": "^2.7.1",
+    "typescript-language-server": "^4.3.3"
   },
   "version": "1.0.0",
   "description": "My webpack project",
