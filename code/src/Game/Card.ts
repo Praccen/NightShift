@@ -54,7 +54,7 @@ export default class Card {
 		}
 		vec3.lerp(
 			animationVec,
-			vec3.fromValues(1, 0.2, 0.2),
+			vec3.fromValues(1, 0.5, 0.5),
 			vec3.fromValues(1, 1, 1),
 			this.animationTime
 		);
@@ -63,7 +63,7 @@ export default class Card {
 			ComponentTypeEnum.GRAPHICS
 		) as GraphicsComponent;
 		if (graphComp != undefined) {
-			if (this.animationTime < 0.7) {
+			if (this.animationTime < 0.9) {
 				graphComp.bundle.graphicsObject.enabled = false;
 				return;
 			} else {
