@@ -4,7 +4,6 @@ import GraphicsBundle from "../../Objects/GraphicsBundle";
 import { OverlayRendering } from "../../Rendering/GUI/OverlayRendering";
 import { Component, ComponentTypeEnum } from "./Component";
 import Game from "../../../Game/States/Game";
-import { vec3 } from "gl-matrix";
 
 export default class GraphicsComponent extends Component {
 	object: GraphicsBundle;

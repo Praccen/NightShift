@@ -14,11 +14,11 @@ export default class PlayerController {
 	private game: Game;
 
 	private entity: Entity;
-	private positionComp: PositionComponent;
+	positionComp: PositionComponent;
 	private movComp: MovementComponent;
 
 	private mouseMovement: vec2;
-	private jawPitch: vec2;
+	jawPitch: vec2;
 	private cards: Card[];
 	private selectedCard: number;
 	private wasRotated: boolean;
@@ -28,7 +28,11 @@ export default class PlayerController {
 	constructor(game: Game) {
 		this.game = game;
 		this.cards = new Array<Card>(3);
-		this.cards = [new Card(game), new Card(game), new Card(game)];
+		this.cards = [
+			new Card(this, game, 0),
+			new Card(this, game, 1),
+			new Card(this, game, 2),
+		];
 		this.selectedCard = 0;
 		this.wasRotated = true;
 		this.showCards = false;
@@ -225,5 +229,8 @@ export default class PlayerController {
 				vec3.fromValues(0.0, 1.7, 0.0)
 			)
 		);
+		this.cards[0].update(dt, 0);
+		this.cards[1].update(dt, 1);
+		this.cards[2].update(dt, 2);
 	}
 }

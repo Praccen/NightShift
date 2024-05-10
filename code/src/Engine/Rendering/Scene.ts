@@ -55,15 +55,31 @@ export default class Scene {
 		// -------------------
 	}
 
-	getNewPhongQuad(diffusePath: string, specularPath: string): GraphicsBundle {
-		const length = this.graphicBundles.push(
-			new GraphicsBundle(
-				this.textureStore.getTexture(diffusePath),
-				this.textureStore.getTexture(specularPath),
-				new PhongQuad(geometryPass)
-			)
-		);
-		return this.graphicBundles[length - 1];
+	getNewPhongQuad(
+		diffusePath: string,
+		specularPath: string,
+		emissionMap?: string
+	): GraphicsBundle {
+		if (emissionMap != undefined) {
+			const length = this.graphicBundles.push(
+				new GraphicsBundle(
+					this.textureStore.getTexture(diffusePath),
+					this.textureStore.getTexture(specularPath),
+					new PhongQuad(geometryPass),
+					this.textureStore.getTexture(emissionMap)
+				)
+			);
+			return this.graphicBundles[length - 1];
+		} else {
+			const length = this.graphicBundles.push(
+				new GraphicsBundle(
+					this.textureStore.getTexture(diffusePath),
+					this.textureStore.getTexture(specularPath),
+					new PhongQuad(geometryPass)
+				)
+			);
+			return this.graphicBundles[length - 1];
+		}
 	}
 
 	getNewMesh(

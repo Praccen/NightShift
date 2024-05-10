@@ -21,7 +21,7 @@ export default class Game extends State {
 	private menuButton: Button;
 	objectPlacer: ObjectPlacer;
 
-	private scene: Scene;
+	scene: Scene;
 	private static instance: Game;
 
 	private player: PlayerController;

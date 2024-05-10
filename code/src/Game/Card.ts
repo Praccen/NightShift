@@ -1,4 +1,11 @@
+import { quat, vec3 } from "gl-matrix";
+import GraphicsComponent from "../Engine/ECS/Components/GraphicsComponent";
+import PositionComponent from "../Engine/ECS/Components/PositionComponent";
+import { ComponentTypeEnum } from "../Engine/ECS/Components/Component";
+import Entity from "../Engine/ECS/Entity";
+import PlayerController from "./PlayerController";
 import Game from "./States/Game";
+
 enum COLOR {
 	RED,
 	GREEN,
@@ -8,36 +15,122 @@ enum COLOR {
 	PURPLE,
 }
 class Box {
-	colors: COLOR;
+	color: COLOR;
 	constructor() {
-		let rand = Math.floor(Math.random() * 5 + 1);
-		if (rand == 1) {
-			this.colors = COLOR.RED;
-			console.warn("RED");
-		} else if (rand == 2) {
-			this.colors = COLOR.GREEN;
-			console.warn("GREEN");
-		} else if (rand == 3) {
-			this.colors = COLOR.BLUE;
-			console.warn("BLUE");
-		} else if (rand == 4) {
-			this.colors = COLOR.ORANGE;
-			console.warn("ORANGE");
-		} else if (rand == 5) {
-			this.colors = COLOR.PINK;
-			console.warn("PINK");
-		} else if (rand == 6) {
-			this.colors = COLOR.PURPLE;
-			console.warn("PURPLE");
-		}
+		this.color = Math.floor(Math.random() * 5 + 1);
 	}
 }
 
 export default class Card {
-	private game: Game;
 	boxes: Array<Box>;
-	constructor(game: Game) {
+	shapes: Array<Entity>;
+	position: vec3;
+	player: PlayerController;
+	game: Game;
+
+	constructor(player: PlayerController, game: Game, cardNr: number) {
 		this.game = game;
 		this.boxes = [new Box(), new Box(), new Box()];
+		this.shapes = [
+			this.createNewCardShape(this.boxes[0], cardNr),
+			this.createNewCardShape(this.boxes[1], 1),
+			this.createNewCardShape(this.boxes[2], 2),
+		];
+		this.player = player;
+	}
+
+	update(dt: number, cardNr: number) {
+		let playerPos = this.player.positionComp.position;
+		let forward = vec3.clone(this.game.rendering.camera.getDir());
+		let right = vec3.clone(this.game.rendering.camera.getRight());
+		forward[1] = 0.0;
+		vec3.normalize(forward, forward);
+		let posComp = this.shapes[0].getComponent(
+			ComponentTypeEnum.POSITION
+		) as PositionComponent;
+		if (posComp != undefined) {
+			let offsetY: number = 0.0;
+			let offset: number = 0.0;
+			let flush: number = 0.0;
+			switch (cardNr) {
+				case 0:
+					flush = -30;
+					offsetY = 0.001;
+					offset = -0.05;
+					break;
+				case 2:
+					flush = 30;
+					offsetY = -0.001;
+					offset = 0.05;
+					break;
+			}
+
+			vec3.scaleAndAdd(posComp.position, playerPos, forward, 0.1 + offsetY);
+			quat.rotateY(
+				posComp.rotation,
+				quat.create(),
+				(this.player.jawPitch[0] / 180) * Math.PI
+			);
+			quat.rotateZ(posComp.rotation, posComp.rotation, (flush / 180) * Math.PI);
+			vec3.scale(right, right, offset);
+			vec3.add(
+				posComp.position,
+				posComp.position,
+				vec3.add(vec3.create(), right, vec3.fromValues(0.0, 1.7, 0))
+			);
+		}
+	}
+
+	createNewCardShape(box: Box, cardNr: number): Entity {
+		let cardEntity = this.game.ecsManager.createEntity();
+		let graphComp = new GraphicsComponent(
+			this.game.scene.getNewPhongQuad(
+				"CSS:rgb(0,0,0)",
+				"CSS:rgb(0,0,0)",
+				"CSS:rgb(255,255,255)"
+			)
+		);
+		switch (box.color) {
+			case COLOR.RED:
+				graphComp.object.emissionColor = vec3.fromValues(1, 0, 0);
+				break;
+			case COLOR.GREEN:
+				graphComp.object.emissionColor = vec3.fromValues(0, 1, 0);
+				break;
+			case COLOR.BLUE:
+				graphComp.object.emissionColor = vec3.fromValues(0, 0, 1);
+				break;
+			case COLOR.ORANGE:
+				graphComp.object.emissionColor = vec3.fromValues(1, 1, 0);
+				break;
+			case COLOR.PINK:
+				graphComp.object.emissionColor = vec3.fromValues(1, 0, 0);
+				break;
+			case COLOR.PURPLE:
+				graphComp.object.emissionColor = vec3.fromValues(1, 0, 1);
+				break;
+		}
+		switch (cardNr) {
+			case 0:
+				vec3.scale(
+					graphComp.object.emissionColor,
+					graphComp.object.emissionColor,
+					0.8
+				);
+				break;
+			case 1:
+				graphComp.object.emissionColor;
+				vec3.scale(
+					graphComp.object.emissionColor,
+					graphComp.object.emissionColor,
+					0.9
+				);
+				break;
+		}
+		let posComp = new PositionComponent();
+		vec3.set(posComp.scale, 0.05, 0.1, 0.1);
+		this.game.ecsManager.addComponent(cardEntity, graphComp);
+		this.game.ecsManager.addComponent(cardEntity, posComp);
+		return cardEntity;
 	}
 }
