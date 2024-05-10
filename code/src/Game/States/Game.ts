@@ -11,14 +11,12 @@ import { vec3 } from "gl-matrix";
 import PointLightComponent from "../../Engine/ECS/Components/PointLightComponent";
 import PositionComponent from "../../Engine/ECS/Components/PositionComponent";
 import PlayerController from "../PlayerController";
-import Player from "../Player";
 import Card from "../Card";
 
 export default class Game extends State {
 	rendering: Rendering;
 	ecsManager: ECSManager;
 	private stateAccessible: StateAccessible;
-	private player: Player;
 	private cards: Card[];
 
 	private overlayRendering: OverlayRendering;
