@@ -8,6 +8,8 @@ import Game from "./States/Game";
 import CollisionComponent from "../Engine/ECS/Components/CollisionComponent";
 import Card from "./Card";
 
+const sensitivity = 45.0; // TODO: move to options, and add a slider in options menu.
+
 export default class PlayerController {
 	private game: Game;
 
@@ -97,8 +99,21 @@ export default class PlayerController {
 	}
 
 	update(dt: number) {
-		if (vec2.squaredLength(this.mouseMovement) > 0.0 && document.pointerLockElement == document.getElementById("gameDiv")) {
-			let sensitivity: number = 45.0; // TODO: move to options, and add a slider in options menu.
+        if (vec2.sqrLen(input.joystickRightDirection) > 0.001) {
+			vec2.scaleAndAdd(
+				this.jawPitch,
+				this.jawPitch,
+				input.joystickRightDirection,
+				-sensitivity * 4.0 * dt
+			);
+			this.jawPitch[0] = this.jawPitch[0] % 360;
+			this.jawPitch[1] = Math.max(Math.min(this.jawPitch[1], 89), -89);
+			this.game.rendering.camera.setPitchJawDegrees(
+				this.jawPitch[1],
+				this.jawPitch[0]
+			);
+        }
+        else if (vec2.squaredLength(this.mouseMovement) > 0.0 && document.pointerLockElement == document.getElementById("gameDiv")) {
 			vec2.scaleAndAdd(
 				this.jawPitch,
 				this.jawPitch,
