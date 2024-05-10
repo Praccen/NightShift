@@ -27,6 +27,7 @@ export default class Card {
 	position: vec3;
 	player: PlayerController;
 	game: Game;
+	animationTime: number;
 
 	constructor(player: PlayerController, game: Game, cardNr: number) {
 		this.game = game;
@@ -37,9 +38,39 @@ export default class Card {
 			this.createNewCardShape(this.boxes[2], 2),
 		];
 		this.player = player;
+		this.animationTime = 0.0;
 	}
 
 	update(dt: number, cardNr: number) {
+		let animationVec: vec3 = vec3.fromValues(1, 1, 1);
+		if (this.player.showCards) {
+			if (this.animationTime < 1.0) {
+				this.animationTime += dt;
+			}
+		} else {
+			if (this.animationTime > 0.0) {
+				this.animationTime -= dt;
+			}
+		}
+		vec3.lerp(
+			animationVec,
+			vec3.fromValues(1, 0.2, 0.2),
+			vec3.fromValues(1, 1, 1),
+			this.animationTime
+		);
+
+		let graphComp = this.shapes[0].getComponent(
+			ComponentTypeEnum.GRAPHICS
+		) as GraphicsComponent;
+		if (graphComp != undefined) {
+			if (this.animationTime < 0.7) {
+				graphComp.bundle.graphicsObject.enabled = false;
+				return;
+			} else {
+				graphComp.bundle.graphicsObject.enabled = true;
+			}
+		}
+
 		let playerPos = this.player.positionComp.position;
 		let forward = vec3.clone(this.game.rendering.camera.getDir());
 		let right = vec3.clone(this.game.rendering.camera.getRight());
@@ -65,7 +96,12 @@ export default class Card {
 					break;
 			}
 
-			vec3.scaleAndAdd(posComp.position, playerPos, forward, 0.1 + offsetY);
+			vec3.scaleAndAdd(
+				posComp.position,
+				playerPos,
+				forward,
+				0.1 + offsetY - (1.0 - this.animationTime)
+			);
 			quat.rotateY(
 				posComp.rotation,
 				quat.create(),
@@ -73,10 +109,12 @@ export default class Card {
 			);
 			quat.rotateZ(posComp.rotation, posComp.rotation, (flush / 180) * Math.PI);
 			vec3.scale(right, right, offset);
+			let posVec: vec3 = vec3.create();
+			vec3.mul(posVec, vec3.fromValues(0.0, 1.7, 0), animationVec);
 			vec3.add(
 				posComp.position,
 				posComp.position,
-				vec3.add(vec3.create(), right, vec3.fromValues(0.0, 1.7, 0))
+				vec3.add(vec3.create(), right, posVec)
 			);
 		}
 	}

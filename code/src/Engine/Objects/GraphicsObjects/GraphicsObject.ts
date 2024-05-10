@@ -5,6 +5,7 @@ import ShaderProgram from "../../Rendering/ShaderPrograms/ShaderProgram";
 
 export default class GraphicsObject {
 	shaderProgram: ShaderProgram;
+	enabled: boolean;
 
 	// Private
 	private VAO: WebGLVertexArrayObject;
@@ -19,6 +20,7 @@ export default class GraphicsObject {
 		this.EBO = null; // Optional
 
 		this.init();
+		this.enabled = true;
 	}
 
 	init() {

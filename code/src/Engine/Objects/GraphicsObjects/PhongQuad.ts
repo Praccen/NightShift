@@ -13,19 +13,19 @@ export default class PhongQuad extends GraphicsObject {
 		super(shaderProgram);
 
 		// prettier-ignore
-		this.vertices = new Float32Array([ 
-            // positions        // normals         // uv
-            -0.5,  0.5,  0.0,   0.0, 0.0, 1.0,     0.0, 1.0,
-            -0.5, -0.5,  0.0,   0.0, 0.0, 1.0,     0.0, 0.0,
-             0.5, -0.5,  0.0,   0.0, 0.0, 1.0,     1.0, 0.0,
-             0.5,  0.5,  0.0,   0.0, 0.0, 1.0,     1.0, 1.0,
-        ]);
+		this.vertices = new Float32Array([
+			// positions        // normals         // uv
+			-0.5, 0.5, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0,
+			-0.5, -0.5, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0,
+			0.5, -0.5, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0,
+			0.5, 0.5, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0,
+		]);
 
 		// prettier-ignore
 		this.indices = new Int32Array([
-            0, 1, 2,
-            0, 2, 3,
-        ]);
+			0, 1, 2,
+			0, 2, 3,
+		]);
 		this.setVertexData(this.vertices);
 		this.setIndexData(this.indices);
 	}
@@ -71,7 +71,9 @@ export default class PhongQuad extends GraphicsObject {
 	}
 
 	draw() {
-		this.bindVAO();
-		gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_INT, 0);
+		if (this.enabled) {
+			this.bindVAO();
+			gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_INT, 0);
+		}
 	}
 }

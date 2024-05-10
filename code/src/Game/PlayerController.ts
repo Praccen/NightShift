@@ -22,7 +22,7 @@ export default class PlayerController {
 	private cards: Card[];
 	private selectedCard: number;
 	private wasRotated: boolean;
-	private showCards: boolean;
+	showCards: boolean;
 	private cardsToggled: boolean;
 
 	constructor(game: Game) {
