@@ -6,6 +6,7 @@ import BoundingBoxComponent from "../Engine/ECS/Components/BoundingBoxComponent"
 import { input } from "./GameMachine";
 import Game from "./States/Game";
 import CollisionComponent from "../Engine/ECS/Components/CollisionComponent";
+import Card from "./Card";
 
 export default class PlayerController {
 	private game: Game;
@@ -16,9 +17,20 @@ export default class PlayerController {
 
 	private mouseMovement: vec2;
 	private jawPitch: vec2;
+	private cards: Card[];
+	private selectedCard: number;
+	private wasRotated: boolean;
+	private showCards: boolean;
+	private cardsToggled: boolean;
 
 	constructor(game: Game) {
 		this.game = game;
+		this.cards = new Array<Card>(3);
+		this.cards = [new Card(game), new Card(game), new Card(game)];
+		this.selectedCard = 0;
+		this.wasRotated = true;
+		this.showCards = false;
+		this.cardsToggled = true;
 
 		this.jawPitch = vec2.create();
 		this.mouseMovement = vec2.create();
@@ -146,6 +158,26 @@ export default class PlayerController {
 
 			if (input.keys["D"]) {
 				vec3.add(accVec, accVec, right);
+			}
+
+			// Look at cards
+			if (input.keys["C"]) {
+				if (!this.cardsToggled) {
+					this.showCards = this.showCards ? false : true;
+				}
+				this.cardsToggled = true;
+			} else {
+				this.cardsToggled = false;
+			}
+
+			// Rotate cards
+			if (input.keys["R"]) {
+				if (!this.wasRotated) {
+					this.selectedCard = (this.selectedCard % this.cards.length) + 1;
+				}
+				this.wasRotated = true;
+			} else {
+				this.wasRotated = false;
 			}
 		}
 

@@ -11,13 +11,11 @@ import { vec3 } from "gl-matrix";
 import PointLightComponent from "../../Engine/ECS/Components/PointLightComponent";
 import PositionComponent from "../../Engine/ECS/Components/PositionComponent";
 import PlayerController from "../PlayerController";
-import Card from "../Card";
 
 export default class Game extends State {
 	rendering: Rendering;
 	ecsManager: ECSManager;
 	private stateAccessible: StateAccessible;
-	private cards: Card[];
 
 	private overlayRendering: OverlayRendering;
 	private menuButton: Button;
@@ -44,8 +42,6 @@ export default class Game extends State {
 
 	private constructor(sa: StateAccessible) {
 		super();
-		this.cards = new Array<Card>(3);
-		this.cards = [new Card(this), new Card(this), new Card(this)];
 		this.stateAccessible = sa;
 		this.objectPlacer = new ObjectPlacer(
 			this.stateAccessible.meshStore,
