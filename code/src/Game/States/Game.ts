@@ -78,19 +78,11 @@ export default class Game extends State {
 			this.scene
 		);
 		this.ecsManager = new ECSManager(this.rendering);
-		this.createPointLight(
-			vec3.fromValues(-14.0, -5.0, 7.0),
-			true,
-			vec3.fromValues(3.0, 0.8, 0.0)
-		);
-		this.createPointLight(
-			vec3.fromValues(5.0, -5.0, -9.0),
-			true,
-			vec3.fromValues(0.0, 0.8, 3.0)
-		);
-		// this.createPointLight(vec3.fromValues(-20.0, -5.0, -14.0), true, vec3.fromValues(0.0, 2.0, 0.8));
-		// this.createPointLight(vec3.fromValues(10.0, -5.0, -15.0), true, vec3.fromValues(2.0, 0.0, 0.8));
-		// this.createPointLight(vec3.fromValues(10.0, -5.0, 15.0), true, vec3.fromValues(0.8, 2.0, 0.0));
+		// this.createPointLight(vec3.fromValues(-14.0, 0.0, 7.0), true, vec3.fromValues(3.0, 0.8, 0.0));
+		// this.createPointLight(vec3.fromValues(5.0, 0.0, -9.0), true, vec3.fromValues(0.0, 0.8, 3.0));
+		// this.createPointLight(vec3.fromValues(-20.0, 0.0, -14.0), true, vec3.fromValues(0.0, 2.0, 0.8));
+		// this.createPointLight(vec3.fromValues(10.0, 0.0, -15.0), true, vec3.fromValues(2.0, 0.0, 0.8));
+		// this.createPointLight(vec3.fromValues(10.0, 0.0, 15.0), true, vec3.fromValues(0.8, 2.0, 0.0));
 	}
 
 	createPointLight(position: vec3, castShadow: boolean, colour?: vec3) {
@@ -110,14 +102,14 @@ export default class Game extends State {
 	}
 
 	async load() {
-		// let colour = vec3.fromValues(0.10, 0.10, 0.15);
-		let colour = vec3.fromValues(0.0, 0.0, 0.0);
+		let colour = vec3.fromValues(0.1, 0.1, 0.15);
+		// let colour = vec3.fromValues(0.0, 0.0, 0.0);
 		this.rendering.clearColour.r = colour[0];
 		this.rendering.clearColour.g = colour[1];
 		this.rendering.clearColour.b = colour[2];
 
 		let dirLight = this.scene.getDirectionalLight();
-		dirLight.ambientMultiplier = 0.1;
+		dirLight.ambientMultiplier = 0.5;
 		vec3.set(dirLight.direction, 0.2, -0.9, -0.4);
 		vec3.copy(dirLight.colour, colour);
 

@@ -53,7 +53,7 @@ this.placements.set(
 	new Placement(
 		"Assets/objs/cube.obj",
 		"CSS:rgb(255,255,255)",
-		"CSS:rgb(0,0,0)",
+		"CSS:rgb(100,100,100)",
 	    null //"Assets/textures/white.png",
 	)
 )
