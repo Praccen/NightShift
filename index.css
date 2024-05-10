@@ -1,0 +1,201 @@
+:root {
+	--bodyColor: rgb(0, 0, 42);
+}
+
+* {
+	padding: 0;
+	margin: 0;
+}
+html, body {
+	background: var(--bodyColor);
+	color: #fff;
+	overflow: hidden;
+	touch-action: none;
+	-ms-touch-action: none;
+}
+
+gameDiv {
+	position: absolute;
+}
+
+canvas {
+	position: absolute;
+	size: inherit;
+	touch-action-delay: none;
+	touch-action: none;
+	-ms-touch-action: none;
+	
+	image-rendering: optimizeSpeed;             /* Older versions of FF          */
+    image-rendering: -moz-crisp-edges;          /* FF 6.0+                       */
+    image-rendering: -webkit-optimize-contrast; /* Safari                        */
+    image-rendering: -o-crisp-edges;            /* OS X & Windows Opera (12.02+) */
+    image-rendering: pixelated;                 /* Awesome future-browsers       */
+    -ms-interpolation-mode: nearest-neighbor;   /* IE                            */
+}
+ 
+#guicontainer {
+	position: relative;
+	width: inherit;
+	height: inherit;
+
+    z-index: 10;
+}
+
+.floating-div {
+    position: absolute;
+	font-family:'Courier New', Courier, monospace;
+	white-space: pre;
+	width: fit-content;
+	height: fit-content;
+	
+	color: white;
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+	
+	/* Make text not selectable */
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	 -khtml-user-select: none; /* Konqueror HTML */
+	   -moz-user-select: none; /* Old versions of Firefox */
+		-ms-user-select: none; /* Internet Explorer/Edge */
+			user-select: none; /* Non-prefixed version, currently
+								  supported by Chrome, Opera and Firefox */
+}
+
+.button {
+	font-size: inherit;
+	font-family: inherit;
+	background: linear-gradient(#d34c62, #d34c62, #93205d);
+	color: #ffffff;
+	text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+	border: 2px solid black;
+	border-radius: 5px;
+	font-weight: bold;
+	box-shadow: inset 0 0.7em 0 rgba(255,255,255, .2);
+	padding: 5px 20px;
+	transition: all 0.1s;
+	cursor: pointer;
+}
+  
+.button:hover {
+	box-shadow: 
+	  inset 0 0.7em 0 rgba(255,255,255, .2),
+	  inset 0 0 0.5em rgba(0,0,255, .2);
+}
+  
+.button:active {
+	box-shadow: 
+	  inset 0 0.1em 0 rgba(255,255,255, .2),
+	  inset 0 0 0.5em rgba(0,0,255, .2);
+}
+
+.listButton {
+	font-size: inherit;
+	font-family: inherit;
+	background-color: transparent;
+	color: white;
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+	width: 100%;
+	text-align: left;
+}
+
+.checkboxContainer {
+	display: block;
+	position: relative;
+	margin-bottom: 12px;
+	cursor: pointer;
+	font-size: inherit;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	color: cyan;
+}
+
+.checkboxContainer input {
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+	height: 0;
+	width: 0;
+  }
+
+.checkmark {
+	position: absolute;
+	top: 0.05em;
+	line-height: 0.7em;
+	width: 1.5em;
+	background-color: transparent;
+	border: 0.1em solid cyan;
+	border-radius: 10%;
+	box-shadow: inset 0 0 0 cyan;
+	transition: all 0.2s;
+	vertical-align: middle;
+}
+
+.checkmark:before {
+	position: relative;
+	left: 0.1em;
+	content: "OFF";
+	font-size: 0.6em;
+	color: cyan;
+}
+
+.checkboxContainer:hover input ~ .checkmark {
+	background-color: rgba(255, 255, 255, 0.2);
+}
+
+.checkboxContainer:hover input:checked ~ .checkmark {
+	box-shadow: inset 1.6em 0 0 rgba(0, 255, 255, 0.8);
+}
+
+.checkboxContainer input:checked ~ .checkmark {
+	box-shadow: inset 1.6em 0 0 cyan;
+}
+
+.checkboxContainer input:checked ~ .checkmark:before {
+	position: relative;
+    content: "ON";
+    color: var(--bodyColor);
+    left: 1.2em;
+	font-size: 0.6em;
+}
+
+.slider {
+	-webkit-appearance: none;
+	font-size: inherit;
+	height: 0.5em;
+	width: 10.0em;
+	border-radius: 10%;  
+	background: rgba(0, 255, 255, 0.2);
+	outline: none;
+	-webkit-transition: all .2s;
+	transition: all .2s;
+  }
+
+  .slider:hover {
+	background: rgba(0, 255, 255, 0.4);
+  }
+  
+  .slider::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 1.0em;
+	height: 1.0em;
+	border-radius: 50%; 
+	background: cyan;
+	cursor: pointer;
+  }
+  
+  .slider::-moz-range-thumb {
+	width: 1.0em;
+	height: 1.0em;
+	border-radius: 50%;
+	background: cyan;
+	cursor: pointer;
+  }
+
+
+.sliderLabel {
+	font-size: inherit;
+	color: cyan;
+}
