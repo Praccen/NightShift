@@ -236,6 +236,7 @@ export default class ObjectPlacer {
 		let collisionComp = new CollisionComponent();
 		collisionComp.isStatic = true;
 		this.ecsManager.addComponent(entity, collisionComp);
+		collisionComp.frictionCoefficient = 0.0;
 
 		let octree = this.meshStore.getOctree(placement.modelPath, false);
 		if (octree == undefined) {

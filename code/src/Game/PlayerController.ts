@@ -59,7 +59,7 @@ export default class PlayerController {
 		this.game.ecsManager.addComponent(this.entity, collisionComp);
 
 		this.movComp = new MovementComponent();
-		this.movComp.acceleration = 20.0;
+		this.movComp.acceleration = 40.0;
 		this.movComp.drag = 10.0;
 		this.game.ecsManager.addComponent(this.entity, this.movComp);
 	}
@@ -103,9 +103,61 @@ export default class PlayerController {
 			vec2.zero(this.mouseMovement);
 		}
 
+        // Movement input
+		let forward = vec3.clone(this.game.rendering.camera.getDir());
+		forward[1] = 0.0;
+		vec3.normalize(forward, forward);
+
+		let right = vec3.clone(this.game.rendering.camera.getRight());
+		right[1] = 0.0;
+		vec3.normalize(right, right);
+
+        let accVec = vec3.create();
+
+		// Touch / joystick control
+		input.updateGamepad();
+		if (vec2.sqrLen(input.joystickLeftDirection) > 0.001) {
+            vec3.scaleAndAdd(accVec, accVec, right, input.joystickLeftDirection[0] * 2.0);
+            vec3.scaleAndAdd(accVec, accVec, forward, -input.joystickLeftDirection[1] * 2.0);
+		}
+		// Keyboard control
+		else {
+			if (input.keys["W"]) {
+				vec3.add(accVec, accVec, forward);
+			}
+
+			if (input.keys["S"]) {
+                vec3.sub(accVec, accVec, forward);
+			}
+
+			if (input.keys["A"]) {
+                vec3.sub(accVec, accVec, right);
+			}
+
+			if (input.keys["D"]) {
+                vec3.add(accVec, accVec, right);
+			}
+		}
+
+		if (vec3.sqrLen(accVec) > 1.0) {
+            vec3.normalize(accVec, accVec);
+		}
+        vec3.copy(this.movComp.accelerationDirection, accVec);
+
+		// Jumping
+		if (input.keys[" "] || input.buttons.get("A")) {
+			this.movComp.jumpRequested = true;
+		} else {
+			this.movComp.jumpRequested = false;
+		}
+
 		if (input.keys["P"]) {
 			this.respawn();
 		}
+
+        let xzVelocity = vec3.clone(this.movComp.velocity);
+		xzVelocity[1] = 0.0;
+		this.movComp.drag = 10.0 + vec3.len(xzVelocity) * 2.0;
 
 		this.game.rendering.camera.setPosition(
 			vec3.add(
