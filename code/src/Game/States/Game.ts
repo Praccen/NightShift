@@ -11,6 +11,7 @@ import { vec3 } from "gl-matrix";
 import PointLightComponent from "../../Engine/ECS/Components/PointLightComponent";
 import PositionComponent from "../../Engine/ECS/Components/PositionComponent";
 import PlayerController from "../PlayerController";
+import Spider from "../Spider";
 
 export default class Game extends State {
 	rendering: Rendering;
@@ -25,6 +26,7 @@ export default class Game extends State {
 	private static instance: Game;
 
 	private player: PlayerController;
+	private spider: Spider;
 
 	private pointerLockTimer: number;
 	private oWasPressed: boolean;
@@ -91,6 +93,7 @@ export default class Game extends State {
 		// this.createPointLight(vec3.fromValues(10.0, 0.0, 15.0), true, vec3.fromValues(0.8, 2.0, 0.0));
 
 		this.player = new PlayerController(this);
+		this.spider = new Spider(this);
 	}
 
 	createPointLight(position: vec3, castShadow: boolean, colour?: vec3) {
@@ -132,7 +135,8 @@ export default class Game extends State {
 		this.rendering.camera.setPosition(vec3.fromValues(0.0, 2.0, 0.0));
 		this.overlayRendering.setCamera(this.rendering.camera);
 
-		this.player.init();
+		this.player.respawn();
+		this.spider.respawn();
 	}
 
 	async init() {
@@ -178,6 +182,11 @@ export default class Game extends State {
 			this.pointerLockTimer = 0.0;
 		}
 
+		if (input.keys["P"]) {
+			this.player.respawn();
+			this.spider.respawn();
+		}
+
 		if (input.keys["O"]) {
 			if (!this.oWasPressed) {
 				this.gotoState = StatesEnum.DEBUGMODE;
@@ -189,6 +198,7 @@ export default class Game extends State {
 		}
 
 		this.player.update(dt);
+		this.spider.update(dt);
 
 		this.ecsManager.update(dt);
 	}

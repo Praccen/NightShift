@@ -6,15 +6,15 @@ import { Component, ComponentTypeEnum } from "./Component";
 import Game from "../../../Game/States/Game";
 
 export default class GraphicsComponent extends Component {
-	object: GraphicsBundle;
+	bundle: GraphicsBundle;
 
-	constructor(object: GraphicsBundle) {
+	constructor(bundle: GraphicsBundle) {
 		super(ComponentTypeEnum.GRAPHICS);
-		this.object = object;
+		this.bundle = bundle;
 	}
 
 	destructor(): void {
-		Game.getInstanceNoSa().rendering.scene.deleteGraphicsBundle(this.object);
+		Game.getInstanceNoSa().rendering.scene.deleteGraphicsBundle(this.bundle);
 	}
 
 	updateGui(

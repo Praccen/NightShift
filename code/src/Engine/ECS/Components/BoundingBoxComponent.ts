@@ -6,10 +6,11 @@ import { Component, ComponentTypeEnum } from "./Component";
 export default class BoundingBoxComponent extends Component {
 	boundingBox: OBB;
 
-	constructor() {
+	constructor(matrix: mat4) {
 		super(ComponentTypeEnum.BOUNDINGBOX);
 
 		this.boundingBox = new OBB();
+		this.updateTransformMatrix(matrix);
 	}
 
 	/**

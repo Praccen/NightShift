@@ -28,14 +28,7 @@ export default class GraphicsSystem extends System {
 			);
 
 			if (graphComp && posComp) {
-				mat4.identity(graphComp.object.modelMatrix);
-
-				if (posParentComp) {
-					posParentComp.calculateMatrix(graphComp.object.modelMatrix);
-					mat4.copy(posParentComp.matrix, graphComp.object.modelMatrix);
-				}
-
-				posComp.calculateMatrix(graphComp.object.modelMatrix);
+				graphComp.bundle.modelMatrix = posComp.matrix;
 			}
 
 			let pointLightComp = <PointLightComponent>(

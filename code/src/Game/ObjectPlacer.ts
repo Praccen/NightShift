@@ -223,9 +223,8 @@ export default class ObjectPlacer {
 		vec3.copy(posComp.origin, origin);
 		this.ecsManager.addComponent(entity, posComp);
 
-		let boundingBoxComp = new BoundingBoxComponent();
+		let boundingBoxComp = new BoundingBoxComponent(posComp.matrix);
 		boundingBoxComp.setup(mesh.graphicsObject);
-		boundingBoxComp.updateTransformMatrix(mesh.modelMatrix);
 		this.ecsManager.addComponent(entity, boundingBoxComp);
 
 		if (!placement.addCollision) {
@@ -345,7 +344,7 @@ export default class ObjectPlacer {
 					ComponentTypeEnum.GRAPHICS
 				) as GraphicsComponent;
 				if (graphicsComponent != undefined) {
-					this.scene.deleteGraphicsBundle(graphicsComponent.object);
+					this.scene.deleteGraphicsBundle(graphicsComponent.bundle);
 				}
 			}
 

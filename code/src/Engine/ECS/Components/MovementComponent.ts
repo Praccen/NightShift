@@ -1,5 +1,8 @@
 import { quat, vec3 } from "gl-matrix";
 import { Component, ComponentTypeEnum } from "./Component";
+import { OverlayRendering } from "../../Rendering/GUI/OverlayRendering";
+import Div from "../../Rendering/GUI/Objects/Div";
+import ObjectPlacer from "../../../Game/ObjectPlacer";
 
 export default class MovementComponent extends Component {
 	constantAcceleration: vec3;
@@ -25,5 +28,59 @@ export default class MovementComponent extends Component {
 		this.jumpRequested = false;
 		this.jumpAllowed = false;
 		this.momentum = quat.create();
+	}
+
+	updateGui(
+		overlayRendering: OverlayRendering,
+		parentDiv: Div,
+		objectPlacer: ObjectPlacer
+	) {
+		for (let i = 1; i < parentDiv.children.length; i++) {
+			if (parentDiv.children[i].textString == ComponentTypeEnum[this.type]) {
+				// Next should be a div that should hold the text edits
+				if ((<Div>parentDiv.children[i + 1]).children.length == 0) {
+					this.addTextEdit(
+						overlayRendering,
+						<Div>parentDiv.children[i + 1],
+						"VelX",
+						["velocity"],
+						0
+					);
+					this.addTextEdit(
+						overlayRendering,
+						<Div>parentDiv.children[i + 1],
+						"VelY",
+						["velocity"],
+						1
+					);
+					this.addTextEdit(
+						overlayRendering,
+						<Div>parentDiv.children[i + 1],
+						"VelZ",
+						["velocity"],
+						2
+					);
+				} else {
+					this.updateTextEdit(
+						<Div>parentDiv.children[i + 1],
+						"VelX",
+						["velocity"],
+						0
+					);
+					this.updateTextEdit(
+						<Div>parentDiv.children[i + 1],
+						"VelY",
+						["velocity"],
+						1
+					);
+					this.updateTextEdit(
+						<Div>parentDiv.children[i + 1],
+						"VelZ",
+						["velocity"],
+						2
+					);
+				}
+			}
+		}
 	}
 }

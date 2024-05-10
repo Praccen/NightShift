@@ -1,13 +1,14 @@
 import Progress from "../../Engine/Rendering/GUI/Objects/Progress";
 import State, { StatesEnum } from "../../Engine/States/State";
 import TextObject2D from "../../Engine/Rendering/GUI/Objects/Text/TextObject2D";
-import { StateAccessible } from "../GameMachine";
+import GameMachine, { StateAccessible } from "../GameMachine";
 import Texture from "../../Engine/Rendering/Textures/Texture";
 import { OverlayRendering } from "../../Engine/Rendering/GUI/OverlayRendering";
 
 export default class LoadingScreen extends State {
 	private overlayRendering: OverlayRendering;
 	private sa: StateAccessible;
+	private gameMachine: GameMachine;
 
 	private text: TextObject2D;
 	private statusText: string;
@@ -24,10 +25,11 @@ export default class LoadingScreen extends State {
 	private octreesRequested: number;
 	private octreesLoaded: number;
 
-	constructor(sa: StateAccessible) {
+	constructor(sa: StateAccessible, gameMachine: GameMachine) {
 		super();
 		this.overlayRendering = new OverlayRendering();
 		this.sa = sa;
+		this.gameMachine = gameMachine;
 
 		// Crate GUI
 		this.text = this.overlayRendering.getNew2DText();
@@ -198,6 +200,7 @@ export default class LoadingScreen extends State {
 		this.text.textString += "  " + Math.ceil(this.progress * 100) + "%";
 
 		if (this.progress >= 1.0 && this.timer >= 0.5) {
+			this.gameMachine.createGameStates();
 			this.gotoState = StatesEnum.MAINMENU;
 		}
 	}

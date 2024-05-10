@@ -68,7 +68,7 @@ export default class MovementSystem extends System {
 				movComp.accelerationDirection[0] != 0.0 ||
 				movComp.accelerationDirection[2] != 0.0;
 			if (!accelerating && vec3.sqrLen(movComp.velocity) < 0.001) {
-				vec3.scale(movComp.velocity, movComp.velocity, 0.0);
+				vec3.multiply(movComp.velocity, movComp.velocity, vec3.fromValues(0.0, 1.0, 0.0));
 			}
 
 			let displacement = vec3.scale(

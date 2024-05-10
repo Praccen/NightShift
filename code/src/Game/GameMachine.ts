@@ -58,47 +58,12 @@ export default class GameMachine extends StateMachine {
 			this.stateAccessible.audioPlayer.setMusicVolume(options.musicVolume);
 		this.stateAccessible.audioPlayer.setSoundEffectVolume(options.effectVolume);
 
-		let game = Game.getInstance(this.stateAccessible);
-
 		// Add states
 		this.addState(
 			StatesEnum.LOADINGSCREEN,
 			LoadingScreen,
 			1 / 60.0,
-			new LoadingScreen(this.stateAccessible)
-		);
-		this.addState(
-			StatesEnum.MAINMENU,
-			Menu,
-			1.0 / 60.0,
-			new Menu(this.stateAccessible)
-		);
-		this.addState(
-			StatesEnum.LEVELSELECT,
-			LevelSelect,
-			1.0 / 60.0,
-			new LevelSelect(this.stateAccessible)
-		);
-		this.addState(
-			StatesEnum.OPTIONS,
-			OptionsMenu,
-			1.0 / 60.0,
-			new OptionsMenu(this.stateAccessible)
-		);
-		this.addState(
-			StatesEnum.CONTROLS,
-			ControlsMenu,
-			1.0 / 60.0,
-			new ControlsMenu(this.stateAccessible)
-		);
-		this.addState(StatesEnum.GAME, Game, 1.0 / 144.0, game);
-		this.stateAccessible.restartGame = true;
-
-		this.addState(
-			StatesEnum.DEBUGMODE,
-			DebugMode,
-			1.0 / 144.0,
-			new DebugMode(this.stateAccessible, game)
+			new LoadingScreen(this.stateAccessible, this)
 		);
 
 		this.overlayRendering = new OverlayRendering();
@@ -109,6 +74,8 @@ export default class GameMachine extends StateMachine {
 		this.fpsDisplay.scaleWithWindow = false;
 		this.fpsDisplay.getElement().style.color = "lime";
 	}
+
+	
 
 	onExit(e: BeforeUnloadEvent) {
 		WebUtils.SetCookie("showFps", options.showFps.valueOf().toString());
@@ -145,6 +112,46 @@ export default class GameMachine extends StateMachine {
 		if (grassDensityCookie != "") {
 			options.grassDensity = parseFloat(grassDensityCookie);
 		}
+	}
+
+	/**
+	 * Will be called by loading screen once everything is loaded
+	 */
+	createGameStates() {
+		let game = Game.getInstance(this.stateAccessible);
+		this.addState(
+			StatesEnum.MAINMENU,
+			Menu,
+			1.0 / 60.0,
+			new Menu(this.stateAccessible)
+		);
+		this.addState(
+			StatesEnum.LEVELSELECT,
+			LevelSelect,
+			1.0 / 60.0,
+			new LevelSelect(this.stateAccessible)
+		);
+		this.addState(
+			StatesEnum.OPTIONS,
+			OptionsMenu,
+			1.0 / 60.0,
+			new OptionsMenu(this.stateAccessible)
+		);
+		this.addState(
+			StatesEnum.CONTROLS,
+			ControlsMenu,
+			1.0 / 60.0,
+			new ControlsMenu(this.stateAccessible)
+		);
+		this.addState(StatesEnum.GAME, Game, 1.0 / 144.0, game);
+		this.stateAccessible.restartGame = true;
+
+		this.addState(
+			StatesEnum.DEBUGMODE,
+			DebugMode,
+			1.0 / 144.0,
+			new DebugMode(this.stateAccessible, game)
+		);
 	}
 
 	async runCurrentState() {

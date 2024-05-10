@@ -62,12 +62,11 @@ export default class PlayerController {
 		this.positionComp = new PositionComponent();
 		this.entity = this.game.ecsManager.createEntity();
 		this.game.ecsManager.addComponent(this.entity, this.positionComp);
-		let boundingBoxComp = new BoundingBoxComponent();
+		let boundingBoxComp = new BoundingBoxComponent(this.positionComp.matrix);
 		boundingBoxComp.boundingBox.setMinAndMaxVectors(
 			vec3.fromValues(-0.4, 0.0, -0.4),
 			vec3.fromValues(0.4, 1.8, 0.4)
 		);
-		boundingBoxComp.updateTransformMatrix(this.positionComp.matrix);
 		this.game.ecsManager.addComponent(this.entity, boundingBoxComp);
 
 		let collisionComp = new CollisionComponent();
@@ -82,14 +81,10 @@ export default class PlayerController {
 		this.game.ecsManager.addComponent(this.entity, this.movComp);
 	}
 
-	init() {
-		this.respawn();
-	}
-
 	respawn() {
 		vec3.set(this.positionComp.position, 0.0, 15.0, 0.0);
 		vec3.set(this.movComp.velocity, 0.0, 0.0, 0.0);
-		this.setCameraDirection(vec3.fromValues(-1.0, 0.0, 0.0));
+		this.setCameraDirection(vec3.fromValues(0.0, 0.0, -1.0));
 		vec2.zero(this.mouseMovement);
 	}
 
@@ -212,10 +207,6 @@ export default class PlayerController {
 			this.movComp.jumpRequested = true;
 		} else {
 			this.movComp.jumpRequested = false;
-		}
-
-		if (input.keys["P"]) {
-			this.respawn();
 		}
 
 		let xzVelocity = vec3.clone(this.movComp.velocity);

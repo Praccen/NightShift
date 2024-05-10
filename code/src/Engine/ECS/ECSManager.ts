@@ -73,11 +73,11 @@ export default class ECSManager {
 
 		this.systems.get("MOVEMENT").update(dt);
 		this.systems.get("POSITIONMATRIXUPDATE").update(dt);
-		this.systems.get("GRAPHICS").update(dt);
 		this.systems.get("COLLISION").update(dt);
 	}
 
 	updateRenderingSystems(dt: number, updateCameraFocus: boolean = true) {
+		this.systems.get("GRAPHICS").update(dt);
 		this.systems.get("PARTICLE").update(dt);
 		if (updateCameraFocus) {
 			this.systems.get("CAMERAFOCUS").update(dt);
@@ -91,8 +91,9 @@ export default class ECSManager {
 		return this.entityAdditionQueue[length - 1];
 	}
 
-	addComponent(entity: Entity, component: Component) {
+	addComponent(entity: Entity, component: Component): Component {
 		this.componentAdditionQueue.push({ entity, component });
+		return component;
 	}
 
 	removeEntity(entityID: number) {
