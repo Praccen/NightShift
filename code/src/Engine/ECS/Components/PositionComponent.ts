@@ -27,9 +27,8 @@ export default class PositionComponent extends Component {
 	calculateMatrix(matrix: mat4) {
 		mat4.translate(matrix, matrix, this.position);
 		mat4.multiply(matrix, matrix, mat4.fromQuat(mat4.create(), this.rotation));
-		mat4.translate(matrix, matrix, vec3.negate(vec3.create(), this.origin));
-		5;
 		mat4.scale(matrix, matrix, this.scale);
+		mat4.translate(matrix, matrix, vec3.negate(vec3.create(), this.origin));
 	}
 
 	updateGui(
