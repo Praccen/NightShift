@@ -313,7 +313,7 @@ export default class Game extends State {
 
 		this.ecsManager.update(dt);
 
-		if (this.boxesCollectedCurrent == 3) {
+		if (this.boxesCollectedCurrent == 3 && this.boxes.size >= 3) {
 			this.boxesCollectedCurrent = 0;
 			this.player.cards = new Array<Card>(3);
 			this.player.cards = [
