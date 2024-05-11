@@ -93,3 +93,13 @@ this.placements.set(
 		null //"CSS:rgb(0, 255, 70)",
 	)
 );
+
+this.placements.set(
+	"Shelf",
+	new Placement(
+		"Assets/objs/shelf.obj",
+		"CSS:rgb(50,50,50)",
+		"CSS:rgb(0,0,0)",
+		null //"CSS:rgb(25,25,25)",
+	)
+);

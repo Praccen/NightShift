@@ -187,7 +187,7 @@ export default class Spider {
 		let dir = vec3.sub(vec3.create(), this.targetPos, this.parentPosComp.position);
 		dir[1] = 0.0;
 		vec3.normalize(dir, dir);
-        let collisionObjects = this.game.objectPlacer.getEntitiesOfType("Box || Box Gray");
+        let collisionObjects = this.game.objectPlacer.getEntitiesOfType("Box || Box Gray || Shelf");
 
 		if (vec3.squaredDistance(this.targetPos, this.parentPosComp.position) > 1.0) {
 			let top = vec3.add(

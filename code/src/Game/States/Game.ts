@@ -264,7 +264,7 @@ export default class Game extends State {
 		if (input.keys["Y"]) {
 			let ray = new Ray();
 			ray.setStartAndDir(this.rendering.camera.getPosition(), this.rendering.camera.getDir());
-			let collisionObjects = this.objectPlacer.getEntitiesOfType("Box || Box Gray");
+			let collisionObjects = this.objectPlacer.getEntitiesOfType("Box || Box Gray || Shelf");
 			let rayInfo = ECSUtils.RayCastAgainstEntityList(ray, collisionObjects);
 			if (rayInfo.eId > -1) {
 				this.spider.setTarget(
