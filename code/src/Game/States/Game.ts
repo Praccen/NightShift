@@ -197,6 +197,10 @@ export default class Game extends State {
 			this.oWasPressed = false;
 		}
 
+		if (input.keys["Q"]) {
+			this.spider.setTarget(this.player.positionComp.position);
+		}
+
 		this.player.update(dt);
 		this.spider.update(dt);
 

@@ -55,12 +55,16 @@ export module ECSUtils {
 	 */
 	export function RayCastAgainstEntityList(
 		ray: Ray,
-		entities: Array<Entity>
+		entities: Array<Entity>,
+		maxDist = Infinity
 	): { distance: number; eId: number } {
-		let closest = Infinity;
+		let closest = maxDist;
 		let eId = -1;
 
 		for (let e of entities) {
+			if (e == undefined) {
+				continue;
+			}
 			let bbComp = e.getComponent(
 				ComponentTypeEnum.BOUNDINGBOX
 			) as BoundingBoxComponent;
