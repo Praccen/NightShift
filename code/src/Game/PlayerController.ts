@@ -198,7 +198,11 @@ export default class PlayerController {
 						vec3.add(
 							this.selectedBox.moveComp.velocity,
 							this.selectedBox.moveComp.velocity,
-							vec3.scale(vec3.create(), forward, 5.0)
+							vec3.scale(
+								vec3.create(),
+								vec3.add(vec3.create(), forward, vec3.fromValues(0, 1, 0)),
+								7.0
+							)
 						);
 						this.selectedBox.pickedUp = false;
 						this.isHoldingBox = false;

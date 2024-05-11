@@ -59,7 +59,6 @@ export default class Box {
 			this.entity,
 			new MovementComponent()
 		) as MovementComponent;
-		this.moveComp.constantAcceleration[1] = -2.0;
 
 		let boundComp = entity.getComponent(ComponentTypeEnum.BOUNDINGBOX) as BoundingBoxComponent;
 
@@ -70,6 +69,7 @@ export default class Box {
 
 	update(dt: number) {
 		if (this.pickedUp) {
+			vec3.set(this.moveComp.velocity, 0, 0, 0);
 			let forward = vec3.clone(this.game.rendering.camera.getDir());
 			let camPos = vec3.clone(this.game.rendering.camera.getPosition());
 			if (this.posComp != undefined) {
