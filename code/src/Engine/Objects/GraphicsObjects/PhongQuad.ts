@@ -59,21 +59,13 @@ export default class PhongQuad extends GraphicsObject {
 	getVertexPositions(): Array<vec3> {
 		let returnArr = new Array<vec3>();
 		for (let i = 0; i < this.vertices.length; i += 8) {
-			returnArr.push(
-				vec3.fromValues(
-					this.vertices[i],
-					this.vertices[i + 1],
-					this.vertices[i + 2]
-				)
-			);
+			returnArr.push(vec3.fromValues(this.vertices[i], this.vertices[i + 1], this.vertices[i + 2]));
 		}
 		return returnArr;
 	}
 
 	draw() {
-		if (this.enabled) {
-			this.bindVAO();
-			gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_INT, 0);
-		}
+		this.bindVAO();
+		gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_INT, 0);
 	}
 }

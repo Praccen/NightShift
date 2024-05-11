@@ -22,12 +22,7 @@ export default class TextObject3D extends GuiObject {
 	}
 
 	draw3D(viewProj: mat4): void {
-		let pos = vec4.fromValues(
-			this.position[0],
-			this.position[1],
-			this.position[2],
-			1.0
-		);
+		let pos = vec4.fromValues(this.position[0], this.position[1], this.position[2], 1.0);
 		let screenCoords = vec4.transformMat4(vec4.create(), pos, viewProj);
 		screenCoords[0] = (screenCoords[0] / screenCoords[3] + 1.0) / 2.0;
 		screenCoords[1] = 1.0 - (screenCoords[1] / screenCoords[3] + 1.0) / 2.0;

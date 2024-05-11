@@ -46,15 +46,10 @@ export default class Box {
 				setColor = "CSS:rgb(255,0,255)";
 				break;
 		}
-		this.graphComp = entity.getComponent(
-			ComponentTypeEnum.GRAPHICS
-		) as GraphicsComponent;
-		this.graphComp.bundle.diffuse =
-			this.game.stateAccessible.textureStore.getTexture(setColor);
+		this.graphComp = entity.getComponent(ComponentTypeEnum.GRAPHICS) as GraphicsComponent;
+		this.graphComp.bundle.diffuse = this.game.stateAccessible.textureStore.getTexture(setColor);
 
-		this.posComp = entity.getComponent(
-			ComponentTypeEnum.POSITION
-		) as PositionComponent;
+		this.posComp = entity.getComponent(ComponentTypeEnum.POSITION) as PositionComponent;
 		vec3.set(this.posComp.scale, 0.5, 0.5, 0.5);
 
 		let moveComp = this.game.ecsManager.addComponent(
@@ -63,13 +58,9 @@ export default class Box {
 		) as MovementComponent;
 		moveComp.constantAcceleration[1] = -2.0;
 
-		let boundComp = entity.getComponent(
-			ComponentTypeEnum.BOUNDINGBOX
-		) as BoundingBoxComponent;
+		let boundComp = entity.getComponent(ComponentTypeEnum.BOUNDINGBOX) as BoundingBoxComponent;
 
-		let collComp = entity.getComponent(
-			ComponentTypeEnum.COLLISION
-		) as CollisionComponent;
+		let collComp = entity.getComponent(ComponentTypeEnum.COLLISION) as CollisionComponent;
 		collComp.mass = 5.0;
 		collComp.isStatic = false;
 	}

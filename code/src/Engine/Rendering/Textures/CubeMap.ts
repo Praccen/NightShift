@@ -24,12 +24,7 @@ export default class CubeMap extends Texture {
 	 * @param height - height of the texture
 	 * @param face - cubemap face to set, leave empty to set data for all faces
 	 */
-	setTextureData(
-		data: Uint8Array,
-		width: number,
-		height: number,
-		face?: number
-	) {
+	setTextureData(data: Uint8Array, width: number, height: number, face?: number) {
 		this.width = width;
 		this.height = height;
 		gl.bindTexture(this.textureTarget, this.texture);
@@ -92,11 +87,7 @@ export default class CubeMap extends Texture {
 					self.loadedFromFile = true;
 					if (self.useMipMap) {
 						gl.generateMipmap(self.textureTarget);
-						gl.texParameteri(
-							self.textureTarget,
-							gl.TEXTURE_MIN_FILTER,
-							gl.LINEAR_MIPMAP_LINEAR
-						);
+						gl.texParameteri(self.textureTarget, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 					}
 				}
 			});

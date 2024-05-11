@@ -30,11 +30,7 @@ export default class MovementComponent extends Component {
 		this.momentum = quat.create();
 	}
 
-	updateGui(
-		overlayRendering: OverlayRendering,
-		parentDiv: Div,
-		objectPlacer: ObjectPlacer
-	) {
+	updateGui(overlayRendering: OverlayRendering, parentDiv: Div, objectPlacer: ObjectPlacer) {
 		for (let i = 1; i < parentDiv.children.length; i++) {
 			if (parentDiv.children[i].textString == ComponentTypeEnum[this.type]) {
 				// Next should be a div that should hold the text edits
@@ -61,24 +57,9 @@ export default class MovementComponent extends Component {
 						2
 					);
 				} else {
-					this.updateTextEdit(
-						<Div>parentDiv.children[i + 1],
-						"VelX",
-						["velocity"],
-						0
-					);
-					this.updateTextEdit(
-						<Div>parentDiv.children[i + 1],
-						"VelY",
-						["velocity"],
-						1
-					);
-					this.updateTextEdit(
-						<Div>parentDiv.children[i + 1],
-						"VelZ",
-						["velocity"],
-						2
-					);
+					this.updateTextEdit(<Div>parentDiv.children[i + 1], "VelX", ["velocity"], 0);
+					this.updateTextEdit(<Div>parentDiv.children[i + 1], "VelY", ["velocity"], 1);
+					this.updateTextEdit(<Div>parentDiv.children[i + 1], "VelZ", ["velocity"], 2);
 				}
 			}
 		}

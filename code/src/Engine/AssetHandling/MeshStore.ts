@@ -11,19 +11,13 @@ import { vec2, vec3 } from "gl-matrix";
 export default class MeshStore {
 	private meshMap: Map<string, Mesh>;
 	private heightmapMap: Map<string, Heightmap>;
-	private octreeMap: Map<
-		string,
-		{ octree: Octree; triangles: Array<Triangle> }
-	>;
+	private octreeMap: Map<string, { octree: Octree; triangles: Array<Triangle> }>;
 	private textureStore: TextureStore;
 
 	constructor(textureStore: TextureStore) {
 		this.meshMap = new Map<string, Mesh>();
 		this.heightmapMap = new Map<string, Heightmap>();
-		this.octreeMap = new Map<
-			string,
-			{ octree: Octree; triangles: Array<Triangle> }
-		>();
+		this.octreeMap = new Map<string, { octree: Octree; triangles: Array<Triangle> }>();
 		this.textureStore = textureStore;
 	}
 
@@ -80,10 +74,7 @@ export default class MeshStore {
 		if (!useTextureSizeForResolution) {
 			newHeightmap.createPlane(x, y, sizePerX, sizePerY);
 		}
-		await newHeightmap.readHeightDataFromTexture(
-			path,
-			useTextureSizeForResolution
-		);
+		await newHeightmap.readHeightDataFromTexture(path, useTextureSizeForResolution);
 		this.heightmapMap.set(path, newHeightmap);
 
 		return newHeightmap;
@@ -127,9 +118,7 @@ export default class MeshStore {
 			if (path.endsWith(".obj")) {
 				let mesh = this.getMesh(path, false);
 				if (!mesh) {
-					console.warn(
-						"Trying to get octree for " + path + " before loading " + path
-					);
+					console.warn("Trying to get octree for " + path + " before loading " + path);
 					return null;
 				}
 
@@ -137,9 +126,7 @@ export default class MeshStore {
 			} else {
 				let heightmap = this.getHeightmap(path, false);
 				if (!heightmap) {
-					console.warn(
-						"Trying to get octree for " + path + " before loading " + path
-					);
+					console.warn("Trying to get octree for " + path + " before loading " + path);
 					return null;
 				}
 
@@ -148,8 +135,7 @@ export default class MeshStore {
 
 			octree.triangles = triangles;
 
-			let octPath =
-				"Assets/octrees/" + path.split("/").pop().split(".")[0] + ".oct";
+			let octPath = "Assets/octrees/" + path.split("/").pop().split(".")[0] + ".oct";
 			let fetched = false;
 			try {
 				const response = await fetch(octPath);
@@ -171,9 +157,7 @@ export default class MeshStore {
 
 			if (!fetched) {
 				console.log(
-					"Did not find an octree to load from " +
-						octPath +
-						". Generating it from scratch."
+					"Did not find an octree to load from " + octPath + ". Generating it from scratch."
 				);
 				let minVec = vec3.fromValues(Infinity, Infinity, Infinity);
 				let maxVec = vec3.fromValues(-Infinity, -Infinity, -Infinity);
@@ -212,18 +196,14 @@ export default class MeshStore {
 
 		return {
 			octree: octree.octree,
-			doneLoading:
-				octree.triangles != undefined && octree.triangles.length == 0,
+			doneLoading: octree.triangles != undefined && octree.triangles.length == 0,
 		};
 	}
 
 	downloadOctrees() {
 		for (let octree of this.octreeMap) {
 			let data = octree[1].octree.getDataString();
-			WebUtils.DownloadFile(
-				octree[0].split("/").pop().split(".")[0] + ".oct",
-				data
-			);
+			WebUtils.DownloadFile(octree[0].split("/").pop().split(".")[0] + ".oct", data);
 		}
 	}
 
@@ -265,8 +245,7 @@ export default class MeshStore {
 					return element != "mtllib";
 				});
 				if (mtlName.length == 1) {
-					let mtlPath =
-						meshPath.substring(0, meshPath.lastIndexOf("/") + 1) + mtlName;
+					let mtlPath = meshPath.substring(0, meshPath.lastIndexOf("/") + 1) + mtlName;
 					try {
 						const mtlResponse = await fetch(mtlPath);
 
@@ -337,14 +316,10 @@ export default class MeshStore {
 
 							let diffuseTextureData = new Uint8Array(index * 4);
 							for (let mtl of mtls) {
-								diffuseTextureData[mtl[1].spriteIndex * 4 + 0] =
-									mtl[1].diffuseColor[0] * 255;
-								diffuseTextureData[mtl[1].spriteIndex * 4 + 1] =
-									mtl[1].diffuseColor[1] * 255;
-								diffuseTextureData[mtl[1].spriteIndex * 4 + 2] =
-									mtl[1].diffuseColor[2] * 255;
-								diffuseTextureData[mtl[1].spriteIndex * 4 + 3] =
-									mtl[1].dissolve * 255;
+								diffuseTextureData[mtl[1].spriteIndex * 4 + 0] = mtl[1].diffuseColor[0] * 255;
+								diffuseTextureData[mtl[1].spriteIndex * 4 + 1] = mtl[1].diffuseColor[1] * 255;
+								diffuseTextureData[mtl[1].spriteIndex * 4 + 2] = mtl[1].diffuseColor[2] * 255;
+								diffuseTextureData[mtl[1].spriteIndex * 4 + 3] = mtl[1].dissolve * 255;
 							}
 							let tempTexture = new Texture(false);
 							tempTexture.setTextureData(diffuseTextureData, index, 1);
@@ -352,12 +327,9 @@ export default class MeshStore {
 
 							let specularTextureData = new Uint8Array(index * 4);
 							for (let mtl of mtls) {
-								specularTextureData[mtl[1].spriteIndex * 4 + 0] =
-									mtl[1].specularColor[0] * 255;
-								specularTextureData[mtl[1].spriteIndex * 4 + 1] =
-									mtl[1].specularColor[1] * 255;
-								specularTextureData[mtl[1].spriteIndex * 4 + 2] =
-									mtl[1].specularColor[2] * 255;
+								specularTextureData[mtl[1].spriteIndex * 4 + 0] = mtl[1].specularColor[0] * 255;
+								specularTextureData[mtl[1].spriteIndex * 4 + 1] = mtl[1].specularColor[1] * 255;
+								specularTextureData[mtl[1].spriteIndex * 4 + 2] = mtl[1].specularColor[2] * 255;
 								specularTextureData[mtl[1].spriteIndex * 4 + 3] = 255;
 							}
 							tempTexture = new Texture(false);
@@ -369,12 +341,9 @@ export default class MeshStore {
 
 							let emissionTextureData = new Uint8Array(index * 4);
 							for (let mtl of mtls) {
-								emissionTextureData[mtl[1].spriteIndex * 4 + 0] =
-									mtl[1].emissionColor[0] * 255;
-								emissionTextureData[mtl[1].spriteIndex * 4 + 1] =
-									mtl[1].emissionColor[1] * 255;
-								emissionTextureData[mtl[1].spriteIndex * 4 + 2] =
-									mtl[1].emissionColor[2] * 255;
+								emissionTextureData[mtl[1].spriteIndex * 4 + 0] = mtl[1].emissionColor[0] * 255;
+								emissionTextureData[mtl[1].spriteIndex * 4 + 1] = mtl[1].emissionColor[1] * 255;
+								emissionTextureData[mtl[1].spriteIndex * 4 + 2] = mtl[1].emissionColor[2] * 255;
 								emissionTextureData[mtl[1].spriteIndex * 4 + 3] = 255;
 							}
 							tempTexture = new Texture(false);
@@ -393,20 +362,14 @@ export default class MeshStore {
 				const coords = line.split(/\s+/).filter((element) => {
 					return element != "vt";
 				});
-				vertexTexCoords.push(
-					vec2.fromValues(parseFloat(coords[0]), parseFloat(coords[1]))
-				);
+				vertexTexCoords.push(vec2.fromValues(parseFloat(coords[0]), parseFloat(coords[1])));
 			} else if (line.startsWith("vn")) {
 				// Normal
 				const coords = line.split(/\s+/).filter((element) => {
 					return element != "vn";
 				});
 				vertexNormals.push(
-					vec3.fromValues(
-						parseFloat(coords[0]),
-						parseFloat(coords[1]),
-						parseFloat(coords[2])
-					)
+					vec3.fromValues(parseFloat(coords[0]), parseFloat(coords[1]), parseFloat(coords[2]))
 				);
 			} else if (line.startsWith("v")) {
 				// Position
@@ -414,11 +377,7 @@ export default class MeshStore {
 					return element != "v";
 				});
 				vertexPositions.push(
-					vec3.fromValues(
-						parseFloat(coords[0]),
-						parseFloat(coords[1]),
-						parseFloat(coords[2])
-					)
+					vec3.fromValues(parseFloat(coords[0]), parseFloat(coords[1]), parseFloat(coords[2]))
 				);
 			} else if (line.startsWith("f")) {
 				// Faces
@@ -490,8 +449,7 @@ export default class MeshStore {
 			}
 
 			if (!isNaN(vertices[i].mtlIndex)) {
-				returnArr[i * 8 + 6] =
-					vertices[i].mtlIndex / mtls.size + 0.5 / mtls.size;
+				returnArr[i * 8 + 6] = vertices[i].mtlIndex / mtls.size + 0.5 / mtls.size;
 				returnArr[i * 8 + 7] = 0.5;
 			} else if (!isNaN(vertices[i].texCoordIndex)) {
 				returnArr[i * 8 + 6] = vertexTexCoords[vertices[i].texCoordIndex][0];

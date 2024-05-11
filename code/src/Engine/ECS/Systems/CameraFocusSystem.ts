@@ -15,25 +15,17 @@ export default class CameraFocusSystem extends System {
 
 	update(dt: number) {
 		for (const e of this.entities) {
-			let posComp = <PositionComponent>(
-				e.getComponent(ComponentTypeEnum.POSITIONPARENT)
-			);
+			let posComp = <PositionComponent>e.getComponent(ComponentTypeEnum.POSITIONPARENT);
 
 			if (!posComp) {
 				posComp = <PositionComponent>e.getComponent(ComponentTypeEnum.POSITION);
 			}
 
-			let camFocusComp = <CameraFocusComponent>(
-				e.getComponent(ComponentTypeEnum.CAMERAFOCUS)
-			);
+			let camFocusComp = <CameraFocusComponent>e.getComponent(ComponentTypeEnum.CAMERAFOCUS);
 
 			let tempMatrix = mat4.create();
 			posComp.calculateMatrix(tempMatrix);
-			let camPosVector = vec3.transformMat4(
-				vec3.create(),
-				vec3.create(),
-				tempMatrix
-			);
+			let camPosVector = vec3.transformMat4(vec3.create(), vec3.create(), tempMatrix);
 			let camPos = vec3.add(
 				vec3.create(),
 				vec3.add(vec3.create(), camPosVector, camFocusComp.focusPoint),

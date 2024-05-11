@@ -22,21 +22,9 @@ export default class Mesh extends GraphicsObject {
 			// Save the positions as shapes in the input array
 			const length = triangles.push(new Triangle());
 			triangles[length - 1].setVertices(
-				vec3.fromValues(
-					this.vertices[i],
-					this.vertices[i + 1],
-					this.vertices[i + 2]
-				),
-				vec3.fromValues(
-					this.vertices[i + 8],
-					this.vertices[i + 8 + 1],
-					this.vertices[i + 8 + 2]
-				),
-				vec3.fromValues(
-					this.vertices[i + 16],
-					this.vertices[i + 16 + 1],
-					this.vertices[i + 16 + 2]
-				)
+				vec3.fromValues(this.vertices[i], this.vertices[i + 1], this.vertices[i + 2]),
+				vec3.fromValues(this.vertices[i + 8], this.vertices[i + 8 + 1], this.vertices[i + 8 + 2]),
+				vec3.fromValues(this.vertices[i + 16], this.vertices[i + 16 + 1], this.vertices[i + 16 + 2])
 			);
 		}
 	}
@@ -44,13 +32,7 @@ export default class Mesh extends GraphicsObject {
 	getVertexPositions(): Array<vec3> {
 		let returnArr = new Array<vec3>();
 		for (let i = 0; i < this.vertices.length; i += 8) {
-			returnArr.push(
-				vec3.fromValues(
-					this.vertices[i],
-					this.vertices[i + 1],
-					this.vertices[i + 2]
-				)
-			);
+			returnArr.push(vec3.fromValues(this.vertices[i], this.vertices[i + 1], this.vertices[i + 2]));
 		}
 		return returnArr;
 	}

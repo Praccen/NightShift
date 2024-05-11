@@ -6,10 +6,7 @@ import Ray from "../Physics/Shapes/Ray";
 
 export module MousePicking {
 	export function GetRay(camera: Camera): Ray {
-		let ndc = vec2.fromValues(
-			input.mousePositionOnCanvas.x,
-			input.mousePositionOnCanvas.y
-		);
+		let ndc = vec2.fromValues(input.mousePositionOnCanvas.x, input.mousePositionOnCanvas.y);
 		ndc[0] = (ndc[0] / windowInfo.resolutionWidth - 0.5) * 2.0;
 		ndc[1] = (ndc[1] / windowInfo.resolutionHeight - 0.5) * -2.0;
 
@@ -28,11 +25,7 @@ export module MousePicking {
 		);
 		let dir = vec3.normalize(
 			vec3.create(),
-			vec3.fromValues(
-				mouseRayWorld4D[0],
-				mouseRayWorld4D[1],
-				mouseRayWorld4D[2]
-			)
+			vec3.fromValues(mouseRayWorld4D[0], mouseRayWorld4D[1], mouseRayWorld4D[2])
 		);
 
 		let ray = new Ray();

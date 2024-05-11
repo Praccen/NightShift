@@ -61,19 +61,12 @@ export module CollisionSolver {
 				vec3.scale(
 					rotationAxis,
 					rotationAxis,
-					(vec3.len(change) + rotationImpact) *
-						vec3.len(collisionPointOffset) *
-						5.0
+					(vec3.len(change) + rotationImpact) * vec3.len(collisionPointOffset) * 5.0
 				);
 				quat.mul(
 					movComp.momentum,
 					movComp.momentum,
-					quat.fromEuler(
-						quat.create(),
-						rotationAxis[0],
-						rotationAxis[1],
-						rotationAxis[2]
-					)
+					quat.fromEuler(quat.create(), rotationAxis[0], rotationAxis[1], rotationAxis[2])
 				);
 			} else {
 				movComp.momentum = quat.create();
@@ -86,19 +79,11 @@ export module CollisionSolver {
 		e1: Entity,
 		e2: Entity
 	) {
-		let e1MovComp = <MovementComponent>(
-			e1.getComponent(ComponentTypeEnum.MOVEMENT)
-		);
-		let e1CollisionComp = <CollisionComponent>(
-			e1.getComponent(ComponentTypeEnum.COLLISION)
-		);
+		let e1MovComp = <MovementComponent>e1.getComponent(ComponentTypeEnum.MOVEMENT);
+		let e1CollisionComp = <CollisionComponent>e1.getComponent(ComponentTypeEnum.COLLISION);
 
-		let e2MovComp = <MovementComponent>(
-			e2.getComponent(ComponentTypeEnum.MOVEMENT)
-		);
-		let e2CollisionComp = <CollisionComponent>(
-			e2.getComponent(ComponentTypeEnum.COLLISION)
-		);
+		let e2MovComp = <MovementComponent>e2.getComponent(ComponentTypeEnum.MOVEMENT);
+		let e2CollisionComp = <CollisionComponent>e2.getComponent(ComponentTypeEnum.COLLISION);
 
 		for (let inf of intersectionInformation) {
 			let axis = vec3.clone(inf.axis);
@@ -115,11 +100,7 @@ export module CollisionSolver {
 			let velDifference = vec3.sub(vec3.create(), e1Vel, e2Vel);
 			let dotProd = vec3.dot(velDifference, axis);
 			if (dotProd < 0.0) {
-				let eN = vec3.cross(
-					vec3.create(),
-					vec3.cross(vec3.create(), velDifference, axis),
-					axis
-				);
+				let eN = vec3.cross(vec3.create(), vec3.cross(vec3.create(), velDifference, axis), axis);
 
 				if (vec3.squaredLength(eN) > 0.0001) {
 					vec3.normalize(eN, eN);
@@ -150,16 +131,14 @@ export module CollisionSolver {
 					let tangentVel1 = vec3.dot(e1Vel, eN);
 					let tangentVel2 = vec3.dot(e2Vel, eN);
 					let u1Dot =
-						((e1CollisionComp.mass -
-							collisionCoefficient * e2CollisionComp.mass) /
+						((e1CollisionComp.mass - collisionCoefficient * e2CollisionComp.mass) /
 							(e1CollisionComp.mass + e2CollisionComp.mass)) *
 							v1Dot +
 						(((1.0 + collisionCoefficient) * e2CollisionComp.mass) /
 							(e1CollisionComp.mass + e2CollisionComp.mass)) *
 							v2Dot;
 					let u2Dot =
-						((e2CollisionComp.mass -
-							collisionCoefficient * e1CollisionComp.mass) /
+						((e2CollisionComp.mass - collisionCoefficient * e1CollisionComp.mass) /
 							(e2CollisionComp.mass + e1CollisionComp.mass)) *
 							v2Dot +
 						(((1.0 + collisionCoefficient) * e1CollisionComp.mass) /
@@ -169,28 +148,18 @@ export module CollisionSolver {
 					let frictionMagnitude1 =
 						-1.0 *
 						((u1Dot - v1Dot) * frictionCoefficient < 0.0 ? 1 : 0) *
-						Math.min(
-							Math.abs(tangentVel1),
-							Math.abs((u1Dot - v1Dot) * frictionCoefficient)
-						);
+						Math.min(Math.abs(tangentVel1), Math.abs((u1Dot - v1Dot) * frictionCoefficient));
 					let frictionMagnitude2 =
 						-1.0 *
 						((u2Dot - v2Dot) * frictionCoefficient < 0.0 ? 1 : 0) *
-						Math.min(
-							Math.abs(tangentVel2),
-							Math.abs((u2Dot - v2Dot) * frictionCoefficient)
-						);
+						Math.min(Math.abs(tangentVel2), Math.abs((u2Dot - v2Dot) * frictionCoefficient));
 
 					vec3.scaleAndAdd(e1Change, e1Change, axis, u1Dot - v1Dot);
 					vec3.scaleAndAdd(e1Change, e1Change, eN, frictionMagnitude1);
 
 					vec3.scaleAndAdd(e2Change, e2Change, axis, u2Dot - v2Dot);
 					vec3.scaleAndAdd(e2Change, e2Change, eN, frictionMagnitude2);
-				} else if (
-					!e1MovComp ||
-					e1CollisionComp.isStatic ||
-					e1CollisionComp.isImmovable
-				) {
+				} else if (!e1MovComp || e1CollisionComp.isStatic || e1CollisionComp.isImmovable) {
 					let inverseVelDifference = vec3.negate(vec3.create(), velDifference);
 					let v2Dot = vec3.dot(inverseVelDifference, axis);
 					let relativeTangentVel = vec3.dot(inverseVelDifference, eN);
@@ -199,18 +168,9 @@ export module CollisionSolver {
 						v2Dot * (1.0 + collisionCoefficient) + frictionCoefficient
 					);
 
-					vec3.scaleAndAdd(
-						e2Change,
-						e2Change,
-						axis,
-						-v2Dot * (1.0 + collisionCoefficient)
-					);
+					vec3.scaleAndAdd(e2Change, e2Change, axis, -v2Dot * (1.0 + collisionCoefficient));
 					vec3.scaleAndAdd(e2Change, e2Change, eN, -frictionMagnitude);
-				} else if (
-					!e2MovComp ||
-					e2CollisionComp.isStatic ||
-					e2CollisionComp.isImmovable
-				) {
+				} else if (!e2MovComp || e2CollisionComp.isStatic || e2CollisionComp.isImmovable) {
 					let v1Dot = vec3.dot(velDifference, axis);
 					let relativeTangentVel = vec3.dot(velDifference, eN);
 					let frictionMagnitude = Math.min(
@@ -218,12 +178,7 @@ export module CollisionSolver {
 						v1Dot * (1.0 + collisionCoefficient) + frictionCoefficient
 					);
 
-					vec3.scaleAndAdd(
-						e1Change,
-						e1Change,
-						axis,
-						-v1Dot * (1.0 + collisionCoefficient)
-					);
+					vec3.scaleAndAdd(e1Change, e1Change, axis, -v1Dot * (1.0 + collisionCoefficient));
 					vec3.scaleAndAdd(e1Change, e1Change, eN, -frictionMagnitude);
 				}
 
@@ -249,15 +204,11 @@ export module CollisionSolver {
 
 				if (!e1CollisionComp.isImmovable && !e1CollisionComp.isStatic) {
 					// Prioritize the parent position component if there is one
-					let posComp = <PositionComponent>(
-						e1.getComponent(ComponentTypeEnum.POSITIONPARENT)
-					);
+					let posComp = <PositionComponent>e1.getComponent(ComponentTypeEnum.POSITIONPARENT);
 
 					// Otherwise move the position component
 					if (!posComp) {
-						posComp = <PositionComponent>(
-							e1.getComponent(ComponentTypeEnum.POSITION)
-						);
+						posComp = <PositionComponent>e1.getComponent(ComponentTypeEnum.POSITION);
 					}
 
 					vec3.add(
@@ -273,15 +224,11 @@ export module CollisionSolver {
 
 				if (!e2CollisionComp.isImmovable && !e2CollisionComp.isStatic) {
 					// Prioritize the parent position component if there is one
-					let posComp = <PositionComponent>(
-						e2.getComponent(ComponentTypeEnum.POSITIONPARENT)
-					);
+					let posComp = <PositionComponent>e2.getComponent(ComponentTypeEnum.POSITIONPARENT);
 
 					// Otherwise move the position component
 					if (!posComp) {
-						posComp = <PositionComponent>(
-							e2.getComponent(ComponentTypeEnum.POSITION)
-						);
+						posComp = <PositionComponent>e2.getComponent(ComponentTypeEnum.POSITION);
 					}
 
 					vec3.subtract(

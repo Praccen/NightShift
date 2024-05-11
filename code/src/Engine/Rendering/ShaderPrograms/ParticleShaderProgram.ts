@@ -79,12 +79,7 @@ void main()
 
 class ParticleShaderProgram extends ShaderProgram {
 	constructor() {
-		super(
-			"ParticleShaderProgram",
-			particleVertexShaderSrc,
-			particleFragmentShaderSrc,
-			false
-		);
+		super("ParticleShaderProgram", particleVertexShaderSrc, particleFragmentShaderSrc, false);
 
 		this.use();
 

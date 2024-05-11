@@ -10,20 +10,13 @@ export default class GrassSpawner extends GraphicsObject {
 	private vertices: Float32Array;
 	private instanceVBO: WebGLBuffer;
 
-	constructor(
-		shaderProgram: ShaderProgram,
-		numberOfStartingGrassStraws: number = 0
-	) {
+	constructor(shaderProgram: ShaderProgram, numberOfStartingGrassStraws: number = 0) {
 		super(shaderProgram);
 
 		this.bindVAO();
 		this.instanceVBO = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.instanceVBO);
-		gl.bufferData(
-			gl.ARRAY_BUFFER,
-			numberOfStartingGrassStraws * 7 * 4,
-			gl.STATIC_DRAW
-		);
+		gl.bufferData(gl.ARRAY_BUFFER, numberOfStartingGrassStraws * 7 * 4, gl.STATIC_DRAW);
 		shaderProgram.setupInstancedVertexAttributePointers();
 		this.unbindVAO();
 

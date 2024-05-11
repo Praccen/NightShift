@@ -36,12 +36,7 @@ export default class MeshCollisionComponent extends Component {
 				vec3.min(minVec, minVec, vertex);
 			}
 		}
-		this.octree = new Octree(
-			minVec,
-			maxVec,
-			smallestNodeSizeMultiplicator,
-			maxShapesPerNode
-		);
+		this.octree = new Octree(minVec, maxVec, smallestNodeSizeMultiplicator, maxShapesPerNode);
 
 		this.octree.addShapes(triangles);
 		this.octree.prune();

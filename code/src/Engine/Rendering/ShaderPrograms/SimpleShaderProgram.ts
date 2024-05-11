@@ -59,11 +59,7 @@ void main()
 
 class SimpleShaderProgram extends ShaderProgram {
 	constructor() {
-		super(
-			"SimpleShaderProgram",
-			simpleVertexShaderSrc,
-			simpleFragmentShaderSrc
-		);
+		super("SimpleShaderProgram", simpleVertexShaderSrc, simpleFragmentShaderSrc);
 
 		this.use();
 

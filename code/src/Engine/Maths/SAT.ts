@@ -172,11 +172,7 @@ export module SAT {
 	 * @param testAxis The axis to test along.
 	 * @returns The average point of intersection.
 	 */
-	export function getIntersectionPoint(
-		shapeA: Shape,
-		shapeB: Shape,
-		testAxis: vec3
-	): vec3 {
+	export function getIntersectionPoint(shapeA: Shape, shapeB: Shape, testAxis: vec3): vec3 {
 		let shapeAVertices = shapeA.getTransformedVertices();
 		let shapeBVertices = shapeB.getTransformedVertices();
 
@@ -348,17 +344,9 @@ export module SAT {
 
 		if (shapeANormals.length == 1 && shapeBNormals.length == 1) {
 			// Coplanar possible
-			let crossVector = vec3.cross(
-				vec3.create(),
-				shapeANormals[0],
-				shapeBNormals[0]
-			);
+			let crossVector = vec3.cross(vec3.create(), shapeANormals[0], shapeBNormals[0]);
 
-			if (
-				crossVector[0] == 0.0 &&
-				crossVector[1] == 0.0 &&
-				crossVector[2] == 0.0
-			) {
+			if (crossVector[0] == 0.0 && crossVector[1] == 0.0 && crossVector[2] == 0.0) {
 				// Coplanar
 				// Test the edge normals for all edges
 				for (const AEdgeNormal of shapeA.getTransformedEdgeNormals()) {
@@ -426,30 +414,14 @@ export module SAT {
 
 		let shapeANormals = shapeA.getTransformedNormals();
 		for (let normal of shapeANormals) {
-			if (
-				!getContinousOverlap(
-					normal,
-					shapeAVertices,
-					shapeBVertices,
-					relativeVel,
-					info
-				)
-			) {
+			if (!getContinousOverlap(normal, shapeAVertices, shapeBVertices, relativeVel, info)) {
 				return [-1.0, null];
 			}
 		}
 
 		let shapeBNormals = shapeB.getTransformedNormals();
 		for (let normal of shapeBNormals) {
-			if (
-				!getContinousOverlap(
-					normal,
-					shapeAVertices,
-					shapeBVertices,
-					relativeVel,
-					info
-				)
-			) {
+			if (!getContinousOverlap(normal, shapeAVertices, shapeBVertices, relativeVel, info)) {
 				return [-1.0, null];
 			}
 		}
@@ -464,28 +436,14 @@ export module SAT {
 
 		if (shapeANormals.length == 1 && shapeBNormals.length == 1) {
 			// Coplanar possible
-			let crossVector = vec3.cross(
-				vec3.create(),
-				shapeANormals[0],
-				shapeBNormals[0]
-			);
+			let crossVector = vec3.cross(vec3.create(), shapeANormals[0], shapeBNormals[0]);
 
-			if (
-				crossVector[0] == 0.0 &&
-				crossVector[1] == 0.0 &&
-				crossVector[2] == 0.0
-			) {
+			if (crossVector[0] == 0.0 && crossVector[1] == 0.0 && crossVector[2] == 0.0) {
 				// Coplanar
 				// Test the edge normals for all edges
 				for (const AEdgeNormal of shapeA.getTransformedEdgeNormals()) {
 					if (
-						!getContinousOverlap(
-							AEdgeNormal,
-							shapeAVertices,
-							shapeBVertices,
-							relativeVel,
-							info
-						)
+						!getContinousOverlap(AEdgeNormal, shapeAVertices, shapeBVertices, relativeVel, info)
 					) {
 						return [-1.0, null];
 					}
@@ -493,13 +451,7 @@ export module SAT {
 
 				for (const BEdgeNormal of shapeB.getTransformedEdgeNormals()) {
 					if (
-						!getContinousOverlap(
-							BEdgeNormal,
-							shapeAVertices,
-							shapeBVertices,
-							relativeVel,
-							info
-						)
+						!getContinousOverlap(BEdgeNormal, shapeAVertices, shapeBVertices, relativeVel, info)
 					) {
 						return [-1.0, null];
 					}
@@ -521,15 +473,7 @@ export module SAT {
 				if (dotProd < 0.99 && dotProd > -0.99) {
 					let testVec = vec3.clone(e1);
 					vec3.normalize(testVec, vec3.cross(testVec, testVec, e2));
-					if (
-						!getContinousOverlap(
-							testVec,
-							shapeAVertices,
-							shapeBVertices,
-							relativeVel,
-							info
-						)
-					) {
+					if (!getContinousOverlap(testVec, shapeAVertices, shapeBVertices, relativeVel, info)) {
 						return [-1.0, null];
 					}
 				}

@@ -81,14 +81,8 @@ export default class Game extends State {
 		crosshair.size = 10;
 		crosshair.textString = "➕";
 
-		this.scene = new Scene(
-			this.stateAccessible.textureStore,
-			this.stateAccessible.meshStore
-		);
-		this.rendering = new Rendering(
-			this.stateAccessible.textureStore,
-			this.scene
-		);
+		this.scene = new Scene(this.stateAccessible.textureStore, this.stateAccessible.meshStore);
+		this.rendering = new Rendering(this.stateAccessible.textureStore, this.scene);
 		this.ecsManager = new ECSManager(this.rendering);
 		// this.createPointLight(vec3.fromValues(-14.0, 0.0, 7.0), true, vec3.fromValues(3.0, 0.8, 0.0));
 		// this.createPointLight(vec3.fromValues(5.0, 0.0, -9.0), true, vec3.fromValues(0.0, 0.8, 3.0));
@@ -138,11 +132,7 @@ export default class Game extends State {
 
 		this.rendering.setSkybox("Assets/textures/skyboxes/NightSky");
 
-		await this.objectPlacer.load(
-			this.scene,
-			this.ecsManager,
-			this.stateAccessible.level
-		);
+		await this.objectPlacer.load(this.scene, this.ecsManager, this.stateAccessible.level);
 		// Run first update right away to let placed objects init
 		this.ecsManager.update(0);
 

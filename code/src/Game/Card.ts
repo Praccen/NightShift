@@ -59,15 +59,13 @@ export default class Card {
 			this.animationTime
 		);
 
-		let graphComp = this.shapes[0].getComponent(
-			ComponentTypeEnum.GRAPHICS
-		) as GraphicsComponent;
+		let graphComp = this.shapes[0].getComponent(ComponentTypeEnum.GRAPHICS) as GraphicsComponent;
 		if (graphComp != undefined) {
 			if (this.animationTime < 0.9) {
-				graphComp.bundle.graphicsObject.enabled = false;
+				graphComp.bundle.enabled = false;
 				return;
 			} else {
-				graphComp.bundle.graphicsObject.enabled = true;
+				graphComp.bundle.enabled = true;
 			}
 		}
 
@@ -76,9 +74,7 @@ export default class Card {
 		let right = vec3.clone(this.game.rendering.camera.getRight());
 		forward[1] = 0.0;
 		vec3.normalize(forward, forward);
-		let posComp = this.shapes[0].getComponent(
-			ComponentTypeEnum.POSITION
-		) as PositionComponent;
+		let posComp = this.shapes[0].getComponent(ComponentTypeEnum.POSITION) as PositionComponent;
 		if (posComp != undefined) {
 			let offsetY: number = 0.0;
 			let offset: number = 0.0;
@@ -102,31 +98,19 @@ export default class Card {
 				forward,
 				0.1 + offsetY - (1.0 - this.animationTime)
 			);
-			quat.rotateY(
-				posComp.rotation,
-				quat.create(),
-				(this.player.jawPitch[0] / 180) * Math.PI
-			);
+			quat.rotateY(posComp.rotation, quat.create(), (this.player.jawPitch[0] / 180) * Math.PI);
 			quat.rotateZ(posComp.rotation, posComp.rotation, (flush / 180) * Math.PI);
 			vec3.scale(right, right, offset);
 			let posVec: vec3 = vec3.create();
 			vec3.mul(posVec, vec3.fromValues(0.0, 1.7, 0), animationVec);
-			vec3.add(
-				posComp.position,
-				posComp.position,
-				vec3.add(vec3.create(), right, posVec)
-			);
+			vec3.add(posComp.position, posComp.position, vec3.add(vec3.create(), right, posVec));
 		}
 	}
 
 	createNewCardShape(box: Box, cardNr: number): Entity {
 		let cardEntity = this.game.ecsManager.createEntity();
 		let graphComp = new GraphicsComponent(
-			this.game.scene.getNewPhongQuad(
-				"CSS:rgb(0,0,0)",
-				"CSS:rgb(0,0,0)",
-				"CSS:rgb(255,255,255)"
-			)
+			this.game.scene.getNewPhongQuad("CSS:rgb(0,0,0)", "CSS:rgb(0,0,0)", "CSS:rgb(255,255,255)")
 		);
 		switch (box.color) {
 			case COLOR.RED:
@@ -150,19 +134,11 @@ export default class Card {
 		}
 		switch (cardNr) {
 			case 0:
-				vec3.scale(
-					graphComp.bundle.emissionColor,
-					graphComp.bundle.emissionColor,
-					0.8
-				);
+				vec3.scale(graphComp.bundle.emissionColor, graphComp.bundle.emissionColor, 0.8);
 				break;
 			case 1:
 				graphComp.bundle.emissionColor;
-				vec3.scale(
-					graphComp.bundle.emissionColor,
-					graphComp.bundle.emissionColor,
-					0.9
-				);
+				vec3.scale(graphComp.bundle.emissionColor, graphComp.bundle.emissionColor, 0.9);
 				break;
 		}
 		let posComp = new PositionComponent();

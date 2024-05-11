@@ -17,11 +17,7 @@ export default class GraphicsComponent extends Component {
 		Game.getInstanceNoSa().rendering.scene.deleteGraphicsBundle(this.bundle);
 	}
 
-	updateGui(
-		overlayRendering: OverlayRendering,
-		parentDiv: Div,
-		objectPlacer: ObjectPlacer
-	) {
+	updateGui(overlayRendering: OverlayRendering, parentDiv: Div, objectPlacer: ObjectPlacer) {
 		for (let i = 1; i < parentDiv.children.length; i++) {
 			if (parentDiv.children[i].textString == ComponentTypeEnum[this.type]) {
 				// Next should be a div that should hold the text edits

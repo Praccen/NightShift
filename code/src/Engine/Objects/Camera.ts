@@ -126,24 +126,13 @@ export default class Camera {
 	private updateViewProjMatrix() {
 		let updateViewProj = false;
 		if (this.viewMatrixNeedsUpdate) {
-			mat4.lookAt(
-				this.viewMatrix,
-				this.pos,
-				vec3.add(vec3.create(), this.pos, this.dir),
-				this.up
-			);
+			mat4.lookAt(this.viewMatrix, this.pos, vec3.add(vec3.create(), this.pos, this.dir), this.up);
 			this.viewMatrixNeedsUpdate = false;
 			updateViewProj = true;
 		}
 
 		if (this.projMatrixNeedsUpdate) {
-			mat4.perspective(
-				this.projectionMatrix,
-				this.fov,
-				this.ratio,
-				0.01,
-				this.farPlaneDistance
-			);
+			mat4.perspective(this.projectionMatrix, this.fov, this.ratio, 0.01, this.farPlaneDistance);
 			this.projMatrixNeedsUpdate = false;
 			updateViewProj = true;
 		}
@@ -153,24 +142,12 @@ export default class Camera {
 		}
 	}
 
-	bindViewProjMatrix(
-		uniformLocation: WebGLUniformLocation,
-		skybox: boolean = false
-	) {
+	bindViewProjMatrix(uniformLocation: WebGLUniformLocation, skybox: boolean = false) {
 		this.updateViewProjMatrix();
 
 		if (skybox) {
-			let tempViewMatrix = mat4.lookAt(
-				mat4.create(),
-				vec3.create(),
-				this.dir,
-				this.up
-			);
-			let tempViewProj = mat4.mul(
-				mat4.create(),
-				this.projectionMatrix,
-				tempViewMatrix
-			);
+			let tempViewMatrix = mat4.lookAt(mat4.create(), vec3.create(), this.dir, this.up);
+			let tempViewProj = mat4.mul(mat4.create(), this.projectionMatrix, tempViewMatrix);
 
 			gl.uniformMatrix4fv(uniformLocation, false, tempViewProj);
 		} else {

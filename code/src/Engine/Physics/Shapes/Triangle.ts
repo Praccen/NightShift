@@ -78,11 +78,7 @@ export default class Triangle extends Shape {
 			for (const originalVertex of this.originalVertices) {
 				let transformedVertex = vec3.transformMat4(
 					vec3.create(),
-					vec3.fromValues(
-						originalVertex[0],
-						originalVertex[1],
-						originalVertex[2]
-					),
+					vec3.fromValues(originalVertex[0], originalVertex[1], originalVertex[2]),
 					this.transformMatrix
 				);
 				this.transformedVertices.push(transformedVertex);
@@ -119,31 +115,19 @@ export default class Triangle extends Shape {
 			this.transformedEdges.push(
 				vec3.normalize(
 					vec3.create(),
-					vec3.subtract(
-						vec3.create(),
-						this.transformedVertices[1],
-						this.transformedVertices[0]
-					)
+					vec3.subtract(vec3.create(), this.transformedVertices[1], this.transformedVertices[0])
 				)
 			);
 			this.transformedEdges.push(
 				vec3.normalize(
 					vec3.create(),
-					vec3.subtract(
-						vec3.create(),
-						this.transformedVertices[2],
-						this.transformedVertices[1]
-					)
+					vec3.subtract(vec3.create(), this.transformedVertices[2], this.transformedVertices[1])
 				)
 			);
 			this.transformedEdges.push(
 				vec3.normalize(
 					vec3.create(),
-					vec3.subtract(
-						vec3.create(),
-						this.transformedVertices[0],
-						this.transformedVertices[2]
-					)
+					vec3.subtract(vec3.create(), this.transformedVertices[0], this.transformedVertices[2])
 				)
 			);
 
@@ -161,31 +145,19 @@ export default class Triangle extends Shape {
 			this.transformedEdgeNormals.push(
 				vec3.normalize(
 					vec3.create(),
-					vec3.cross(
-						vec3.create(),
-						this.transformedEdges[0],
-						this.transformedNormals[0]
-					)
+					vec3.cross(vec3.create(), this.transformedEdges[0], this.transformedNormals[0])
 				)
 			);
 			this.transformedEdgeNormals.push(
 				vec3.normalize(
 					vec3.create(),
-					vec3.cross(
-						vec3.create(),
-						this.transformedEdges[1],
-						this.transformedNormals[0]
-					)
+					vec3.cross(vec3.create(), this.transformedEdges[1], this.transformedNormals[0])
 				)
 			);
 			this.transformedEdgeNormals.push(
 				vec3.normalize(
 					vec3.create(),
-					vec3.cross(
-						vec3.create(),
-						this.transformedEdges[2],
-						this.transformedNormals[0]
-					)
+					vec3.cross(vec3.create(), this.transformedEdges[2], this.transformedNormals[0])
 				)
 			);
 

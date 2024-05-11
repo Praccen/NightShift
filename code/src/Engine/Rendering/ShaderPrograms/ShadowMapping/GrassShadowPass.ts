@@ -35,12 +35,7 @@ void main() {
 
 class GrassShadowPass extends ShaderProgram {
 	constructor() {
-		super(
-			"GrassShadowPass",
-			grassShadowVertexShaderSrc,
-			shadowFragmentShaderSrc,
-			false
-		);
+		super("GrassShadowPass", grassShadowVertexShaderSrc, shadowFragmentShaderSrc, false);
 
 		this.use();
 

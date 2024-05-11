@@ -25,9 +25,7 @@ export default class GuiObject {
 		this.center = false;
 
 		// look up the guicontainer
-		this.divContainerElement = <HTMLElement>(
-			document.getElementById("guicontainer")
-		);
+		this.divContainerElement = <HTMLElement>document.getElementById("guicontainer");
 
 		// make the div
 		this.div = document.createElement("div");
@@ -72,8 +70,7 @@ export default class GuiObject {
 		this.div.style.left = this.position2D[0] * 100 + "%";
 		this.div.style.top = this.position2D[1] * 100 + "%";
 		if (this.scaleWithWindow) {
-			this.div.style.fontSize =
-				this.fontSize * (windowInfo.resolutionHeight / 1080.0) + "px";
+			this.div.style.fontSize = this.fontSize * (windowInfo.resolutionHeight / 1080.0) + "px";
 		} else {
 			this.div.style.fontSize = this.fontSize + "px";
 		}

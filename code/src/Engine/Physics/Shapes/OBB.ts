@@ -94,11 +94,7 @@ export default class OBB extends Shape {
 		if (this.verticesNeedsUpdate) {
 			this.transformedVertices.length = 0;
 
-			let resultingMatrix = mat4.mul(
-				mat4.create(),
-				this.inverseMatrix,
-				this.transformMatrix
-			);
+			let resultingMatrix = mat4.mul(mat4.create(), this.inverseMatrix, this.transformMatrix);
 
 			for (const originalVertex of this.originalVertices) {
 				this.transformedVertices.push(

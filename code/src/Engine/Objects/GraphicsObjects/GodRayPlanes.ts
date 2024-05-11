@@ -40,21 +40,9 @@ export default class GodRayPlanes extends GraphicsObject {
 	draw() {
 		this.bindVAO();
 
-		gl.uniform1f(
-			this.shaderProgram.getUniformLocation("fogMaxDistance")[0],
-			this.fogMaxDistance
-		);
-		gl.uniform1f(
-			this.shaderProgram.getUniformLocation("numPlanes")[0],
-			this.numPlanes
-		);
+		gl.uniform1f(this.shaderProgram.getUniformLocation("fogMaxDistance")[0], this.fogMaxDistance);
+		gl.uniform1f(this.shaderProgram.getUniformLocation("numPlanes")[0], this.numPlanes);
 
-		gl.drawElementsInstanced(
-			gl.TRIANGLES,
-			6,
-			gl.UNSIGNED_INT,
-			0,
-			this.numPlanes
-		);
+		gl.drawElementsInstanced(gl.TRIANGLES, 6, gl.UNSIGNED_INT, 0, this.numPlanes);
 	}
 }

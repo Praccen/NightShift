@@ -19,16 +19,8 @@ class TreeNode {
 		this.position = position;
 		let halfSize = size * 0.5;
 		this.obb.setMinAndMaxVectors(
-			vec3.add(
-				vec3.create(),
-				vec3.fromValues(-halfSize, -halfSize, -halfSize),
-				this.position
-			),
-			vec3.add(
-				vec3.create(),
-				vec3.fromValues(halfSize, halfSize, halfSize),
-				this.position
-			)
+			vec3.add(vec3.create(), vec3.fromValues(-halfSize, -halfSize, -halfSize), this.position),
+			vec3.add(vec3.create(), vec3.fromValues(halfSize, halfSize, halfSize), this.position)
 		);
 
 		this.children = new Array<TreeNode>();
@@ -51,11 +43,7 @@ class TreeNode {
 								halfSize,
 								vec3.add(
 									vec3.create(),
-									vec3.fromValues(
-										x * quarterSize,
-										y * quarterSize,
-										z * quarterSize
-									),
+									vec3.fromValues(x * quarterSize, y * quarterSize, z * quarterSize),
 									this.position
 								)
 							)
@@ -143,10 +131,7 @@ class TreeNode {
 		for (let i = 0; i < this.children.length; i++) {
 			this.children[i].prune();
 
-			if (
-				this.children[i].content.length == 0 &&
-				this.children[i].children.length == 0
-			) {
+			if (this.children[i].content.length == 0 && this.children[i].children.length == 0) {
 				this.children.splice(i, 1);
 				i--;
 			}
@@ -197,11 +182,7 @@ class TreeNode {
 		}
 	}
 
-	getShapesForRayCast(
-		ray: Ray,
-		shapeArray: Array<Shape>,
-		maxDistance: number = Infinity
-	) {
+	getShapesForRayCast(ray: Ray, shapeArray: Array<Shape>, maxDistance: number = Infinity) {
 		if (IntersectionTester.doRayCast(ray, [this.obb], maxDistance) >= 0.0) {
 			for (const child of this.children) {
 				child.getShapesForRayCast(ray, shapeArray, maxDistance);
@@ -297,11 +278,7 @@ export default class Octree {
 		);
 	}
 
-	getShapesForRayCast(
-		ray: Ray,
-		shapeArray: Array<Shape>,
-		maxDistance: number = Infinity
-	) {
+	getShapesForRayCast(ray: Ray, shapeArray: Array<Shape>, maxDistance: number = Infinity) {
 		this.baseNode.getShapesForRayCast(ray, shapeArray, maxDistance);
 	}
 
@@ -354,9 +331,7 @@ export default class Octree {
 				} else {
 					// Add current node to parent queue
 					parentQueue.push(currentNode);
-					let length = currentNode.children.push(
-						new TreeNode(currentSize, currentPos)
-					);
+					let length = currentNode.children.push(new TreeNode(currentSize, currentPos));
 					currentNode = currentNode.children[length - 1];
 				}
 			} else if (row.startsWith("t")) {

@@ -22,9 +22,7 @@ export default class AudioPlayer {
 		const sound_effect_volume_multilpliers_list = [];
 		let count = 0;
 		for (const file of sound_effect_files) {
-			this.sound_effects[file.split(".")[0]] = new Audio(
-				this.sound_effects_dir + "/" + file
-			);
+			this.sound_effects[file.split(".")[0]] = new Audio(this.sound_effects_dir + "/" + file);
 			this.sound_effects_volume_multilpliers[file.split(".")[0]] =
 				sound_effect_volume_multilpliers_list[count];
 			count++;
@@ -65,28 +63,19 @@ export default class AudioPlayer {
 	}
 
 	setAudioVolume(key, volume) {
-		if (
-			this.sound_effects[key] &&
-			this.sound_effects_volume_multilpliers[key]
-		) {
+		if (this.sound_effects[key] && this.sound_effects_volume_multilpliers[key]) {
 			this.sound_effects[key].volume = Math.min(
 				volume * this.sound_effects_volume_multilpliers[key],
 				1
 			);
 		} else if (this.songs[key] && this.songs_volume_multilpliers[key]) {
-			this.songs[key].volume = Math.min(
-				volume * this.songs_volume_multilpliers[key],
-				1
-			);
+			this.songs[key].volume = Math.min(volume * this.songs_volume_multilpliers[key], 1);
 		}
 	}
 
 	setMusicVolume(volume: number) {
 		Object.keys(this.songs).forEach((key) => {
-			this.songs[key].volume = Math.min(
-				volume * this.songs_volume_multilpliers[key],
-				1
-			);
+			this.songs[key].volume = Math.min(volume * this.songs_volume_multilpliers[key], 1);
 		});
 	}
 

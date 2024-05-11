@@ -37,54 +37,33 @@ export default class PointLight {
 		);
 		this.pointShadowDepthMap.setTextureData(null, 1024, 1024);
 
-		this.pointShadowBuffer = new Framebuffer(
-			1024,
-			1024,
-			[],
-			this.pointShadowDepthMap
-		);
+		this.pointShadowBuffer = new Framebuffer(1024, 1024, [], this.pointShadowDepthMap);
 	}
 
-	bind(
-		lightIndex: number,
-		depthMapIndex: number,
-		shaderProgram: ShaderProgram
-	) {
-		let ul = shaderProgram.getUniformLocation(
-			"pointLights[" + lightIndex + "].position"
-		);
+	bind(lightIndex: number, depthMapIndex: number, shaderProgram: ShaderProgram) {
+		let ul = shaderProgram.getUniformLocation("pointLights[" + lightIndex + "].position");
 		if (ul[1]) {
 			gl.uniform3fv(ul[0], this.position);
 		}
-		ul = shaderProgram.getUniformLocation(
-			"pointLights[" + lightIndex + "].colour"
-		);
+		ul = shaderProgram.getUniformLocation("pointLights[" + lightIndex + "].colour");
 		if (ul[1]) {
 			gl.uniform3fv(ul[0], this.colour);
 		}
 
-		ul = shaderProgram.getUniformLocation(
-			"pointLights[" + lightIndex + "].constant"
-		);
+		ul = shaderProgram.getUniformLocation("pointLights[" + lightIndex + "].constant");
 		if (ul[1]) {
 			gl.uniform1f(ul[0], this.constant);
 		}
-		ul = shaderProgram.getUniformLocation(
-			"pointLights[" + lightIndex + "].linear"
-		);
+		ul = shaderProgram.getUniformLocation("pointLights[" + lightIndex + "].linear");
 		if (ul[1]) {
 			gl.uniform1f(ul[0], this.linear);
 		}
-		ul = shaderProgram.getUniformLocation(
-			"pointLights[" + lightIndex + "].quadratic"
-		);
+		ul = shaderProgram.getUniformLocation("pointLights[" + lightIndex + "].quadratic");
 		if (ul[1]) {
 			gl.uniform1f(ul[0], this.quadratic);
 		}
 
-		ul = shaderProgram.getUniformLocation(
-			"pointLights[" + lightIndex + "].pointDepthMapIndex"
-		);
+		ul = shaderProgram.getUniformLocation("pointLights[" + lightIndex + "].pointDepthMapIndex");
 		if (ul[1]) {
 			gl.uniform1i(ul[0], this.castShadow ? depthMapIndex : -1);
 		}

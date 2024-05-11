@@ -10,6 +10,7 @@ import Card from "./Card";
 import { MousePicking } from "../Engine/Maths/MousePicking";
 import { ECSUtils } from "../Engine/Utils/ESCUtils";
 import Box from "./Box";
+import Ray from "../Engine/Physics/Shapes/Ray";
 
 const sensitivity = 45.0; // TODO: move to options, and add a slider in options menu.
 
@@ -33,11 +34,7 @@ export default class PlayerController {
 	constructor(game: Game) {
 		this.game = game;
 		this.cards = new Array<Card>(3);
-		this.cards = [
-			new Card(this, game, 0),
-			new Card(this, game, 1),
-			new Card(this, game, 2),
-		];
+		this.cards = [new Card(this, game, 0), new Card(this, game, 1), new Card(this, game, 2)];
 		this.selectedCard = 0;
 		this.wasRotated = true;
 		this.showCards = false;
@@ -57,11 +54,7 @@ export default class PlayerController {
 				movY = 0.0;
 			}
 
-			vec2.sub(
-				this.mouseMovement,
-				this.mouseMovement,
-				vec2.fromValues(movX, movY)
-			);
+			vec2.sub(this.mouseMovement, this.mouseMovement, vec2.fromValues(movX, movY));
 		};
 
 		this.positionComp = new PositionComponent();
@@ -112,26 +105,15 @@ export default class PlayerController {
 			);
 			this.jawPitch[0] = this.jawPitch[0] % 360;
 			this.jawPitch[1] = Math.max(Math.min(this.jawPitch[1], 89), -89);
-			this.game.rendering.camera.setPitchJawDegrees(
-				this.jawPitch[1],
-				this.jawPitch[0]
-			);
+			this.game.rendering.camera.setPitchJawDegrees(this.jawPitch[1], this.jawPitch[0]);
 		} else if (
 			vec2.squaredLength(this.mouseMovement) > 0.0 &&
 			document.pointerLockElement == document.getElementById("gameDiv")
 		) {
-			vec2.scaleAndAdd(
-				this.jawPitch,
-				this.jawPitch,
-				this.mouseMovement,
-				sensitivity * dt
-			);
+			vec2.scaleAndAdd(this.jawPitch, this.jawPitch, this.mouseMovement, sensitivity * dt);
 			this.jawPitch[0] = this.jawPitch[0] % 360;
 			this.jawPitch[1] = Math.max(Math.min(this.jawPitch[1], 89), -89);
-			this.game.rendering.camera.setPitchJawDegrees(
-				this.jawPitch[1],
-				this.jawPitch[0]
-			);
+			this.game.rendering.camera.setPitchJawDegrees(this.jawPitch[1], this.jawPitch[0]);
 
 			vec2.zero(this.mouseMovement);
 		}
@@ -150,18 +132,8 @@ export default class PlayerController {
 		// Touch / joystick control
 		input.updateGamepad();
 		if (vec2.sqrLen(input.joystickLeftDirection) > 0.001) {
-			vec3.scaleAndAdd(
-				accVec,
-				accVec,
-				right,
-				input.joystickLeftDirection[0] * 2.0
-			);
-			vec3.scaleAndAdd(
-				accVec,
-				accVec,
-				forward,
-				-input.joystickLeftDirection[1] * 2.0
-			);
+			vec3.scaleAndAdd(accVec, accVec, right, input.joystickLeftDirection[0] * 2.0);
+			vec3.scaleAndAdd(accVec, accVec, forward, -input.joystickLeftDirection[1] * 2.0);
 		}
 		// Keyboard control
 		else {
@@ -204,19 +176,19 @@ export default class PlayerController {
 			// Pickup box
 			if (input.keys["E"]) {
 				if (!this.wasPicked) {
-					let objective_boxes =
-						this.game.objectPlacer.getEntitiesOfType("Box Objective");
+					let objective_boxes = this.game.objectPlacer.getEntitiesOfType("Box Objective");
 
-					let ray = MousePicking.GetRay(this.game.rendering.camera);
-					let rayCastResult = ECSUtils.RayCastAgainstEntityList(
-						ray,
-						objective_boxes
+					let ray = new Ray();
+					ray.setStartAndDir(
+						this.game.rendering.camera.getPosition(),
+						this.game.rendering.camera.getDir()
 					);
+					let rayCastResult = ECSUtils.RayCastAgainstEntityList(ray, objective_boxes);
 					let selectedBox = this.game.boxes.get(rayCastResult.eId);
 					console.log(selectedBox);
 					if (selectedBox != undefined) {
 						selectedBox.pickedUp = true;
-						selectedBox.graphComp.bundle.graphicsObject.enabled = false;
+						selectedBox.graphComp.bundle.enabled = false;
 					}
 				}
 				this.wasPicked = true;
@@ -242,11 +214,7 @@ export default class PlayerController {
 		this.movComp.drag = 10.0 + vec3.len(xzVelocity) * 2.0;
 
 		this.game.rendering.camera.setPosition(
-			vec3.add(
-				vec3.create(),
-				this.positionComp.position,
-				vec3.fromValues(0.0, 1.7, 0.0)
-			)
+			vec3.add(vec3.create(), this.positionComp.position, vec3.fromValues(0.0, 1.7, 0.0))
 		);
 		this.cards[0].update(dt, 0);
 		this.cards[1].update(dt, 1);

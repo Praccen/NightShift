@@ -126,11 +126,9 @@ export default class LoadingScreen extends State {
 
 		// Load heightmaps
 		for (const heightmapInfo of heightmaps) {
-			this.sa.meshStore.loadHeightmap
-				.apply(this.sa.meshStore, heightmapInfo)
-				.then(() => {
-					this.heightmapsLoaded++;
-				});
+			this.sa.meshStore.loadHeightmap.apply(this.sa.meshStore, heightmapInfo).then(() => {
+				this.heightmapsLoaded++;
+			});
 		}
 	}
 
@@ -151,10 +149,7 @@ export default class LoadingScreen extends State {
 			}
 		}
 		let loadedAssets =
-			texturesLoaded +
-			this.meshesLoaded +
-			this.heightmapsLoaded +
-			this.octreesLoaded;
+			texturesLoaded + this.meshesLoaded + this.heightmapsLoaded + this.octreesLoaded;
 
 		// When all meshes and heightmaps have been loaded, we can start processing octrees
 		if (
@@ -166,18 +161,10 @@ export default class LoadingScreen extends State {
 			let i = this.octreesToLoad.length - 1;
 			let octreeToLoad = this.octreesToLoad[i];
 			this.sa.meshStore
-				.loadOctree(
-					octreeToLoad[0],
-					octreeToLoad[1],
-					octreeToLoad[2],
-					10 /*Give a 10 ms deadline*/
-				)
+				.loadOctree(octreeToLoad[0], octreeToLoad[1], octreeToLoad[2], 10 /*Give a 10 ms deadline*/)
 				.then((value) => {
 					if (value.doneLoading) {
-						if (
-							this.octreesToLoad[this.octreesToLoad.length - 1][0] ==
-							octreeToLoad[0]
-						) {
+						if (this.octreesToLoad[this.octreesToLoad.length - 1][0] == octreeToLoad[0]) {
 							this.octreesToLoad.pop(); // Done loading, remove it from the queue
 							this.octreesLoaded++; // And increase the number of octrees loaded
 						}

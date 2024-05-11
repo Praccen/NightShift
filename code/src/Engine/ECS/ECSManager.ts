@@ -55,10 +55,7 @@ export default class ECSManager {
 		this.systems.set("POSITIONMATRIXUPDATE", new PositionMatrixUpdateSystem());
 		this.systems.set("GRAPHICS", new GraphicsSystem());
 		this.systems.set("PARTICLE", new ParticleSpawnerSystem());
-		this.systems.set(
-			"CAMERAFOCUS",
-			new CameraFocusSystem(this.rendering.camera)
-		);
+		this.systems.set("CAMERAFOCUS", new CameraFocusSystem(this.rendering.camera));
 	}
 
 	update(dt: number) {
@@ -85,9 +82,7 @@ export default class ECSManager {
 	}
 
 	createEntity(): Entity {
-		const length = this.entityAdditionQueue.push(
-			new Entity(this.entityCounter++)
-		);
+		const length = this.entityAdditionQueue.push(new Entity(this.entityCounter++));
 		return this.entityAdditionQueue[length - 1];
 	}
 

@@ -40,17 +40,12 @@ export default class ShaderProgram {
 		gl.compileShader(vertexShader);
 
 		// Check for shader compile errors
-		if (
-			!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS) ||
-			debugShaderCompilation
-		) {
+		if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS) || debugShaderCompilation) {
 			console.log(
 				"Vertex shader compiled successfully: " +
 					gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)
 			);
-			console.log(
-				"Vertex shader compiler log: \n" + gl.getShaderInfoLog(vertexShader)
-			);
+			console.log("Vertex shader compiler log: \n" + gl.getShaderInfoLog(vertexShader));
 		}
 
 		// fragment shader
@@ -59,17 +54,12 @@ export default class ShaderProgram {
 		gl.compileShader(fragmentShader);
 
 		// Check for shader compile errors
-		if (
-			!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS) ||
-			debugShaderCompilation
-		) {
+		if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS) || debugShaderCompilation) {
 			console.log(
 				"Fragment shader compiled successfully: " +
 					gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)
 			);
-			console.log(
-				"Fragment shader compiler log: \n" + gl.getShaderInfoLog(fragmentShader)
-			);
+			console.log("Fragment shader compiler log: \n" + gl.getShaderInfoLog(fragmentShader));
 		}
 
 		this.shaderProgram = gl.createProgram();
@@ -79,15 +69,10 @@ export default class ShaderProgram {
 		gl.linkProgram(this.shaderProgram);
 
 		// Check for linking errors?
-		let linkedShaders = gl.getProgramParameter(
-			this.shaderProgram,
-			gl.LINK_STATUS
-		);
+		let linkedShaders = gl.getProgramParameter(this.shaderProgram, gl.LINK_STATUS);
 		if (!linkedShaders || debugShaderCompilation) {
 			console.log("Linked shaders successfully: " + linkedShaders);
-			console.log(
-				"Linking shaders log: \n" + gl.getProgramInfoLog(this.shaderProgram)
-			);
+			console.log("Linking shaders log: \n" + gl.getProgramInfoLog(this.shaderProgram));
 		}
 
 		// Delete shaders now that they have been made into a program
@@ -106,10 +91,7 @@ export default class ShaderProgram {
 	setupInstancedVertexAttributePointers() {}
 
 	setUniformLocation(uniformName: string) {
-		this.uniformBindings.set(
-			uniformName,
-			gl.getUniformLocation(this.shaderProgram, uniformName)
-		);
+		this.uniformBindings.set(uniformName, gl.getUniformLocation(this.shaderProgram, uniformName));
 	}
 
 	getUniformLocation(uniformName: string): [WebGLUniformLocation, boolean] {

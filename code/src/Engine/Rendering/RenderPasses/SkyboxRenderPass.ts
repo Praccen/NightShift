@@ -19,10 +19,7 @@ export default class SkyboxRenderPass {
 		if (this.skybox != undefined) {
 			gl.enable(gl.DEPTH_TEST);
 			skyboxShaderProgram.use();
-			camera.bindViewProjMatrix(
-				skyboxShaderProgram.getUniformLocation("viewProjMatrix")[0],
-				true
-			);
+			camera.bindViewProjMatrix(skyboxShaderProgram.getUniformLocation("viewProjMatrix")[0], true);
 			gl.depthFunc(gl.LEQUAL);
 			this.skybox.draw();
 			gl.depthFunc(gl.LESS);

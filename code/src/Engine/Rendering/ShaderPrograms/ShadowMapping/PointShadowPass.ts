@@ -61,11 +61,7 @@ void main()
 
 class PointShadowPass extends ShaderProgram {
 	constructor() {
-		super(
-			"PointShadowPass",
-			pointShadowVertexShaderSrc,
-			pointShadowFragmentShaderSrc
-		);
+		super("PointShadowPass", pointShadowVertexShaderSrc, pointShadowFragmentShaderSrc);
 
 		this.use();
 

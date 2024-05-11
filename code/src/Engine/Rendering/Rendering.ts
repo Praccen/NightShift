@@ -91,16 +91,10 @@ export default class Rendering {
 		this.geometryRenderPass = new GeometryRenderPass();
 
 		let textureArray = new Array<Texture>();
-		for (
-			let i = 0;
-			i < this.geometryRenderPass.outputFramebuffer.textures.length;
-			i++
-		) {
+		for (let i = 0; i < this.geometryRenderPass.outputFramebuffer.textures.length; i++) {
 			textureArray.push(this.geometryRenderPass.outputFramebuffer.textures[i]);
 		}
-		textureArray.push(
-			this.directionalShadowRenderPass.shadowBuffer.depthTexture
-		);
+		textureArray.push(this.directionalShadowRenderPass.shadowBuffer.depthTexture);
 		this.lightingRenderPass = new LightingRenderPass(textureArray);
 		// ----------------------------
 
@@ -111,9 +105,7 @@ export default class Rendering {
 			[new Texture(false), new Texture(false, gl.R32F, gl.RED, gl.FLOAT)],
 			null
 		);
-		this.particleRenderPass = new ParticleRenderPass(
-			this.particleFramebuffer.textures
-		);
+		this.particleRenderPass = new ParticleRenderPass(this.particleFramebuffer.textures);
 		// -------------------
 
 		// ---- Skybox ----
@@ -144,9 +136,7 @@ export default class Rendering {
 			[new Texture(false)],
 			null
 		);
-		this.bloomRenderPass = new BloomRenderPass(
-			this.bloomExtractionInputFramebuffer.textures
-		);
+		this.bloomRenderPass = new BloomRenderPass(this.bloomExtractionInputFramebuffer.textures);
 		this.useBloom = options.useBloom;
 		// -------------------------¨
 
@@ -157,9 +147,7 @@ export default class Rendering {
 			null
 		);
 
-		this.finishedOutputRenderPass = new FinishedOutputRenderPass(
-			this.finishedFramebuffer.textures
-		);
+		this.finishedOutputRenderPass = new FinishedOutputRenderPass(this.finishedFramebuffer.textures);
 
 		this.screenCaptureNextFrame = false;
 
@@ -168,12 +156,7 @@ export default class Rendering {
 
 	initGL() {
 		this.clearColour = { r: 0.15, g: 0.1, b: 0.1, a: 1.0 };
-		gl.clearColor(
-			this.clearColour.r,
-			this.clearColour.g,
-			this.clearColour.b,
-			this.clearColour.a
-		);
+		gl.clearColor(this.clearColour.r, this.clearColour.g, this.clearColour.b, this.clearColour.a);
 
 		// Enable depth test
 		gl.enable(gl.DEPTH_TEST);
@@ -231,18 +214,12 @@ export default class Rendering {
 		});
 	}
 
-	draw(
-		saveScreenshot: boolean = false,
-		screenshotName: string = "screencapture"
-	) {
+	draw(saveScreenshot: boolean = false, screenshotName: string = "screencapture") {
 		if (
 			this.resolutionWidth != windowInfo.resolutionWidth ||
 			this.resolutionHeight != windowInfo.resolutionHeight
 		) {
-			this.reportCanvasResize(
-				windowInfo.resolutionWidth,
-				windowInfo.resolutionHeight
-			);
+			this.reportCanvasResize(windowInfo.resolutionWidth, windowInfo.resolutionHeight);
 		}
 
 		gl.enable(gl.DEPTH_TEST);
@@ -261,12 +238,7 @@ export default class Rendering {
 		this.finishedFramebuffer.bind(gl.DRAW_FRAMEBUFFER);
 
 		// Clear the output with the actual clear colour we have set
-		gl.clearColor(
-			this.clearColour.r,
-			this.clearColour.g,
-			this.clearColour.b,
-			this.clearColour.a
-		);
+		gl.clearColor(this.clearColour.r, this.clearColour.g, this.clearColour.b, this.clearColour.a);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
 
 		// ---- Lighting pass ----

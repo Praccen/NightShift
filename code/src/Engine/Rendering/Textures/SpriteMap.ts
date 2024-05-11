@@ -16,11 +16,7 @@ export default class SpriteMap {
 		mat4.translate(
 			matrix,
 			matrix,
-			vec3.fromValues(
-				this.currentSprite.x * spriteSizeX,
-				this.currentSprite.y * spriteSizeY,
-				0.0
-			)
+			vec3.fromValues(this.currentSprite.x * spriteSizeX, this.currentSprite.y * spriteSizeY, 0.0)
 		);
 		mat4.scale(matrix, matrix, vec3.fromValues(spriteSizeX, spriteSizeY, 1.0));
 	}

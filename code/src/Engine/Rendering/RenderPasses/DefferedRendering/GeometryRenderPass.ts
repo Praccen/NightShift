@@ -28,12 +28,7 @@ export default class GeometryRenderPass {
 	}
 
 	draw(scene: Scene, camera: Camera) {
-		gl.viewport(
-			0.0,
-			0.0,
-			windowInfo.resolutionWidth,
-			windowInfo.resolutionHeight
-		);
+		gl.viewport(0.0, 0.0, windowInfo.resolutionWidth, windowInfo.resolutionHeight);
 
 		// Bind gbuffer and clear that with 0,0,0,0 (the alpha = 0 is important to be able to identify fragments in the lighting pass that have not been written with geometry)
 		this.outputFramebuffer.bind(gl.FRAMEBUFFER);
@@ -42,21 +37,14 @@ export default class GeometryRenderPass {
 
 		geometryPass.use();
 
-		camera.bindViewProjMatrix(
-			geometryPass.getUniformLocation("viewProjMatrix")[0]
-		);
+		camera.bindViewProjMatrix(geometryPass.getUniformLocation("viewProjMatrix")[0]);
 
 		scene.renderScene(geometryPass, true);
 
 		grassShaderProgram.use();
-		camera.bindViewProjMatrix(
-			grassShaderProgram.getUniformLocation("viewProjMatrix")[0]
-		);
+		camera.bindViewProjMatrix(grassShaderProgram.getUniformLocation("viewProjMatrix")[0]);
 
-		gl.uniform3fv(
-			grassShaderProgram.getUniformLocation("cameraPos")[0],
-			camera.getPosition()
-		);
+		gl.uniform3fv(grassShaderProgram.getUniformLocation("cameraPos")[0], camera.getPosition());
 		gl.uniform1f(
 			grassShaderProgram.getUniformLocation("currentTime")[0],
 			(Date.now() - applicationStartTime) * 0.001

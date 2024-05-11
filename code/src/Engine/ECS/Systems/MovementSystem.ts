@@ -11,16 +11,12 @@ export default class MovementSystem extends System {
 
 	update(dt: number) {
 		for (const e of this.entities) {
-			let posComp = <PositionComponent>(
-				e.getComponent(ComponentTypeEnum.POSITIONPARENT)
-			);
+			let posComp = <PositionComponent>e.getComponent(ComponentTypeEnum.POSITIONPARENT);
 
 			if (posComp == undefined) {
 				posComp = <PositionComponent>e.getComponent(ComponentTypeEnum.POSITION);
 			}
-			let movComp = <MovementComponent>(
-				e.getComponent(ComponentTypeEnum.MOVEMENT)
-			);
+			let movComp = <MovementComponent>e.getComponent(ComponentTypeEnum.MOVEMENT);
 
 			let oldVel = vec3.clone(movComp.velocity);
 
@@ -28,11 +24,7 @@ export default class MovementSystem extends System {
 			vec3.add(
 				movComp.velocity,
 				movComp.velocity,
-				vec3.scale(
-					vec3.create(),
-					movComp.accelerationDirection,
-					movComp.acceleration * dt
-				)
+				vec3.scale(vec3.create(), movComp.accelerationDirection, movComp.acceleration * dt)
 			);
 			vec3.add(
 				movComp.velocity,
@@ -65,8 +57,7 @@ export default class MovementSystem extends System {
 
 			//stop if velocity is too slow
 			const accelerating =
-				movComp.accelerationDirection[0] != 0.0 ||
-				movComp.accelerationDirection[2] != 0.0;
+				movComp.accelerationDirection[0] != 0.0 || movComp.accelerationDirection[2] != 0.0;
 			if (!accelerating && vec3.sqrLen(movComp.velocity) < 0.001) {
 				vec3.multiply(movComp.velocity, movComp.velocity, vec3.fromValues(0.0, 1.0, 0.0));
 			}

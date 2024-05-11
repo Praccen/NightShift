@@ -69,10 +69,7 @@ export default class DirectionalShadowRenderPass {
 				grassShadowPass.getUniformLocation("lightSpaceMatrix")[0]
 			);
 
-		gl.uniform3fv(
-			grassShadowPass.getUniformLocation("cameraPos")[0],
-			camera.getPosition()
-		);
+		gl.uniform3fv(grassShadowPass.getUniformLocation("cameraPos")[0], camera.getPosition());
 		gl.uniform1f(
 			grassShadowPass.getUniformLocation("currentTime")[0],
 			(Date.now() - applicationStartTime) * 0.001

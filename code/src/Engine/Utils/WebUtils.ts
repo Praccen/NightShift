@@ -27,11 +27,7 @@ export module WebUtils {
 	 * @param cookieValue Cookie value
 	 * @param daysToLast How long the cookie should be valid
 	 */
-	export function SetCookie(
-		cookieName: string,
-		cookieValue: string,
-		daysToLast: number = 365
-	) {
+	export function SetCookie(cookieName: string, cookieValue: string, daysToLast: number = 365) {
 		const d = new Date();
 		d.setTime(d.getTime() + daysToLast * 24 * 60 * 60 * 1000);
 		let expires = "expires=" + d.toUTCString();
@@ -53,10 +49,7 @@ export module WebUtils {
 	 */
 	export function DownloadFile(filename, text) {
 		let element = document.createElement("a");
-		element.setAttribute(
-			"href",
-			"data:text/plain;charset=utf-8," + encodeURIComponent(text)
-		);
+		element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(text));
 		element.setAttribute("download", filename);
 
 		element.style.display = "none";

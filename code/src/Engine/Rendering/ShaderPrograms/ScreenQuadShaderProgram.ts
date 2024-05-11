@@ -34,11 +34,7 @@ void main() {
 
 class ScreenQuadShaderProgram extends ShaderProgram {
 	constructor() {
-		super(
-			"ScreenQuadShaderProgram",
-			screenQuadVertexSrc,
-			screenQuadFragmentSrc
-		);
+		super("ScreenQuadShaderProgram", screenQuadVertexSrc, screenQuadFragmentSrc);
 
 		this.setUniformLocation("screenTexture");
 

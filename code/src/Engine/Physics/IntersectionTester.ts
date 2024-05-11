@@ -22,13 +22,7 @@ export module IntersectionTester {
 		 * @param shapeA The shape of physical object A that is intersecting
 		 * @param shapeB The shape of physical object B that is intersecting
 		 */
-		constructor(
-			axis: vec3,
-			depth: number,
-			point: vec3,
-			shapeA: Shape,
-			shapeB: Shape
-		) {
+		constructor(axis: vec3, depth: number, point: vec3, shapeA: Shape, shapeB: Shape) {
 			this.axis = vec3.clone(axis);
 			this.depth = depth;
 			this.point = vec3.clone(point);
@@ -51,14 +45,7 @@ export module IntersectionTester {
 		let intersectionDepth = { depth: Infinity };
 		for (let shapeA of shapeArrayA) {
 			for (let shapeB of shapeArrayB) {
-				if (
-					SAT.getIntersection3D(
-						shapeA,
-						shapeB,
-						intersectionAxis,
-						intersectionDepth
-					)
-				) {
+				if (SAT.getIntersection3D(shapeA, shapeB, intersectionAxis, intersectionDepth)) {
 					return true;
 				}
 			}
@@ -85,14 +72,7 @@ export module IntersectionTester {
 
 		for (let shapeA of shapeArrayA) {
 			for (let shapeB of shapeArrayB) {
-				if (
-					SAT.getIntersection3D(
-						shapeA,
-						shapeB,
-						tempIntersectionAxis,
-						tempIntersectionDepth
-					)
-				) {
+				if (SAT.getIntersection3D(shapeA, shapeB, tempIntersectionAxis, tempIntersectionDepth)) {
 					intersecting = true;
 
 					// Save information about intersection

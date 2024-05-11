@@ -36,10 +36,7 @@ export default class VolumetricGodRayPass {
 			volumetricGodRayShaderProgram.getUniformLocation("cameraPos")[0],
 			camera.getPosition()
 		);
-		gl.uniform1f(
-			volumetricGodRayShaderProgram.getUniformLocation("fov")[0],
-			camera.getFov()
-		);
+		gl.uniform1f(volumetricGodRayShaderProgram.getUniformLocation("fov")[0], camera.getFov());
 		// Point lights
 		gl.uniform1i(
 			volumetricGodRayShaderProgram.getUniformLocation("nrOfPointLights")[0],

@@ -15,9 +15,7 @@ export default class ParticleSpawnerSystem extends System {
 			let particleComp = <ParticleSpawnerComponent>(
 				e.getComponent(ComponentTypeEnum.PARTICLESPAWNER)
 			);
-			let posComp = <PositionComponent>(
-				e.getComponent(ComponentTypeEnum.POSITIONPARENT)
-			);
+			let posComp = <PositionComponent>e.getComponent(ComponentTypeEnum.POSITIONPARENT);
 			if (posComp == undefined) {
 				posComp = <PositionComponent>e.getComponent(ComponentTypeEnum.POSITION);
 			}
@@ -32,25 +30,15 @@ export default class ParticleSpawnerSystem extends System {
 					(particleComp.resetTimer / Math.max(particleComp.lifeTime, 0.00001)) *
 						particleComp.particleSpawner.getNumberOfParticles()
 				);
-				for (
-					currentParticle;
-					currentParticle < endParticle;
-					currentParticle++
-				) {
+				for (currentParticle; currentParticle < endParticle; currentParticle++) {
 					particleComp.particleSpawner.resetParticleStartTime(
-						currentParticle %
-							particleComp.particleSpawner.getNumberOfParticles()
+						currentParticle % particleComp.particleSpawner.getNumberOfParticles()
 					);
 
 					if (posComp) {
 						particleComp.particleSpawner.setParticleStartPosition(
-							currentParticle %
-								particleComp.particleSpawner.getNumberOfParticles(),
-							vec3.add(
-								vec3.create(),
-								ECSUtils.CalculatePosition(e),
-								particleComp.offset
-							)
+							currentParticle % particleComp.particleSpawner.getNumberOfParticles(),
+							vec3.add(vec3.create(), ECSUtils.CalculatePosition(e), particleComp.offset)
 						);
 					}
 				}

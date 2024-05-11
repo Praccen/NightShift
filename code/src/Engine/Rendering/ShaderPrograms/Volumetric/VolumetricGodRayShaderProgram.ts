@@ -1,8 +1,5 @@
 import { gl } from "../../../../main";
-import {
-	pointLightsToAllocate,
-	pointShadowsToAllocate,
-} from "../DeferredRendering/LightingPass";
+import { pointLightsToAllocate, pointShadowsToAllocate } from "../DeferredRendering/LightingPass";
 import ShaderProgram from "../ShaderProgram";
 
 const volumetricGodRayVertexShaderSrc: string = `#version 300 es

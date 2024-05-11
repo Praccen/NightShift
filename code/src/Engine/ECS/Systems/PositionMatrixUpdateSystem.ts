@@ -11,13 +11,9 @@ export default class PositionMatrixUpdateSystem extends System {
 
 	update(dt: number) {
 		for (const e of this.entities) {
-			let posComp = <PositionComponent>(
-				e.getComponent(ComponentTypeEnum.POSITION)
-			);
+			let posComp = <PositionComponent>e.getComponent(ComponentTypeEnum.POSITION);
 
-			let posParentComp = <PositionParentComponent>(
-				e.getComponent(ComponentTypeEnum.POSITIONPARENT)
-			);
+			let posParentComp = <PositionParentComponent>e.getComponent(ComponentTypeEnum.POSITIONPARENT);
 
 			if (posComp) {
 				mat4.identity(posComp.matrix);
@@ -28,7 +24,7 @@ export default class PositionMatrixUpdateSystem extends System {
 				}
 
 				posComp.calculateMatrix(posComp.matrix);
-			}			
+			}
 		}
 	}
 }

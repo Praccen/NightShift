@@ -35,13 +35,8 @@ export default class ParticleRenderPass {
 		if (scene.particleSpawners.length > 0) {
 			// only do this if there are any particle spawners
 			particleShaderProgram.use();
-			camera.bindViewProjMatrix(
-				particleShaderProgram.getUniformLocation("viewProjMatrix")[0]
-			);
-			gl.uniform3fv(
-				particleShaderProgram.getUniformLocation("cameraPos")[0],
-				camera.getPosition()
-			);
+			camera.bindViewProjMatrix(particleShaderProgram.getUniformLocation("viewProjMatrix")[0]);
+			gl.uniform3fv(particleShaderProgram.getUniformLocation("cameraPos")[0], camera.getPosition());
 			gl.uniform1f(
 				particleShaderProgram.getUniformLocation("currentTime")[0],
 				(Date.now() - applicationStartTime) * 0.001

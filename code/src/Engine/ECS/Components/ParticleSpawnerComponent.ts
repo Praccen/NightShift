@@ -20,11 +20,7 @@ export default class ParticleSpawnerComponent extends Component {
 		this.offset = vec3.create();
 	}
 
-	addToGui(
-		overlayRendering: OverlayRendering,
-		parentDiv: Div,
-		objectPlacer: ObjectPlacer
-	) {
+	addToGui(overlayRendering: OverlayRendering, parentDiv: Div, objectPlacer: ObjectPlacer) {
 		let addTextEdit = (label: string, vec: vec3, index: number) => {
 			let propEditText = overlayRendering.getNewEditText(parentDiv);
 			propEditText.textString = label;

@@ -39,12 +39,7 @@ void main() {
 
 class GrassShaderProgram extends ShaderProgram {
 	constructor() {
-		super(
-			"GrassShaderProgram",
-			grassVertexShaderSrc,
-			geometryFragmentShaderSrc,
-			false
-		);
+		super("GrassShaderProgram", grassVertexShaderSrc, geometryFragmentShaderSrc, false);
 
 		this.use();
 

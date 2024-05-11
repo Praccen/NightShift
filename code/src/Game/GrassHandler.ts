@@ -36,10 +36,7 @@ export default class GrassHandler {
 
 		for (let i = 0; i < 4; i++) {
 			for (let j = 0; j < 4; j++) {
-				this.createGrass(
-					-10.0 + i * this.grassSpawnerSide,
-					-10.0 + j * this.grassSpawnerSide
-				);
+				this.createGrass(-10.0 + i * this.grassSpawnerSide, -10.0 + j * this.grassSpawnerSide);
 			}
 		}
 	}
@@ -88,10 +85,7 @@ export default class GrassHandler {
 			vec2.add(
 				middleOffset,
 				middleOffset,
-				vec2.fromValues(
-					this.grassSpawnerSide * 0.5,
-					this.grassSpawnerSide * 0.5
-				)
+				vec2.fromValues(this.grassSpawnerSide * 0.5, this.grassSpawnerSide * 0.5)
 			);
 			if (
 				cameraPos != undefined &&
@@ -99,10 +93,7 @@ export default class GrassHandler {
 			) {
 				spawner.offset[0] =
 					spawner.offset[0] -
-					Math.ceil(
-						Math.abs(middleOffset[0] - cameraPos[0]) /
-							(this.grassSpawnerSide * 4)
-					) *
+					Math.ceil(Math.abs(middleOffset[0] - cameraPos[0]) / (this.grassSpawnerSide * 4)) *
 						Math.sign(middleOffset[0] - cameraPos[0]) *
 						this.grassSpawnerSide *
 						4;
@@ -115,10 +106,7 @@ export default class GrassHandler {
 			) {
 				spawner.offset[1] =
 					spawner.offset[1] -
-					Math.ceil(
-						Math.abs(middleOffset[1] - cameraPos[2]) /
-							(this.grassSpawnerSide * 4)
-					) *
+					Math.ceil(Math.abs(middleOffset[1] - cameraPos[2]) / (this.grassSpawnerSide * 4)) *
 						Math.sign(middleOffset[1] - cameraPos[2]) *
 						this.grassSpawnerSide *
 						4;
@@ -148,9 +136,7 @@ export default class GrassHandler {
 				);
 
 				// Get the height of the heightmap at the corresponding position
-				let height = (<Heightmap>(
-					this.mapBundle.graphicsObject
-				)).getHeightFromWorldPosition(
+				let height = (<Heightmap>this.mapBundle.graphicsObject).getHeightFromWorldPosition(
 					this.mapBundle.modelMatrix,
 					grassStrawPosition,
 					invertedMatrix
@@ -159,9 +145,7 @@ export default class GrassHandler {
 				let size = 0.0;
 
 				if (height != null) {
-					let normal = (<Heightmap>(
-						this.mapBundle.graphicsObject
-					)).getNormalFromWorldPosition(
+					let normal = (<Heightmap>this.mapBundle.graphicsObject).getNormalFromWorldPosition(
 						this.mapBundle.modelMatrix,
 						grassStrawPosition,
 						invertedMatrix
@@ -179,18 +163,11 @@ export default class GrassHandler {
 				data.push(...grassStrawPosition); // Position of straw
 				data.push(size); // Size of straw
 				data.push(
-					...[
-						(Math.random() - 0.5) * 0.1,
-						(Math.random() - 0.5) * 0.1,
-						(Math.random() - 0.5) * 0.1,
-					]
+					...[(Math.random() - 0.5) * 0.1, (Math.random() - 0.5) * 0.1, (Math.random() - 0.5) * 0.1]
 				); // TipOffset
 			}
 
-			spawner.spawner.bufferSubDataUpdate(
-				startIndex * 7,
-				new Float32Array(data)
-			);
+			spawner.spawner.bufferSubDataUpdate(startIndex * 7, new Float32Array(data));
 
 			if (Date.now() - startTime >= this.grassSpawningDeadline) {
 				break;
@@ -216,9 +193,7 @@ export default class GrassHandler {
 			) {
 				if (
 					doggoPosition[1] -
-						(<Heightmap>(
-							this.mapBundle.graphicsObject
-						)).getHeightFromWorldPosition(
+						(<Heightmap>this.mapBundle.graphicsObject).getHeightFromWorldPosition(
 							this.mapBundle.modelMatrix,
 							doggoPosition,
 							invertedMatrix
@@ -233,18 +208,11 @@ export default class GrassHandler {
 
 					for (let x = middleX - 10; x < middleX + 11; x++) {
 						for (let y = middleY - 10; y < middleY + 11; y++) {
-							let dist = vec2.fromValues(
-								x * strawDist - diffX,
-								y * strawDist - diffY
-							);
+							let dist = vec2.fromValues(x * strawDist - diffX, y * strawDist - diffY);
 							if (vec2.length(dist) < 0.3) {
 								let index = Math.floor(x + y * sqrt);
 								if (index > 0 && index < this.grassStrawsPerSpawner) {
-									let offset = vec3.fromValues(
-										doggoVelocity[0],
-										0.0,
-										doggoVelocity[2]
-									);
+									let offset = vec3.fromValues(doggoVelocity[0], 0.0, doggoVelocity[2]);
 									vec3.normalize(offset, offset);
 									vec3.scale(offset, offset, 0.2);
 									offset[1] = -0.2;

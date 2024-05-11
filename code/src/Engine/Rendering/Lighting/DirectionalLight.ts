@@ -27,14 +27,9 @@ export default class DirectionalLight {
 			this.shaderProgram.getUniformLocation("directionalLight.direction")[0],
 			vec3.normalize(this.direction, this.direction)
 		);
-		gl.uniform3fv(
-			this.shaderProgram.getUniformLocation("directionalLight.colour")[0],
-			this.colour
-		);
+		gl.uniform3fv(this.shaderProgram.getUniformLocation("directionalLight.colour")[0], this.colour);
 		gl.uniform1f(
-			this.shaderProgram.getUniformLocation(
-				"directionalLight.ambientMultiplier"
-			)[0],
+			this.shaderProgram.getUniformLocation("directionalLight.ambientMultiplier")[0],
 			this.ambientMultiplier
 		);
 	}
@@ -60,12 +55,7 @@ export default class DirectionalLight {
 			offset * 2.0
 		); // Start by setting it to projection
 		vec3.subtract(cameraPos, cameraPos, offsetVec);
-		let lightView = mat4.lookAt(
-			mat4.create(),
-			cameraPos,
-			focusPos,
-			vec3.fromValues(0.0, 1.0, 0.0)
-		); // This will make it impossible to have exactly straight down shadows, but I'm fine with that
+		let lightView = mat4.lookAt(mat4.create(), cameraPos, focusPos, vec3.fromValues(0.0, 1.0, 0.0)); // This will make it impossible to have exactly straight down shadows, but I'm fine with that
 		mat4.mul(lightSpaceMatrix, lightSpaceMatrix, lightView);
 		gl.uniformMatrix4fv(uniformLocation, false, lightSpaceMatrix);
 	}

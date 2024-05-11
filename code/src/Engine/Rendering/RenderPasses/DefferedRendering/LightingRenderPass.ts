@@ -30,10 +30,7 @@ export default class LightingRenderPass {
 		// ---- Lighting pass ----
 		lightingPass.use();
 
-		gl.uniform3fv(
-			lightingPass.getUniformLocation("camPos")[0],
-			camera.getPosition()
-		);
+		gl.uniform3fv(lightingPass.getUniformLocation("camPos")[0], camera.getPosition());
 		scene.directionalLight.bind();
 		scene.directionalLight.calcAndSendLightSpaceMatrix(
 			vec3.clone(camera.getPosition()),
@@ -41,10 +38,7 @@ export default class LightingRenderPass {
 			lightingPass.getUniformLocation("lightSpaceMatrix")[0]
 		);
 		// Point lights
-		gl.uniform1i(
-			lightingPass.getUniformLocation("nrOfPointLights")[0],
-			scene.pointLights.length
-		);
+		gl.uniform1i(lightingPass.getUniformLocation("nrOfPointLights")[0], scene.pointLights.length);
 
 		// Bind pointLights, with counter as depthMapIndex
 		let counter = 0;

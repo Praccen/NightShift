@@ -31,11 +31,7 @@ export class Component {
 		return this._type;
 	}
 
-	updateGui(
-		overlayRendering: OverlayRendering,
-		parentDiv: Div,
-		objectPlacer: ObjectPlacer
-	) {}
+	updateGui(overlayRendering: OverlayRendering, parentDiv: Div, objectPlacer: ObjectPlacer) {}
 
 	protected addTextEdit(
 		overlayRendering: OverlayRendering,
@@ -91,12 +87,7 @@ export class Component {
 		}
 	}
 
-	protected updateTextEdit(
-		div: Div,
-		label: string,
-		variable: string[],
-		index?: number
-	) {
+	protected updateTextEdit(div: Div, label: string, variable: string[], index?: number) {
 		for (let child of div.children) {
 			if (child.textString == label) {
 				if ((<EditText>child).getInputElement() != document.activeElement) {
@@ -111,14 +102,12 @@ export class Component {
 					if (index == undefined) {
 						(<EditText>child).getInputElement().value = object.toString();
 					} else {
-						(<EditText>child).getInputElement().value =
-							object[index].toString();
+						(<EditText>child).getInputElement().value = object[index].toString();
 					}
 				} else {
 					let val: any = parseFloat((<EditText>child).getInputElement().value);
 					if (input.mouseRightClicked) {
-						let mouseChange =
-							input.mousePosition.x - input.mousePosition.previousX;
+						let mouseChange = input.mousePosition.x - input.mousePosition.previousX;
 						input.mousePosition.previousX = input.mousePosition.x;
 						if (input.keys["SHIFT"]) {
 							val += mouseChange * 0.01;
@@ -151,12 +140,7 @@ export class Component {
 		}
 	}
 
-	protected updateCheckbox(
-		div: Div,
-		label: string,
-		variable: string[],
-		index?: number
-	) {
+	protected updateCheckbox(div: Div, label: string, variable: string[], index?: number) {
 		for (let child of div.children) {
 			if (child.textString == label) {
 				if ((<Checkbox>child).getInputElement() != document.activeElement) {
@@ -171,9 +155,7 @@ export class Component {
 					if (index == undefined) {
 						(<Checkbox>child).getInputElement().checked = Boolean(object);
 					} else {
-						(<Checkbox>child).getInputElement().checked = Boolean(
-							object[index]
-						);
+						(<Checkbox>child).getInputElement().checked = Boolean(object[index]);
 					}
 				} else {
 					let val: any = (<Checkbox>child).getInputElement().checked;

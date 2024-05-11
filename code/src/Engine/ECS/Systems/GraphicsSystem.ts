@@ -15,25 +15,17 @@ export default class GraphicsSystem extends System {
 
 	update(dt: number) {
 		for (const e of this.entities) {
-			let posComp = <PositionComponent>(
-				e.getComponent(ComponentTypeEnum.POSITION)
-			);
+			let posComp = <PositionComponent>e.getComponent(ComponentTypeEnum.POSITION);
 
-			let graphComp = <GraphicsComponent>(
-				e.getComponent(ComponentTypeEnum.GRAPHICS)
-			);
+			let graphComp = <GraphicsComponent>e.getComponent(ComponentTypeEnum.GRAPHICS);
 
-			let posParentComp = <PositionParentComponent>(
-				e.getComponent(ComponentTypeEnum.POSITIONPARENT)
-			);
+			let posParentComp = <PositionParentComponent>e.getComponent(ComponentTypeEnum.POSITIONPARENT);
 
 			if (graphComp && posComp) {
 				graphComp.bundle.modelMatrix = posComp.matrix;
 			}
 
-			let pointLightComp = <PointLightComponent>(
-				e.getComponent(ComponentTypeEnum.POINTLIGHT)
-			);
+			let pointLightComp = <PointLightComponent>e.getComponent(ComponentTypeEnum.POINTLIGHT);
 
 			if (pointLightComp && (posComp || posParentComp)) {
 				vec3.add(

@@ -49,9 +49,7 @@ export default class GameMachine extends StateMachine {
 		this.initializeOptions();
 		this.stateAccessible = new StateAccessible();
 		this.stateAccessible.textureStore = new TextureStore();
-		this.stateAccessible.meshStore = new MeshStore(
-			this.stateAccessible.textureStore
-		);
+		this.stateAccessible.meshStore = new MeshStore(this.stateAccessible.textureStore);
 		(this.stateAccessible.audioPlayer = new AudioPlayer()),
 			(this.stateAccessible.restartGame = false),
 			(this.stateAccessible.localGame = true),
@@ -75,18 +73,13 @@ export default class GameMachine extends StateMachine {
 		this.fpsDisplay.getElement().style.color = "lime";
 	}
 
-	
-
 	onExit(e: BeforeUnloadEvent) {
 		WebUtils.SetCookie("showFps", options.showFps.valueOf().toString());
 		WebUtils.SetCookie("useCrt", options.useCrt.valueOf().toString());
 		WebUtils.SetCookie("useBloom", options.useBloom.valueOf().toString());
 		WebUtils.SetCookie("volume", options.musicVolume.toString());
 		WebUtils.SetCookie("effectVolume", options.effectVolume.toString());
-		WebUtils.SetCookie(
-			"foldableGrass",
-			options.foldableGrass.valueOf().toString()
-		);
+		WebUtils.SetCookie("foldableGrass", options.foldableGrass.valueOf().toString());
 		WebUtils.SetCookie("grassDensity", options.grassDensity.toString());
 
 		for (let s of this.states) {
@@ -119,12 +112,7 @@ export default class GameMachine extends StateMachine {
 	 */
 	createGameStates() {
 		let game = Game.getInstance(this.stateAccessible);
-		this.addState(
-			StatesEnum.MAINMENU,
-			Menu,
-			1.0 / 60.0,
-			new Menu(this.stateAccessible)
-		);
+		this.addState(StatesEnum.MAINMENU, Menu, 1.0 / 60.0, new Menu(this.stateAccessible));
 		this.addState(
 			StatesEnum.LEVELSELECT,
 			LevelSelect,

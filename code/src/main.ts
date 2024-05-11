@@ -37,9 +37,7 @@ function initWebGL(): WebGL2RenderingContext {
 
 	let tempGl = canvas.getContext("webgl2", { antialias: false });
 	if (!tempGl.getExtension("EXT_color_buffer_float")) {
-		alert(
-			"Rendering to floating point textures is not supported on this platform"
-		);
+		alert("Rendering to floating point textures is not supported on this platform");
 	}
 	if (!tempGl.getExtension("OES_texture_float_linear")) {
 		alert("Floating point rendering to FBO textures not supported");

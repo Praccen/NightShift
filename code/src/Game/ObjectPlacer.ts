@@ -76,9 +76,7 @@ export default class ObjectPlacer {
 		await this.reload(placementsFile);
 	}
 
-	async reload(
-		placementsFile: string = "Assets/placements/Placements.txt"
-	): Promise<void> {
+	async reload(placementsFile: string = "Assets/placements/Placements.txt"): Promise<void> {
 		this.downloadTransforms();
 
 		if (this.ecsManager && this.game) {
@@ -96,9 +94,7 @@ export default class ObjectPlacer {
 
 	private async loadFromFile(placementsFile: string) {
 		// Execute the PlacementList code
-		const placementsResponse = await fetch(
-			"Assets/placements/PlacementList.js"
-		);
+		const placementsResponse = await fetch("Assets/placements/PlacementList.js");
 		if (placementsResponse.ok) {
 			const content = await placementsResponse.text();
 			eval(content);
@@ -192,13 +188,7 @@ export default class ObjectPlacer {
 		return objectName;
 	}
 
-	placeObject(
-		type: string,
-		position: vec3,
-		size: vec3,
-		rotation: quat,
-		origin: vec3
-	): Entity {
+	placeObject(type: string, position: vec3, size: vec3, rotation: quat, origin: vec3): Entity {
 		let placement = this.placements.get(type);
 		if (placement == undefined) {
 			return null;
@@ -282,21 +272,13 @@ export default class ObjectPlacer {
 		this.currentlyEditingEntityId = id;
 	}
 
-	updateCurrentlyEditingObject(
-		rotationChange: vec3,
-		scaleChange: number,
-		newPosition?: vec3
-	) {
+	updateCurrentlyEditingObject(rotationChange: vec3, scaleChange: number, newPosition?: vec3) {
 		if (this.currentlyEditingEntityId != null) {
 			let entity = this.ecsManager.getEntity(this.currentlyEditingEntityId);
 			if (entity != undefined) {
-				let posComp = entity.getComponent(
-					ComponentTypeEnum.POSITIONPARENT
-				) as PositionComponent;
+				let posComp = entity.getComponent(ComponentTypeEnum.POSITIONPARENT) as PositionComponent;
 				if (posComp == undefined) {
-					posComp = entity.getComponent(
-						ComponentTypeEnum.POSITION
-					) as PositionComponent;
+					posComp = entity.getComponent(ComponentTypeEnum.POSITION) as PositionComponent;
 				}
 
 				if (posComp == undefined) {
@@ -306,12 +288,7 @@ export default class ObjectPlacer {
 				quat.mul(
 					posComp.rotation,
 					posComp.rotation,
-					quat.fromEuler(
-						quat.create(),
-						rotationChange[0],
-						rotationChange[1],
-						rotationChange[2]
-					)
+					quat.fromEuler(quat.create(), rotationChange[0], rotationChange[1], rotationChange[2])
 				);
 				vec3.add(
 					posComp.scale,
@@ -357,9 +334,7 @@ export default class ObjectPlacer {
 
 	duplicateCurrentObject() {
 		if (this.currentlyEditingEntityId != undefined) {
-			let entityPlacement = this.entityPlacements.get(
-				this.currentlyEditingEntityId
-			);
+			let entityPlacement = this.entityPlacements.get(this.currentlyEditingEntityId);
 			if (entityPlacement == undefined) {
 				return;
 			}
@@ -375,9 +350,7 @@ export default class ObjectPlacer {
 			);
 
 			if (posComp == undefined) {
-				posComp = <PositionComponent>(
-					entity.getComponent(ComponentTypeEnum.POSITION)
-				);
+				posComp = <PositionComponent>entity.getComponent(ComponentTypeEnum.POSITION);
 			}
 
 			if (posComp == undefined) {
@@ -411,9 +384,7 @@ export default class ObjectPlacer {
 							entity.getComponent(ComponentTypeEnum.POSITIONPARENT)
 						);
 						if (posComp == undefined) {
-							posComp = <PositionComponent>(
-								entity.getComponent(ComponentTypeEnum.POSITION)
-							);
+							posComp = <PositionComponent>entity.getComponent(ComponentTypeEnum.POSITION);
 						}
 
 						if (posComp != undefined) {

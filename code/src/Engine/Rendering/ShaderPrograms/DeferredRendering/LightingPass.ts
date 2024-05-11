@@ -27,10 +27,7 @@ class LightingPass extends ShaderProgram {
 
 		for (let i = 0; i < pointShadowsToAllocate; i++) {
 			this.setUniformLocation("pointDepthMaps[" + i + "]");
-			gl.uniform1i(
-				this.getUniformLocation("pointDepthMaps[" + i + "]")[0],
-				5 + i
-			);
+			gl.uniform1i(this.getUniformLocation("pointDepthMaps[" + i + "]")[0], 5 + i);
 		}
 
 		for (let i = 0; i < pointLightsToAllocate; i++) {

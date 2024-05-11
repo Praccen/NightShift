@@ -68,11 +68,7 @@ export default class Texture {
 		);
 		if (this.useMipMap) {
 			gl.generateMipmap(this.textureTarget);
-			gl.texParameteri(
-				this.textureTarget,
-				gl.TEXTURE_MIN_FILTER,
-				gl.LINEAR_MIPMAP_LINEAR
-			);
+			gl.texParameteri(this.textureTarget, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 		}
 		gl.bindTexture(this.textureTarget, null);
 
@@ -104,11 +100,7 @@ export default class Texture {
 			);
 			if (self.useMipMap) {
 				gl.generateMipmap(self.textureTarget);
-				gl.texParameteri(
-					self.textureTarget,
-					gl.TEXTURE_MIN_FILTER,
-					gl.LINEAR_MIPMAP_LINEAR
-				);
+				gl.texParameteri(self.textureTarget, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 			}
 			self.loadedFromFile = true;
 		});

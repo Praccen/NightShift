@@ -14,6 +14,7 @@ export default class GraphicsBundle {
 	emissionColor: vec3;
 
 	graphicsObject: GraphicsObject;
+	enabled: boolean;
 
 	constructor(
 		diffuse: Texture,
@@ -36,32 +37,35 @@ export default class GraphicsBundle {
 		this.textureMatrix = mat4.create();
 
 		this.graphicsObject = graphicsObject;
+		this.enabled = true;
 	}
 
 	draw(bindSpecialTextures: boolean = true) {
-		this.diffuse.bind(0);
+		if (this.enabled) {
+			this.diffuse.bind(0);
 
-		if (bindSpecialTextures) {
-			this.specular.bind(1);
-			this.emission.bind(2);
-		}
+			if (bindSpecialTextures) {
+				this.specular.bind(1);
+				this.emission.bind(2);
+			}
 
-		let emissionColorU: [WebGLUniformLocation, boolean] =
-			this.graphicsObject.shaderProgram.getUniformLocation("emissionColor");
-		if (emissionColorU[1]) {
-			gl.uniform3fv(emissionColorU[0], this.emissionColor);
-		}
-		let modelReturn: [WebGLUniformLocation, boolean] =
-			this.graphicsObject.shaderProgram.getUniformLocation("modelMatrix");
-		if (modelReturn[1]) {
-			gl.uniformMatrix4fv(modelReturn[0], false, this.modelMatrix);
-		}
-		let textureReturn: [WebGLUniformLocation, boolean] =
-			this.graphicsObject.shaderProgram.getUniformLocation("textureMatrix");
-		if (textureReturn[1]) {
-			gl.uniformMatrix4fv(textureReturn[0], false, this.textureMatrix);
-		}
+			let emissionColorU: [WebGLUniformLocation, boolean] =
+				this.graphicsObject.shaderProgram.getUniformLocation("emissionColor");
+			if (emissionColorU[1]) {
+				gl.uniform3fv(emissionColorU[0], this.emissionColor);
+			}
+			let modelReturn: [WebGLUniformLocation, boolean] =
+				this.graphicsObject.shaderProgram.getUniformLocation("modelMatrix");
+			if (modelReturn[1]) {
+				gl.uniformMatrix4fv(modelReturn[0], false, this.modelMatrix);
+			}
+			let textureReturn: [WebGLUniformLocation, boolean] =
+				this.graphicsObject.shaderProgram.getUniformLocation("textureMatrix");
+			if (textureReturn[1]) {
+				gl.uniformMatrix4fv(textureReturn[0], false, this.textureMatrix);
+			}
 
-		this.graphicsObject.draw();
+			this.graphicsObject.draw();
+		}
 	}
 }

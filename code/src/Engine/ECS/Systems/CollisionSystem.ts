@@ -14,11 +14,7 @@ export default class CollisionSystem extends System {
 	lastCollisionPoint: vec3;
 
 	constructor() {
-		super([
-			ComponentTypeEnum.COLLISION,
-			ComponentTypeEnum.BOUNDINGBOX,
-			ComponentTypeEnum.POSITION,
-		]);
+		super([ComponentTypeEnum.COLLISION, ComponentTypeEnum.BOUNDINGBOX, ComponentTypeEnum.POSITION]);
 		// Optional MESHCOLLISION, MOVEMENT
 
 		this.lastCollisionPoint = vec3.create();
@@ -29,22 +25,16 @@ export default class CollisionSystem extends System {
 
 		// First update the bounding box for all entities that are not static
 		for (let e of this.entities) {
-			let collisionComp = <CollisionComponent>(
-				e.getComponent(ComponentTypeEnum.COLLISION)
-			);
+			let collisionComp = <CollisionComponent>e.getComponent(ComponentTypeEnum.COLLISION);
 
 			if (collisionComp.isStatic) {
 				continue;
 			}
 
-			let bbComp = <BoundingBoxComponent>(
-				e.getComponent(ComponentTypeEnum.BOUNDINGBOX)
-			);
+			let bbComp = <BoundingBoxComponent>e.getComponent(ComponentTypeEnum.BOUNDINGBOX);
 			bbComp.updateTransformMatrix();
 
-			let movComp = <MovementComponent>(
-				e.getComponent(ComponentTypeEnum.MOVEMENT)
-			);
+			let movComp = <MovementComponent>e.getComponent(ComponentTypeEnum.MOVEMENT);
 			if (movComp) {
 				movComp.onGround = false;
 			}
@@ -53,13 +43,9 @@ export default class CollisionSystem extends System {
 		// Now do collisions
 		for (let i = 0; i < this.entities.length; i++) {
 			const e1 = this.entities[i];
-			let e1CollisionComp = <CollisionComponent>(
-				e1.getComponent(ComponentTypeEnum.COLLISION)
-			);
+			let e1CollisionComp = <CollisionComponent>e1.getComponent(ComponentTypeEnum.COLLISION);
 
-			let e1BoundingBoxComp = <BoundingBoxComponent>(
-				e1.getComponent(ComponentTypeEnum.BOUNDINGBOX)
-			);
+			let e1BoundingBoxComp = <BoundingBoxComponent>e1.getComponent(ComponentTypeEnum.BOUNDINGBOX);
 
 			let e1MeshCollisionComp = <MeshCollisionComponent>(
 				e1.getComponent(ComponentTypeEnum.MESHCOLLISION)
@@ -72,9 +58,7 @@ export default class CollisionSystem extends System {
 					continue;
 				}
 
-				let e2CollisionComp = <CollisionComponent>(
-					e2.getComponent(ComponentTypeEnum.COLLISION)
-				);
+				let e2CollisionComp = <CollisionComponent>e2.getComponent(ComponentTypeEnum.COLLISION);
 
 				if (
 					(e1CollisionComp.isStatic || e1CollisionComp.isImmovable) &&
@@ -109,10 +93,7 @@ export default class CollisionSystem extends System {
 
 							// By first giving e2 bb inverse matrix of e1 matrix
 							e2BoundingBoxComp.boundingBox.setInverseMatrix(
-								mat4.invert(
-									mat4.create(),
-									e1BoundingBoxComp.boundingBox.getTransformMatrix()
-								)
+								mat4.invert(mat4.create(), e1BoundingBoxComp.boundingBox.getTransformMatrix())
 							);
 
 							// Then check against mesh octree (now in e1 local coords)
@@ -148,10 +129,7 @@ export default class CollisionSystem extends System {
 
 							// By first giving e1 bb inverse matrix of e2 matrix
 							e1BoundingBoxComp.boundingBox.setInverseMatrix(
-								mat4.invert(
-									mat4.create(),
-									e2BoundingBoxComp.boundingBox.getTransformMatrix()
-								)
+								mat4.invert(mat4.create(), e2BoundingBoxComp.boundingBox.getTransformMatrix())
 							);
 
 							// Then get the shapes from the octree (now in e2 local coords)

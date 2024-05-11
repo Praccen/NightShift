@@ -28,11 +28,7 @@ export default class ParticleSpawner extends GraphicsObject {
 		this.bindVAO();
 		this.instanceVBO = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.instanceVBO);
-		gl.bufferData(
-			gl.ARRAY_BUFFER,
-			numberOfStartingParticles * 11 * 4,
-			gl.DYNAMIC_DRAW
-		);
+		gl.bufferData(gl.ARRAY_BUFFER, numberOfStartingParticles * 11 * 4, gl.DYNAMIC_DRAW);
 		shaderProgram.setupInstancedVertexAttributePointers();
 		this.unbindVAO();
 
@@ -169,22 +165,13 @@ export default class ParticleSpawner extends GraphicsObject {
 		this.bindVAO();
 
 		this.texture.bind(0);
-		gl.uniform1f(
-			this.shaderProgram.getUniformLocation("fadePerSecond")[0],
-			this.fadePerSecond
-		);
+		gl.uniform1f(this.shaderProgram.getUniformLocation("fadePerSecond")[0], this.fadePerSecond);
 		gl.uniform1f(
 			this.shaderProgram.getUniformLocation("sizeChangePerSecond")[0],
 			this.sizeChangePerSecond
 		);
 
-		gl.drawElementsInstanced(
-			gl.TRIANGLES,
-			6,
-			gl.UNSIGNED_INT,
-			0,
-			this.getNumberOfParticles()
-		);
+		gl.drawElementsInstanced(gl.TRIANGLES, 6, gl.UNSIGNED_INT, 0, this.getNumberOfParticles());
 		this.unbindVAO();
 	}
 }

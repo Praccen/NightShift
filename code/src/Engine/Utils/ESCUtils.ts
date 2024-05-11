@@ -18,9 +18,7 @@ export module ECSUtils {
 	 * @returns The final position
 	 */
 	export function CalculatePosition(entity: Entity): vec3 {
-		let posComp = <PositionComponent>(
-			entity.getComponent(ComponentTypeEnum.POSITION)
-		);
+		let posComp = <PositionComponent>entity.getComponent(ComponentTypeEnum.POSITION);
 		let posParentComp = <PositionParentComponent>(
 			entity.getComponent(ComponentTypeEnum.POSITIONPARENT)
 		);
@@ -39,11 +37,7 @@ export module ECSUtils {
 			posComp.calculateMatrix(tempMatrix);
 		}
 
-		let posVector = vec3.transformMat4(
-			vec3.create(),
-			vec3.create(),
-			tempMatrix
-		);
+		let posVector = vec3.transformMat4(vec3.create(), vec3.create(), tempMatrix);
 		return vec3.fromValues(posVector[0], posVector[1], posVector[2]);
 	}
 
@@ -65,31 +59,21 @@ export module ECSUtils {
 			if (e == undefined) {
 				continue;
 			}
-			let bbComp = e.getComponent(
-				ComponentTypeEnum.BOUNDINGBOX
-			) as BoundingBoxComponent;
+			let bbComp = e.getComponent(ComponentTypeEnum.BOUNDINGBOX) as BoundingBoxComponent;
 			if (bbComp == undefined) {
 				continue;
 			}
 
 			bbComp.boundingBox.setUpdateNeeded();
 
-			let dist = IntersectionTester.doRayCast(
-				ray,
-				[bbComp.boundingBox],
-				closest
-			); // Ray cast against bounding box, only caring about hits closer than the previous closest
+			let dist = IntersectionTester.doRayCast(ray, [bbComp.boundingBox], closest); // Ray cast against bounding box, only caring about hits closer than the previous closest
 			if (dist >= 0 && dist < closest) {
 				// Boundingbox is closer than current closest hit
 				// Ray cast against mesh if there is one, only caring about hits closer than the previous closest
 
-				let meshColComp = e.getComponent(
-					ComponentTypeEnum.MESHCOLLISION
-				) as MeshCollisionComponent;
+				let meshColComp = e.getComponent(ComponentTypeEnum.MESHCOLLISION) as MeshCollisionComponent;
 				if (meshColComp != undefined) {
-					ray.setInverseMatrix(
-						mat4.invert(mat4.create(), bbComp.boundingBox.getTransformMatrix())
-					);
+					ray.setInverseMatrix(mat4.invert(mat4.create(), bbComp.boundingBox.getTransformMatrix()));
 					let shapeArray = new Array<Triangle>();
 					meshColComp.octree.getShapesForRayCast(ray, shapeArray, closest);
 					dist = IntersectionTester.doRayCast(ray, shapeArray, closest);
@@ -128,9 +112,7 @@ export module ECSUtils {
 		let eId = -1;
 		let intersectionVec = null;
 
-		let entityABBComp = entityA.getComponent(
-			ComponentTypeEnum.BOUNDINGBOX
-		) as BoundingBoxComponent;
+		let entityABBComp = entityA.getComponent(ComponentTypeEnum.BOUNDINGBOX) as BoundingBoxComponent;
 		if (entityABBComp == undefined) {
 			return { time: earliest, eId: eId, intersectionVec: intersectionVec };
 		}
@@ -149,9 +131,7 @@ export module ECSUtils {
 				continue;
 			}
 
-			let entityBMovComp = entityB.getComponent(
-				ComponentTypeEnum.MOVEMENT
-			) as MovementComponent;
+			let entityBMovComp = entityB.getComponent(ComponentTypeEnum.MOVEMENT) as MovementComponent;
 			let entityBVel = vec3.create();
 			if (entityBMovComp != undefined) {
 				vec3.copy(entityBVel, entityBMovComp.velocity);
@@ -261,10 +241,7 @@ export module ECSUtils {
 					allow0Collision
 				);
 
-				if (
-					((allow0Collision && dist >= 0.0) || dist > 0.0) &&
-					(dist < earliest || dist > 0.0)
-				) {
+				if (((allow0Collision && dist >= 0.0) || dist > 0.0) && (dist < earliest || dist > 0.0)) {
 					// Hit is still closer than current closest
 					// Update the closest information and save the object for editing
 					earliest = dist;
@@ -287,16 +264,12 @@ export module ECSUtils {
 		entityA: Entity,
 		entityB: Entity
 	): Array<IntersectionTester.IntersectionInformation> {
-		let entityABBComp = entityA.getComponent(
-			ComponentTypeEnum.BOUNDINGBOX
-		) as BoundingBoxComponent;
+		let entityABBComp = entityA.getComponent(ComponentTypeEnum.BOUNDINGBOX) as BoundingBoxComponent;
 		if (entityABBComp == undefined) {
 			return null;
 		}
 
-		let entityBBBComp = entityB.getComponent(
-			ComponentTypeEnum.BOUNDINGBOX
-		) as BoundingBoxComponent;
+		let entityBBBComp = entityB.getComponent(ComponentTypeEnum.BOUNDINGBOX) as BoundingBoxComponent;
 		if (entityBBBComp == undefined) {
 			return null;
 		}

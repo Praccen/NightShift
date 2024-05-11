@@ -29,11 +29,7 @@ export default class DebugMenu {
 	mouseOverGuiElement: boolean;
 	actionText: TextObject2D;
 
-	constructor(
-		stateAccessible: StateAccessible,
-		game: Game,
-		debugMode: DebugMode
-	) {
+	constructor(stateAccessible: StateAccessible, game: Game, debugMode: DebugMode) {
 		this.overlay = new OverlayRendering();
 		this.stateAccessible = stateAccessible;
 		this.game = game;
@@ -169,9 +165,7 @@ export default class DebugMenu {
 		};
 
 		this.propsVisibleMemory = new Map<ComponentTypeEnum, boolean>();
-		for (let comp of Object.keys(ComponentTypeEnum).filter((v) =>
-			isNaN(Number(v))
-		)) {
+		for (let comp of Object.keys(ComponentTypeEnum).filter((v) => isNaN(Number(v)))) {
 			let compBtn = this.overlay.getNewButton(this.propsBox);
 			compBtn.textString = comp;
 			compBtn.textSize = 20;
@@ -198,12 +192,10 @@ export default class DebugMenu {
 		consoleCommandsTextEdit.getElement().style.width = "80%";
 		consoleCommandsTextEdit.getInputElement().style.width = "100%";
 
-		consoleCommandsTextEdit
-			.getInputElement()
-			.addEventListener("change", (ev) => {
-				self.parseConsoleInput(consoleCommandsTextEdit.getInputElement().value);
-				consoleCommandsTextEdit.getInputElement().value = "";
-			});
+		consoleCommandsTextEdit.getInputElement().addEventListener("change", (ev) => {
+			self.parseConsoleInput(consoleCommandsTextEdit.getInputElement().value);
+			consoleCommandsTextEdit.getInputElement().value = "";
+		});
 
 		consoleCommandsTextEdit.getElement().onmouseenter = () => {
 			this.mouseOverGuiElement = true;
@@ -241,11 +233,7 @@ export default class DebugMenu {
 					const degrees = parseFloat(args[2]);
 					let rotChange = vec3.create();
 					rotChange[index] = degrees;
-					this.game.objectPlacer.updateCurrentlyEditingObject(
-						rotChange,
-						0,
-						null
-					);
+					this.game.objectPlacer.updateCurrentlyEditingObject(rotChange, 0, null);
 				}
 			}
 		}
@@ -284,10 +272,7 @@ export default class DebugMenu {
 		}
 
 		// Update the placement menu if it is not synced with placements (+1 is because there is a text child as well)
-		if (
-			this.placementMenu.children.length !=
-			this.game.objectPlacer.placements.size + 1
-		) {
+		if (this.placementMenu.children.length != this.game.objectPlacer.placements.size + 1) {
 			for (let i = 1; i < this.placementMenu.children.length; i++) {
 				this.placementMenu.children[i].remove();
 				this.placementMenu.children.splice(i, 1);
@@ -314,10 +299,7 @@ export default class DebugMenu {
 		}
 
 		// Update the entities menu
-		if (
-			this.entitiesBox.children.length !=
-			this.game.ecsManager.entities.length + 1
-		) {
+		if (this.entitiesBox.children.length != this.game.ecsManager.entities.length + 1) {
 			for (let i = 1; i < this.entitiesBox.children.length; i++) {
 				this.entitiesBox.children[i].remove();
 				this.entitiesBox.children.splice(i, 1);
@@ -344,24 +326,19 @@ export default class DebugMenu {
 
 			if (
 				this.game.objectPlacer.currentlyEditingEntityId != undefined &&
-				eChild.textString ==
-					"" + this.game.objectPlacer.currentlyEditingEntityId
+				eChild.textString == "" + this.game.objectPlacer.currentlyEditingEntityId
 			) {
 				eChild.getElement().style.backgroundColor = "dimgray";
 			}
 		}
 
 		if (this.game.objectPlacer.currentlyEditingEntityId != undefined) {
-			let entity = this.game.ecsManager.getEntity(
-				this.game.objectPlacer.currentlyEditingEntityId
-			);
+			let entity = this.game.ecsManager.getEntity(this.game.objectPlacer.currentlyEditingEntityId);
 
 			for (let i = 1; i < this.propsBox.children.length; i += 2) {
 				if (
 					entity != undefined &&
-					entity.hasComponent(
-						ComponentTypeEnum[this.propsBox.children[i].textString]
-					)
+					entity.hasComponent(ComponentTypeEnum[this.propsBox.children[i].textString])
 				) {
 					this.propsBox.children[i].setHidden(false);
 					let hiddenStatus = this.propsVisibleMemory.get(
@@ -371,9 +348,7 @@ export default class DebugMenu {
 						this.propsBox.children[i + 1].setHidden(hiddenStatus);
 					}
 					entity
-						.getComponent(
-							ComponentTypeEnum[this.propsBox.children[i].textString]
-						)
+						.getComponent(ComponentTypeEnum[this.propsBox.children[i].textString])
 						.updateGui(this.overlay, this.propsBox, this.game.objectPlacer);
 				} else {
 					this.propsBox.children[i].setHidden(true);

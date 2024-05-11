@@ -18,12 +18,7 @@ export default class Framebuffer {
 	 * @param textures - colour attachment textures, send empty array if no colour attachments should be used
 	 * @param depthTexture - depth attachment texture, send null if no depth attachment (an rbo will be created instead)
 	 */
-	constructor(
-		width: number,
-		height: number,
-		textures: Array<Texture>,
-		depthTexture: Texture
-	) {
+	constructor(width: number, height: number, textures: Array<Texture>, depthTexture: Texture) {
 		this.width = width;
 		this.height = height;
 
@@ -103,12 +98,7 @@ export default class Framebuffer {
 			// We have no defined depth texture, use a render buffer instead
 			this.rbo = gl.createRenderbuffer();
 			gl.bindRenderbuffer(gl.RENDERBUFFER, this.rbo);
-			gl.renderbufferStorage(
-				gl.RENDERBUFFER,
-				gl.DEPTH_STENCIL,
-				this.width,
-				this.height
-			);
+			gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_STENCIL, this.width, this.height);
 
 			gl.framebufferRenderbuffer(
 				gl.FRAMEBUFFER,
@@ -138,12 +128,7 @@ export default class Framebuffer {
 		if (this.rbo) {
 			gl.bindFramebuffer(gl.FRAMEBUFFER, this.fbo);
 			gl.bindRenderbuffer(gl.RENDERBUFFER, this.rbo);
-			gl.renderbufferStorage(
-				gl.RENDERBUFFER,
-				gl.DEPTH24_STENCIL8,
-				width,
-				height
-			);
+			gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH24_STENCIL8, width, height);
 			gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		}
 	}

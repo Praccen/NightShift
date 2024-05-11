@@ -1,10 +1,7 @@
 import State, { StatesEnum } from "./State";
 
 export default class StateMachine {
-	states: Map<
-		StatesEnum,
-		{ stateType: any; minUpdateRate: number; state: State }
-	>;
+	states: Map<StatesEnum, { stateType: any; minUpdateRate: number; state: State }>;
 
 	protected fps: number = 0;
 	protected currentState: StatesEnum;
@@ -19,21 +16,13 @@ export default class StateMachine {
 	private dt = 0.0;
 
 	constructor(startState: StatesEnum) {
-		this.states = new Map<
-			StatesEnum,
-			{ stateType: any; minUpdateRate: number; state: State }
-		>();
+		this.states = new Map<StatesEnum, { stateType: any; minUpdateRate: number; state: State }>();
 		this.currentState = startState;
 
 		this.firstLoop = true;
 	}
 
-	addState(
-		stateEnum: StatesEnum,
-		stateType: any,
-		minUpdateRate: number,
-		state: State
-	) {
+	addState(stateEnum: StatesEnum, stateType: any, minUpdateRate: number, state: State) {
 		this.states.set(stateEnum, {
 			stateType: stateType,
 			minUpdateRate: minUpdateRate,

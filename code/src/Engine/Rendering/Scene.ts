@@ -55,11 +55,7 @@ export default class Scene {
 		// -------------------
 	}
 
-	getNewPhongQuad(
-		diffusePath: string,
-		specularPath: string,
-		emissionMap?: string
-	): GraphicsBundle {
+	getNewPhongQuad(diffusePath: string, specularPath: string, emissionMap?: string): GraphicsBundle {
 		if (emissionMap != undefined) {
 			const length = this.graphicBundles.push(
 				new GraphicsBundle(
@@ -82,11 +78,7 @@ export default class Scene {
 		}
 	}
 
-	getNewMesh(
-		meshPath: string,
-		diffusePath: string,
-		specularPath: string
-	): GraphicsBundle {
+	getNewMesh(meshPath: string, diffusePath: string, specularPath: string): GraphicsBundle {
 		const length = this.graphicBundles.push(
 			new GraphicsBundle(
 				this.textureStore.getTexture(diffusePath),
@@ -162,25 +154,17 @@ export default class Scene {
 	}
 
 	deleteParticleSpawner(particleSpawner: ParticleSpawner) {
-		this.particleSpawners = this.particleSpawners.filter(
-			(ps) => particleSpawner !== ps
-		);
+		this.particleSpawners = this.particleSpawners.filter((ps) => particleSpawner !== ps);
 	}
 
-	renderScene(
-		shaderProgram: ShaderProgram,
-		bindSpecialTextures: boolean = true
-	) {
+	renderScene(shaderProgram: ShaderProgram, bindSpecialTextures: boolean = true) {
 		for (let bundle of this.graphicBundles) {
 			bundle.graphicsObject.shaderProgram = shaderProgram;
 			bundle.draw(bindSpecialTextures);
 		}
 	}
 
-	renderGrass(
-		shaderProgram: ShaderProgram,
-		bindSpecialTextures: boolean = true
-	) {
+	renderGrass(shaderProgram: ShaderProgram, bindSpecialTextures: boolean = true) {
 		for (let bundle of this.grassSpawners) {
 			bundle.graphicsObject.shaderProgram = shaderProgram;
 			bundle.draw(bindSpecialTextures);

@@ -31,11 +31,7 @@ export default class PositionComponent extends Component {
 		mat4.translate(matrix, matrix, vec3.negate(vec3.create(), this.origin));
 	}
 
-	updateGui(
-		overlayRendering: OverlayRendering,
-		parentDiv: Div,
-		objectPlacer: ObjectPlacer
-	) {
+	updateGui(overlayRendering: OverlayRendering, parentDiv: Div, objectPlacer: ObjectPlacer) {
 		for (let i = 1; i < parentDiv.children.length; i++) {
 			if (parentDiv.children[i].textString == ComponentTypeEnum[this.type]) {
 				// Next should be a div that should hold the text edits
@@ -135,87 +131,22 @@ export default class PositionComponent extends Component {
 						2
 					);
 				} else {
-					this.updateTextEdit(
-						<Div>parentDiv.children[i + 1],
-						"PosX",
-						["position"],
-						0
-					);
-					this.updateTextEdit(
-						<Div>parentDiv.children[i + 1],
-						"PosY",
-						["position"],
-						1
-					);
-					this.updateTextEdit(
-						<Div>parentDiv.children[i + 1],
-						"PosZ",
-						["position"],
-						2
-					);
+					this.updateTextEdit(<Div>parentDiv.children[i + 1], "PosX", ["position"], 0);
+					this.updateTextEdit(<Div>parentDiv.children[i + 1], "PosY", ["position"], 1);
+					this.updateTextEdit(<Div>parentDiv.children[i + 1], "PosZ", ["position"], 2);
 
-					this.updateTextEdit(
-						<Div>parentDiv.children[i + 1],
-						"RotX",
-						["rotation"],
-						0
-					);
-					this.updateTextEdit(
-						<Div>parentDiv.children[i + 1],
-						"RotY",
-						["rotation"],
-						1
-					);
-					this.updateTextEdit(
-						<Div>parentDiv.children[i + 1],
-						"RotZ",
-						["rotation"],
-						2
-					);
-					this.updateTextEdit(
-						<Div>parentDiv.children[i + 1],
-						"RotW",
-						["rotation"],
-						3
-					);
+					this.updateTextEdit(<Div>parentDiv.children[i + 1], "RotX", ["rotation"], 0);
+					this.updateTextEdit(<Div>parentDiv.children[i + 1], "RotY", ["rotation"], 1);
+					this.updateTextEdit(<Div>parentDiv.children[i + 1], "RotZ", ["rotation"], 2);
+					this.updateTextEdit(<Div>parentDiv.children[i + 1], "RotW", ["rotation"], 3);
 
-					this.updateTextEdit(
-						<Div>parentDiv.children[i + 1],
-						"ScaleX",
-						["scale"],
-						0
-					);
-					this.updateTextEdit(
-						<Div>parentDiv.children[i + 1],
-						"ScaleY",
-						["scale"],
-						1
-					);
-					this.updateTextEdit(
-						<Div>parentDiv.children[i + 1],
-						"ScaleZ",
-						["scale"],
-						2
-					);
+					this.updateTextEdit(<Div>parentDiv.children[i + 1], "ScaleX", ["scale"], 0);
+					this.updateTextEdit(<Div>parentDiv.children[i + 1], "ScaleY", ["scale"], 1);
+					this.updateTextEdit(<Div>parentDiv.children[i + 1], "ScaleZ", ["scale"], 2);
 
-					this.updateTextEdit(
-						<Div>parentDiv.children[i + 1],
-						"OriginX",
-						["origin"],
-						0
-					);
-					this.updateTextEdit(
-						<Div>parentDiv.children[i + 1],
-						"OriginY",
-						["origin"],
-						1
-					);
-					this.updateTextEdit(
-						<Div>parentDiv.children[i + 1],
-						"OriginZ",
-						["origin"],
-						2
-					);
+					this.updateTextEdit(<Div>parentDiv.children[i + 1], "OriginX", ["origin"], 0);
+					this.updateTextEdit(<Div>parentDiv.children[i + 1], "OriginY", ["origin"], 1);
+					this.updateTextEdit(<Div>parentDiv.children[i + 1], "OriginZ", ["origin"], 2);
 				}
 			}
 		}
