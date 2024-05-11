@@ -50,7 +50,7 @@ export default class DirectionalShadowRenderPass {
 		scene
 			.getDirectionalLight()
 			.calcAndSendLightSpaceMatrix(
-				vec3.clone(camera.getPosition()),
+				vec3.zero(vec3.create()),
 				this.shadowOffset,
 				shadowPass.getUniformLocation("lightSpaceMatrix")[0]
 			);
@@ -64,7 +64,7 @@ export default class DirectionalShadowRenderPass {
 		scene
 			.getDirectionalLight()
 			.calcAndSendLightSpaceMatrix(
-				vec3.clone(camera.getPosition()),
+				vec3.zero(vec3.create()),
 				this.shadowOffset,
 				grassShadowPass.getUniformLocation("lightSpaceMatrix")[0]
 			);

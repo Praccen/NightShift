@@ -19,7 +19,7 @@ export default class DirectionalLight {
 		this.direction = vec3.fromValues(0.0, -1.0, -0.5);
 		this.colour = vec3.fromValues(0.2, 0.2, 0.2);
 		this.ambientMultiplier = 0.1;
-		this.lightProjectionBoxSideLength = 50.0;
+		this.lightProjectionBoxSideLength = 60.0;
 	}
 
 	bind() {

@@ -207,7 +207,7 @@ export default class Game extends State {
 		this.rendering.clearColour.b = colour[2];
 
 		let dirLight = this.scene.getDirectionalLight();
-		dirLight.ambientMultiplier = 0.5;
+		dirLight.ambientMultiplier = 0.1;
 		vec3.set(dirLight.direction, 0.2, -0.9, -0.4);
 		vec3.copy(dirLight.colour, colour);
 

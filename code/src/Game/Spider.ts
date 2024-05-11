@@ -10,6 +10,7 @@ import CollisionComponent from "../Engine/ECS/Components/CollisionComponent";
 import { ECSUtils } from "../Engine/Utils/ESCUtils";
 import Ray from "../Engine/Physics/Shapes/Ray";
 import PositionParentComponent from "../Engine/ECS/Components/PositionParentComponent";
+import PointLightComponent from "../Engine/ECS/Components/PointLightComponent";
 
 const legMoveDuration: number = 0.1;
 
@@ -67,7 +68,7 @@ export default class Spider {
 			new GraphicsComponent(
 				this.game.rendering.scene.getNewMesh(
 					"Assets/objs/SpiderBody.obj",
-					"CSS:rgb(221, 137, 164)",
+					"CSS:rgb(0,0,0)",
 					"CSS:rgb(0,0,0)"
 				)
 			)
@@ -88,23 +89,28 @@ export default class Spider {
 		collisionComp.mass = 100.0;
 		collisionComp.isImmovable = true;
 
-		let positionDisplayEntity = game.ecsManager.createEntity();
-		this.game.ecsManager.addComponent(positionDisplayEntity, this.parentPosComp);
-		let displayPosComp = this.game.ecsManager.addComponent(
-			positionDisplayEntity,
-			new PositionComponent()
-		) as PositionComponent;
-		vec3.set(displayPosComp.scale, 0.5, 0.5, 0.5);
-		this.game.ecsManager.addComponent(
-			positionDisplayEntity,
-			new GraphicsComponent(
-				this.game.rendering.scene.getNewMesh(
-					"Assets/objs/cube.obj",
-					"CSS:rgb(255, 255, 255)",
-					"CSS:rgb(0,0,0)"
-				)
-			)
-		) as GraphicsComponent;
+        let pointLightComp = this.game.ecsManager.addComponent(this.bodyEntity, new PointLightComponent(this.game.scene.getNewPointLight())) as PointLightComponent;
+        pointLightComp.pointLight.castShadow = true;
+        vec3.set(pointLightComp.pointLight.colour, 0.8, 0.0, 0.0);
+        vec3.set(pointLightComp.posOffset, 0.0, 2.5, 0.0);
+
+		// let positionDisplayEntity = game.ecsManager.createEntity();
+		// this.game.ecsManager.addComponent(positionDisplayEntity, this.parentPosComp);
+		// let displayPosComp = this.game.ecsManager.addComponent(
+		// 	positionDisplayEntity,
+		// 	new PositionComponent()
+		// ) as PositionComponent;
+		// vec3.set(displayPosComp.scale, 0.5, 0.5, 0.5);
+		// this.game.ecsManager.addComponent(
+		// 	positionDisplayEntity,
+		// 	new GraphicsComponent(
+		// 		this.game.rendering.scene.getNewMesh(
+		// 			"Assets/objs/cube.obj",
+		// 			"CSS:rgb(255, 255, 255)",
+		// 			"CSS:rgb(0,0,0)"
+		// 		)
+		// 	)
+		// ) as GraphicsComponent;
 
 		this.legs = new Array<Leg>();
 
@@ -136,7 +142,7 @@ export default class Spider {
 				new GraphicsComponent(
 					this.game.rendering.scene.getNewMesh(
 						"Assets/objs/cube.obj",
-						"CSS:rgb(221, 137, 164)",
+						"CSS:rgb(0,0,0)",
 						"CSS:rgb(0,0,0)"
 					)
 				)
@@ -155,7 +161,7 @@ export default class Spider {
 				new GraphicsComponent(
 					this.game.rendering.scene.getNewMesh(
 						"Assets/objs/cube.obj",
-						"CSS:rgb(221, 137, 164)",
+						"CSS:rgb(0,0,0)",
 						"CSS:rgb(0,0,0)"
 					)
 				)
@@ -173,7 +179,7 @@ export default class Spider {
 				new GraphicsComponent(
 					this.game.rendering.scene.getNewMesh(
 						"Assets/objs/cube.obj",
-						"CSS:rgb(221, 137, 164)",
+						"CSS:rgb(0,0,0)",
 						"CSS:rgb(0,0,0)"
 					)
 				)

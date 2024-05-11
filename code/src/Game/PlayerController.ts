@@ -84,7 +84,7 @@ export default class PlayerController {
 	}
 
 	respawn() {
-		vec3.set(this.positionComp.position, 0.0, 15.0, 0.0);
+		vec3.set(this.positionComp.position, 0.0, 8.0, 0.0);
 		vec3.set(this.movComp.velocity, 0.0, 0.0, 0.0);
 		this.setCameraDirection(vec3.fromValues(0.0, 0.0, -1.0));
 		vec2.zero(this.mouseMovement);

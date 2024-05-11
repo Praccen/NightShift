@@ -33,7 +33,7 @@ export default class LightingRenderPass {
 		gl.uniform3fv(lightingPass.getUniformLocation("camPos")[0], camera.getPosition());
 		scene.directionalLight.bind();
 		scene.directionalLight.calcAndSendLightSpaceMatrix(
-			vec3.clone(camera.getPosition()),
+			vec3.zero(vec3.create()),
 			20.0,
 			lightingPass.getUniformLocation("lightSpaceMatrix")[0]
 		);

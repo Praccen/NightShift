@@ -103,3 +103,13 @@ this.placements.set(
 		null //"CSS:rgb(25,25,25)",
 	)
 );
+
+this.placements.set(
+	"Roof",
+	new Placement(
+		"Assets/objs/roof.obj",
+		"CSS:rgb(255,255,255)",
+		"CSS:rgb(100,100,100)",
+		null //"CSS:rgb(25,25,25)",
+	)
+);

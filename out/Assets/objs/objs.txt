@@ -6,7 +6,7 @@ house.obj
 objs.txt
 police_car.mtl
 police_car.obj
-shelf.mtl
+roof.obj
 shelf.obj
 sphere.mtl
 sphere.obj
