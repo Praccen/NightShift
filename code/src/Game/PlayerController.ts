@@ -222,6 +222,7 @@ export default class PlayerController {
 		// Jumping
 		if (input.keys[" "] || input.buttons.get("A")) {
 			this.movComp.jumpRequested = true;
+			this.movComp.jumpAllowed = true;
 		} else {
 			this.movComp.jumpRequested = false;
 		}

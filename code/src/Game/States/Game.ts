@@ -14,6 +14,8 @@ import PlayerController from "../PlayerController";
 import Spider from "../Spider";
 import Box from "../Box";
 import { COLOR } from "../Card";
+import { ECSUtils } from "../../Engine/Utils/ESCUtils";
+import Ray from "../../Engine/Physics/Shapes/Ray";
 
 export default class Game extends State {
 	rendering: Rendering;
@@ -204,6 +206,23 @@ export default class Game extends State {
 
 		if (input.keys["Q"]) {
 			this.spider.setTarget(this.player.positionComp.position);
+		}
+
+		if (input.keys["E"]) {
+			let ray = new Ray();
+			ray.setStartAndDir(this.rendering.camera.getPosition(), this.rendering.camera.getDir());
+			let collisionObjects = this.objectPlacer.getEntitiesOfType("Box || Box Gray");
+			let rayInfo = ECSUtils.RayCastAgainstEntityList(ray, collisionObjects);
+			if (rayInfo.eId > -1) {
+				this.spider.setTarget(
+					vec3.scaleAndAdd(
+						vec3.create(),
+						this.rendering.camera.getPosition(),
+						ray.getDir(),
+						rayInfo.distance
+					)
+				);
+			}
 		}
 
 		this.player.update(dt);
