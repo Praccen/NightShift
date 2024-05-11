@@ -13,8 +13,9 @@ this.placements.set(
 	"Delivery zone",
 	new Placement(
 		"Assets/objs/DeliveryZone.obj",
-		"Assets/textures/DZ.png",
-		"Assets/textures/DZ.png",
+		"CSS:rgb(255,255,255)",
+		"CSS:rgb(0,0,0)",
+		null,
 		false
 	)
 );
@@ -40,12 +41,7 @@ this.placements.set(
 
 this.placements.set(
 	"Sphere",
-	new Placement(
-		"Assets/objs/sphere.obj",
-		"Assets/objs/sphere.mtl",
-		"Assets/objs/sphere.mtl",
-		null
-	)
+	new Placement("Assets/objs/sphere.obj", "Assets/objs/sphere.mtl", "Assets/objs/sphere.mtl", null)
 );
 
 this.placements.set(

@@ -16,6 +16,7 @@ import Box from "../Box";
 import { COLOR } from "../Card";
 import { ECSUtils } from "../../Engine/Utils/ESCUtils";
 import Ray from "../../Engine/Physics/Shapes/Ray";
+import HandInZone from "../HandInZone";
 
 export default class Game extends State {
 	rendering: Rendering;
@@ -32,6 +33,7 @@ export default class Game extends State {
 	player: PlayerController;
 	private spider: Spider;
 	boxes: Map<number, Box>;
+	zone: HandInZone;
 
 	private pointerLockTimer: number;
 	private oWasPressed: boolean;
@@ -99,9 +101,19 @@ export default class Game extends State {
 	initBoxes() {
 		this.boxes = new Map<number, Box>();
 		let objective_boxes = this.objectPlacer.getEntitiesOfType("Box Objective");
+		let num = 0;
 		objective_boxes.forEach((box) => {
-			this.boxes.set(box.id, new Box(this, COLOR.BLUE, box));
+			if (num < 3) {
+				this.boxes.set(box.id, new Box(this, this.player.cards[num++].boxes[0].color, box));
+			} else {
+				this.boxes.set(box.id, new Box(this, COLOR.BLUE, box));
+			}
 		});
+	}
+
+	initZone() {
+		let zoneObj = this.objectPlacer.getEntitiesOfType("Delivery zone");
+		this.zone = new HandInZone(this, COLOR.GREEN, zoneObj[0]);
 	}
 
 	createPointLight(position: vec3, castShadow: boolean, colour?: vec3) {
@@ -144,6 +156,7 @@ export default class Game extends State {
 		this.player.respawn();
 		this.spider.respawn();
 		this.initBoxes();
+		this.initZone();
 	}
 
 	async init() {

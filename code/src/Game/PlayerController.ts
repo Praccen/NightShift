@@ -23,7 +23,7 @@ export default class PlayerController {
 
 	private mouseMovement: vec2;
 	jawPitch: vec2;
-	private cards: Card[];
+	cards: Card[];
 	private selectedCard: number;
 	private wasRotated: boolean;
 	private wasPicked: boolean;
