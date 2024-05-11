@@ -55,7 +55,7 @@ export default class Box {
 				box.color == this.game.player.cards[1].boxes[0].color ||
 				box.color == this.game.player.cards[2].boxes[0].color
 			) {
-				if (this.posComp != undefined) {
+				if (this.posComp != undefined && box.posComp != undefined) {
 					if (vec3.dist(this.posComp.position, box.posComp.position) < 1.5) {
 						if (vec3.length(box.moveComp.velocity) == 0.0) {
 							box.collComp.isStatic = true;

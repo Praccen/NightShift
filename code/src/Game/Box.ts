@@ -32,22 +32,25 @@ export default class Box {
 		this.setColor();
 
 		this.posComp = entity.getComponent(ComponentTypeEnum.POSITION) as PositionComponent;
-		vec3.set(this.posComp.scale, 0.5, 0.5, 0.5);
 
 		this.moveComp = this.game.ecsManager.addComponent(
 			this.entity,
 			new MovementComponent()
 		) as MovementComponent;
+		this.moveComp.constantAcceleration = vec3.fromValues(0.0, 0.0, 0.0);
 
 		let boundComp = entity.getComponent(ComponentTypeEnum.BOUNDINGBOX) as BoundingBoxComponent;
-
-		this.collComp = entity.getComponent(ComponentTypeEnum.COLLISION) as CollisionComponent;
-		this.collComp.mass = 5.0;
-		this.collComp.isStatic = false;
 	}
 
 	update(dt: number) {
 		if (this.pickedUp) {
+			if (this.posComp == undefined) {
+				// TODO temp disable
+				this.collComp = this.entity.getComponent(ComponentTypeEnum.COLLISION) as CollisionComponent;
+				this.collComp.mass = 5.0;
+				this.collComp.isStatic = false;
+				this.moveComp.constantAcceleration = vec3.fromValues(0.0, -9.8, 0.0);
+			}
 			vec3.set(this.moveComp.velocity, 0, 0, 0);
 			let forward = vec3.clone(this.game.rendering.camera.getDir());
 			let camPos = vec3.clone(this.game.rendering.camera.getPosition());

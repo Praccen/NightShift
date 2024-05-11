@@ -58,9 +58,10 @@ this.placements.set(
 	"Box Objective",
 	new Placement(
 		"Assets/objs/cube.obj",
-		"CSS:rgb(50,50,50)",
+		"CSS:rgb(255,255,255)",
 		"CSS:rgb(0,0,0)",
-		null //"CSS:rgb(25,25,25)",
+		null, //"CSS:rgb(25,25,25)",
+		false
 	)
 );
 
