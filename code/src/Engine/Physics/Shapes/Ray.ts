@@ -13,15 +13,15 @@ export default class Ray extends Shape {
 		this.inverseMatrix = mat4.create();
 	}
 
-	setStart(start: vec3) {
-		this.start = start;
+	setStart(start: ReadonlyVec3) {
+		vec3.copy(this.start, start);
 	}
 
-	setDir(dir: vec3) {
+	setDir(dir: ReadonlyVec3) {
 		vec3.normalize(this.dir, dir);
 	}
 
-	getDir(): vec3 {
+	getDir(): ReadonlyVec3 {
 		return this.getTransformedNormals()[0];
 	}
 

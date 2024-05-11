@@ -25,6 +25,9 @@ export default class Spider {
 	private parentPosComp: PositionParentComponent;
 	private bodyMovComp: MovementComponent;
 	private legs: Array<Leg>;
+    private spiderForward: vec3;
+    private spiderUp: vec3;
+    private spiderRight: vec3;
 
 	private targetPos: vec3;
 
@@ -42,7 +45,7 @@ export default class Spider {
 			new PositionComponent()
 		) as PositionComponent;
 		vec3.set(this.bodyPosComp.origin, 0.0, -0.5, 0.0);
-		vec3.set(this.bodyPosComp.scale, 2.0, 2.0, 4.0);
+		vec3.set(this.bodyPosComp.scale, 2.0, 1.2, 4.0);
 		let bodyBoundingBoxComp = this.game.ecsManager.addComponent(
 			this.bodyEntity,
 			new BoundingBoxComponent(this.parentPosComp.matrix)
@@ -94,14 +97,14 @@ export default class Spider {
 		this.legs = new Array<Leg>();
 
 		const anchorOffsets = [
-			vec3.fromValues(1.0, 1.0, 1.5), // Front left
-			vec3.fromValues(-1.0, 1.0, 1.5), // Front right
-			vec3.fromValues(1.0, 1.0, 0.5), // Middle left
-			vec3.fromValues(-1.0, 1.0, 0.5), // Middle right
-			vec3.fromValues(1.0, 1.0, -0.5), // Middle left
-			vec3.fromValues(-1.0, 1.0, -0.5), // Middle right
-			vec3.fromValues(1.0, 1.0, -1.5), // Back left
-			vec3.fromValues(-1.0, 1.0, -1.5), // Back right
+			vec3.fromValues(1.0, 1.0, 1.5),
+			vec3.fromValues(-1.0, 1.0, 1.5),
+			vec3.fromValues(1.0, 1.0, 0.5),
+			vec3.fromValues(-1.0, 1.0, 0.5),
+			vec3.fromValues(1.0, 1.0, -0.5),
+			vec3.fromValues(-1.0, 1.0, -0.5),
+			vec3.fromValues(1.0, 1.0, -1.5),
+			vec3.fromValues(-1.0, 1.0, -1.5),
 		];
 
 		for (let i = 0; i < anchorOffsets.length; i++) {
@@ -134,6 +137,7 @@ export default class Spider {
 			) as PositionComponent;
 			vec3.set(footPosComp.origin, 0.0, -0.5, 0.0);
 			vec3.set(footPosComp.scale, 0.3, 0.3, 0.3);
+            // vec3.copy(footPosComp.position, this.parentPosComp.position);
 			this.game.ecsManager.addComponent(
 				leg.foot,
 				new GraphicsComponent(
@@ -152,6 +156,7 @@ export default class Spider {
 			) as PositionComponent;
 			vec3.set(jointPosComp.origin, 0.0, -0.5, 0.0);
 			vec3.set(jointPosComp.scale, 0.3, 0.3, 0.3);
+            // vec3.copy(jointPosComp.position, this.parentPosComp.position);
 			this.game.ecsManager.addComponent(
 				leg.joint,
 				new GraphicsComponent(
@@ -163,6 +168,10 @@ export default class Spider {
 				)
 			);
 		}
+
+        this.spiderForward = vec3.fromValues(0.0, 0.0, -1.0);
+        this.spiderUp = vec3.fromValues(0.0, 1.0, 0.0);
+        this.spiderRight = vec3.fromValues(1.0, 0.0, 0.0);
 	}
 
 	respawn() {
@@ -178,6 +187,7 @@ export default class Spider {
 		let dir = vec3.sub(vec3.create(), this.targetPos, this.parentPosComp.position);
 		dir[1] = 0.0;
 		vec3.normalize(dir, dir);
+        let collisionObjects = this.game.objectPlacer.getEntitiesOfType("Box || Box Gray");
 
 		if (vec3.squaredDistance(this.targetPos, this.parentPosComp.position) > 1.0) {
 			let top = vec3.add(
@@ -186,7 +196,6 @@ export default class Spider {
 				vec3.fromValues(0.0, this.parentPosComp.scale[1], 0.0)
 			);
 
-			let collisionObjects = this.game.objectPlacer.getEntitiesOfType("Box || Box Gray");
 			let ray = new Ray();
 			ray.setStartAndDir(top, vec3.add(vec3.create(), dir, vec3.fromValues(0.0, -1.0, 0.0)));
 			let rayResult = ECSUtils.RayCastAgainstEntityList(ray, collisionObjects, 4.0);
@@ -210,33 +219,57 @@ export default class Spider {
 			quat.identity(this.parentPosComp.rotation);
 			quat.rotateY(this.parentPosComp.rotation, this.parentPosComp.rotation, yaw);
 			quat.rotateX(this.parentPosComp.rotation, this.parentPosComp.rotation, -pitch);
+
+            vec3.transformQuat(this.spiderForward, vec3.fromValues(0.0, 0.0, 1.0), this.parentPosComp.rotation);
+            vec3.transformQuat(this.spiderUp, vec3.fromValues(0.0, 1.0, 0.0), this.parentPosComp.rotation);
+            vec3.transformQuat(this.spiderRight, vec3.fromValues(1.0, 0.0, 0.0), this.parentPosComp.rotation);
 		} else {
 			vec3.zero(this.bodyMovComp.velocity);
 		}
 
 		for (let leg of this.legs) {
+            let anchorPosComp = leg.anchor.getComponent(ComponentTypeEnum.POSITION) as PositionComponent;
 			let footPosComp = leg.foot.getComponent(ComponentTypeEnum.POSITION) as PositionComponent;
 			let jointPosComp = leg.joint.getComponent(ComponentTypeEnum.POSITION) as PositionComponent;
 			let anchorPos = ECSUtils.CalculatePosition(leg.anchor);
-			if (footPosComp == undefined || jointPosComp == undefined || anchorPos == undefined) {
+			if (anchorPosComp == undefined || footPosComp == undefined || jointPosComp == undefined || anchorPos == undefined) {
 				continue;
 			}
 
 			if (vec3.dist(anchorPos, footPosComp.position) > 3.0) {
+                let bestAngle = -1.0;
+                let distance = 0.0;
+                let direction = vec3.create();
+                let anchorOffset = vec3.subtract(vec3.create(), anchorPos, this.parentPosComp.position);
+                let spiderOut = vec3.scale(vec3.create(), this.spiderRight, anchorPosComp.position[0]);
 				let ray = new Ray();
-				ray.setStartAndDir(
-					anchorPos,
-					vec3.mul(
-						vec3.create(),
-						vec3.subtract(vec3.create(), anchorPos, this.parentPosComp.position),
-						vec3.fromValues(1.0, -2.0, 1.0)
-					)
-				);
-				let collisionObjects = this.game.objectPlacer.getEntitiesOfType("Box || Box Gray");
-				let rayResult = ECSUtils.RayCastAgainstEntityList(ray, collisionObjects, 3.0);
-				if (rayResult.eId > -1) {
-					vec3.scaleAndAdd(footPosComp.position, anchorPos, ray.getDir(), rayResult.distance);
-				}
+                let rayStart = vec3.scaleAndAdd(vec3.create(), anchorPos, spiderOut, 0.5);
+                // let rayStart = anchorPos;
+                ray.setStart(rayStart);
+
+                for (let rayDir of [
+                    vec3.mul(vec3.create(), anchorOffset, vec3.fromValues(1.0, -2.0, 1.0)),
+                    vec3.mul(vec3.create(), anchorOffset, vec3.fromValues(1.0, -1.0, 1.0)),
+                    vec3.add(vec3.create(), this.spiderForward, this.spiderUp),
+                    vec3.add(vec3.create(), anchorOffset, this.spiderUp),
+                    vec3.sub(vec3.create(), spiderOut, this.spiderUp),
+                    vec3.sub(vec3.create(), vec3.scale(vec3.create(), spiderOut, -0.9), this.spiderUp),
+                    vec3.scale(vec3.create(), this.spiderUp, -1.0),
+                    dir
+                ]) {
+                    ray.setDir(rayDir);
+                    let dotVal = vec3.dot(vec3.normalize(vec3.create(), dir), ray.getDir());
+                    let rayResult = ECSUtils.RayCastAgainstEntityList(ray, collisionObjects, 3.0);
+                    if (rayResult.eId > -1 && dotVal > bestAngle) {
+                        bestAngle = dotVal;
+                        vec3.copy(direction, ray.getDir());
+                        distance = rayResult.distance;
+                    }
+                }
+
+                if (bestAngle > -1.0) {
+                    vec3.scaleAndAdd(footPosComp.position, rayStart, direction, distance);
+                }
 			}
 
 			// ---- Calculate foot peice size and rotation ----
@@ -245,7 +278,7 @@ export default class Spider {
 				vec3.sub(vec3.create(), anchorPos, footPosComp.position),
 				0.5
 			);
-			vec3.add(jointPos, jointPos, vec3.fromValues(0.0, 2.0, 0.0));
+			vec3.scaleAndAdd(jointPos, jointPos, this.spiderUp, 2.0);
 			footPosComp.scale[1] = vec3.len(jointPos);
 
 			let yaw = Math.atan2(jointPos[2], jointPos[0]);
