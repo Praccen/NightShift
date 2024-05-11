@@ -113,6 +113,9 @@ export default class ObjectPlacer {
 					if (t == "") {
 						break;
 					}
+					if (t[0] == "#") {
+						continue;
+					}
 					if (t.startsWith("Placement:")) {
 						currentPlacementType = t.substring("Placement:".length);
 					} else {
