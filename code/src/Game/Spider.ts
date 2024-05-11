@@ -96,13 +96,15 @@ export default class Spider {
 		const anchorOffsets = [
 			vec3.fromValues(1.0, 1.0, 1.5), // Front left
 			vec3.fromValues(-1.0, 1.0, 1.5), // Front right
-			vec3.fromValues(1.0, 1.0, 0.0), // Middle left
-			vec3.fromValues(-1.0, 1.0, 0.0), // Middle right
+			vec3.fromValues(1.0, 1.0, 0.5), // Middle left
+			vec3.fromValues(-1.0, 1.0, 0.5), // Middle right
+			vec3.fromValues(1.0, 1.0, -0.5), // Middle left
+			vec3.fromValues(-1.0, 1.0, -0.5), // Middle right
 			vec3.fromValues(1.0, 1.0, -1.5), // Back left
 			vec3.fromValues(-1.0, 1.0, -1.5), // Back right
 		];
 
-		for (let i = 0; i < 6; i++) {
+		for (let i = 0; i < anchorOffsets.length; i++) {
 			this.legs.push(new Leg());
 			let leg = this.legs[i];
 			leg.anchor = game.ecsManager.createEntity();
