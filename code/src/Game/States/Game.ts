@@ -33,7 +33,9 @@ export default class Game extends State {
 	player: PlayerController;
 	private spider: Spider;
 	boxes: Map<number, Box>;
+	uncollectedBoxed: Map<number, Box>;
 	zone: HandInZone;
+	boxesCollected: number;
 
 	private pointerLockTimer: number;
 	private oWasPressed: boolean;
@@ -96,15 +98,20 @@ export default class Game extends State {
 
 		this.player = new PlayerController(this);
 		this.spider = new Spider(this);
+		this.boxesCollected = 0;
 	}
 
 	initBoxes() {
 		this.boxes = new Map<number, Box>();
+		this.uncollectedBoxed = new Map<number, Box>();
 		let objective_boxes = this.objectPlacer.getEntitiesOfType("Box Objective");
 		let num = 0;
 		objective_boxes.forEach((box) => {
 			if (num < 3) {
-				this.boxes.set(box.id, new Box(this, this.player.cards[num++].boxes[0].color, box));
+				this.uncollectedBoxed.set(
+					box.id,
+					new Box(this, this.player.cards[num++].boxes[0].color, box)
+				);
 			} else {
 				this.boxes.set(box.id, new Box(this, COLOR.BLUE, box));
 			}
@@ -221,7 +228,7 @@ export default class Game extends State {
 			this.spider.setTarget(this.player.positionComp.position);
 		}
 
-		if (input.keys["E"]) {
+		if (input.keys["Y"]) {
 			let ray = new Ray();
 			ray.setStartAndDir(this.rendering.camera.getPosition(), this.rendering.camera.getDir());
 			let collisionObjects = this.objectPlacer.getEntitiesOfType("Box || Box Gray");
@@ -241,6 +248,8 @@ export default class Game extends State {
 		this.player.update(dt);
 		this.spider.update(dt);
 		this.boxes.forEach((box) => box.update(dt));
+		this.uncollectedBoxed.forEach((box) => box.update(dt));
+		this.zone.update(dt);
 
 		this.ecsManager.update(dt);
 	}

@@ -189,10 +189,15 @@ export default class PlayerController {
 							this.game.rendering.camera.getDir()
 						);
 						let rayCastResult = ECSUtils.RayCastAgainstEntityList(ray, objective_boxes);
-						this.selectedBox = this.game.boxes.get(rayCastResult.eId);
+						this.selectedBox = this.game.uncollectedBoxed.get(rayCastResult.eId);
+						if (this.selectedBox == undefined) {
+							this.selectedBox = this.game.boxes.get(rayCastResult.eId);
+						}
 						if (this.selectedBox != undefined && rayCastResult.distance! < 2.0) {
-							this.selectedBox.pickedUp = true;
-							this.isHoldingBox = true;
+							if (!this.selectedBox.collected) {
+								this.selectedBox.pickedUp = true;
+								this.isHoldingBox = true;
+							}
 						}
 					} else {
 						vec3.add(

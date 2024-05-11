@@ -18,12 +18,15 @@ export default class Box {
 	graphComp: GraphicsComponent;
 	collComp: CollisionComponent;
 	moveComp: MovementComponent;
-	pickedUp = false;
+	collected: boolean;
+	pickedUp: boolean;
 
 	constructor(game: Game, color: COLOR, entity: Entity) {
 		this.entity = entity;
 		this.color = color;
 		this.game = game;
+		this.collected = false;
+		this.pickedUp = false;
 
 		let setColor: string = "CSS:rgb(255,255,255)";
 		switch (this.color) {
