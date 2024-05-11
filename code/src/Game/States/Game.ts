@@ -27,7 +27,7 @@ export default class Game extends State {
 	scene: Scene;
 	private static instance: Game;
 
-	private player: PlayerController;
+	player: PlayerController;
 	private spider: Spider;
 	boxes: Map<number, Box>;
 
@@ -208,6 +208,7 @@ export default class Game extends State {
 
 		this.player.update(dt);
 		this.spider.update(dt);
+		this.boxes.forEach((box) => box.update(dt));
 
 		this.ecsManager.update(dt);
 	}

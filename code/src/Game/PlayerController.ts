@@ -27,6 +27,8 @@ export default class PlayerController {
 	private selectedCard: number;
 	private wasRotated: boolean;
 	private wasPicked: boolean;
+	private isHoldingBox: boolean;
+	private selectedBox: Box;
 	showCards: boolean;
 	private cardsToggled: boolean;
 	healthPoints: number;
@@ -39,6 +41,8 @@ export default class PlayerController {
 		this.wasRotated = true;
 		this.showCards = false;
 		this.cardsToggled = true;
+		this.wasPicked = true;
+		this.isHoldingBox = false;
 
 		this.jawPitch = vec2.create();
 		this.mouseMovement = vec2.create();
@@ -176,19 +180,28 @@ export default class PlayerController {
 			// Pickup box
 			if (input.keys["E"]) {
 				if (!this.wasPicked) {
-					let objective_boxes = this.game.objectPlacer.getEntitiesOfType("Box Objective");
+					if (!this.isHoldingBox) {
+						let objective_boxes = this.game.objectPlacer.getEntitiesOfType("Box Objective");
 
-					let ray = new Ray();
-					ray.setStartAndDir(
-						this.game.rendering.camera.getPosition(),
-						this.game.rendering.camera.getDir()
-					);
-					let rayCastResult = ECSUtils.RayCastAgainstEntityList(ray, objective_boxes);
-					let selectedBox = this.game.boxes.get(rayCastResult.eId);
-					console.log(selectedBox);
-					if (selectedBox != undefined) {
-						selectedBox.pickedUp = true;
-						selectedBox.graphComp.bundle.enabled = false;
+						let ray = new Ray();
+						ray.setStartAndDir(
+							this.game.rendering.camera.getPosition(),
+							this.game.rendering.camera.getDir()
+						);
+						let rayCastResult = ECSUtils.RayCastAgainstEntityList(ray, objective_boxes);
+						this.selectedBox = this.game.boxes.get(rayCastResult.eId);
+						if (this.selectedBox != undefined && rayCastResult.distance! < 2.0) {
+							this.selectedBox.pickedUp = true;
+							this.isHoldingBox = true;
+						}
+					} else {
+						vec3.add(
+							this.selectedBox.moveComp.velocity,
+							this.selectedBox.moveComp.velocity,
+							vec3.scale(vec3.create(), forward, 5.0)
+						);
+						this.selectedBox.pickedUp = false;
+						this.isHoldingBox = false;
 					}
 				}
 				this.wasPicked = true;
