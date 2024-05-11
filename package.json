@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "gl-matrix": "^3.4.3",
+    "howler": "^2.2.4",
     "prettier": "^2.7.1",
     "typescript-language-server": "^4.3.3"
   },

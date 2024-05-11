@@ -18,6 +18,7 @@ import { ECSUtils } from "../../Engine/Utils/ESCUtils";
 import Ray from "../../Engine/Physics/Shapes/Ray";
 import HandInZone from "../HandInZone";
 import { Utils } from "./Util";
+import { Howler, Howl } from "howler";
 
 export default class Game extends State {
 	rendering: Rendering;
@@ -42,6 +43,8 @@ export default class Game extends State {
 
 	private pointerLockTimer: number;
 	private oWasPressed: boolean;
+
+	playPotato: Howl;
 
 	public static getInstance(sa: StateAccessible): Game {
 		if (!Game.instance) {
@@ -173,6 +176,18 @@ export default class Game extends State {
 	}
 
 	async load() {
+		Howler.pos(0, 0, 0);
+		// Initialize the Howl object
+		this.playPotato = new Howl({
+			src: ["Assets/audio/single_step.mp3"], // Replace with your sound file URL
+			volume: 1.0,
+			spatial: true,
+			pos: [0, 0, 0], // Initial position in 3D space
+			panningModel: "HRTF", // HRTF for realistic 3D audio
+			refDistance: 1,
+			rolloffFactor: 1,
+		});
+
 		let colour = vec3.fromValues(0.1, 0.1, 0.15);
 		// let colour = vec3.fromValues(0.0, 0.0, 0.0);
 		this.rendering.clearColour.r = colour[0];
@@ -296,6 +311,12 @@ export default class Game extends State {
 			];
 			this.colorBoxes();
 		}
+
+		Howler.pos(
+			this.player.positionComp.position[0],
+			this.player.positionComp.position[1],
+			this.player.positionComp.position[2]
+		);
 	}
 
 	prepareDraw(dt: number, updateCameraFocus: boolean = true): void {
