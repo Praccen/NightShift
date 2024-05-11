@@ -11,10 +11,15 @@ import { ECSUtils } from "../Engine/Utils/ESCUtils";
 import Ray from "../Engine/Physics/Shapes/Ray";
 import PositionParentComponent from "../Engine/ECS/Components/PositionParentComponent";
 
+const legMoveDuration: number = 0.1;
+
 class Leg {
 	anchor: Entity;
 	foot: Entity;
 	joint: Entity;
+    oldPos: vec3;
+    targetPos: vec3;
+    legMoveTimer: number;
 }
 
 export default class Spider {
@@ -33,19 +38,19 @@ export default class Spider {
 
 	constructor(game: Game) {
 		this.game = game;
-		this.targetPos = vec3.fromValues(0.0, 10.0, -25.0);
+		this.targetPos = vec3.fromValues(0.0, 0.0, -25.0);
 
 		this.bodyEntity = game.ecsManager.createEntity();
 		this.parentPosComp = this.game.ecsManager.addComponent(
 			this.bodyEntity,
 			new PositionParentComponent()
 		) as PositionParentComponent;
+        vec3.set(this.parentPosComp.position, 0.0, 5.0, -20.0);
 		this.bodyPosComp = this.game.ecsManager.addComponent(
 			this.bodyEntity,
 			new PositionComponent()
 		) as PositionComponent;
 		vec3.set(this.bodyPosComp.origin, 0.0, -0.5, 0.0);
-		// vec3.set(this.bodyPosComp.scale, 2.0, 1.2, 4.0);
 		let bodyBoundingBoxComp = this.game.ecsManager.addComponent(
 			this.bodyEntity,
 			new BoundingBoxComponent(this.parentPosComp.matrix)
@@ -137,7 +142,7 @@ export default class Spider {
 			) as PositionComponent;
 			vec3.set(footPosComp.origin, 0.0, -0.5, 0.0);
 			vec3.set(footPosComp.scale, 0.3, 0.3, 0.3);
-            // vec3.copy(footPosComp.position, this.parentPosComp.position);
+            vec3.copy(footPosComp.position, this.parentPosComp.position);
 			this.game.ecsManager.addComponent(
 				leg.foot,
 				new GraphicsComponent(
@@ -156,7 +161,6 @@ export default class Spider {
 			) as PositionComponent;
 			vec3.set(jointPosComp.origin, 0.0, -0.5, 0.0);
 			vec3.set(jointPosComp.scale, 0.3, 0.3, 0.3);
-            // vec3.copy(jointPosComp.position, this.parentPosComp.position);
 			this.game.ecsManager.addComponent(
 				leg.joint,
 				new GraphicsComponent(
@@ -167,6 +171,10 @@ export default class Spider {
 					)
 				)
 			);
+
+            leg.targetPos = vec3.clone(footPosComp.position);
+            leg.oldPos = vec3.clone(footPosComp.position);
+            leg.legMoveTimer = 1.0;
 		}
 
         this.spiderForward = vec3.fromValues(0.0, 0.0, -1.0);
@@ -236,7 +244,9 @@ export default class Spider {
 				continue;
 			}
 
-			if (vec3.dist(anchorPos, footPosComp.position) > 3.0) {
+			if (vec3.dist(anchorPos, leg.targetPos) > 3.0) {
+                vec3.copy(leg.oldPos, footPosComp.position);
+                leg.legMoveTimer = 0.0;
                 let bestAngle = -1.0;
                 let distance = 0.0;
                 let direction = vec3.create();
@@ -268,9 +278,14 @@ export default class Spider {
                 }
 
                 if (bestAngle > -1.0) {
-                    vec3.scaleAndAdd(footPosComp.position, rayStart, direction, distance);
+                    vec3.scaleAndAdd(leg.targetPos, rayStart, direction, distance);
                 }
 			}
+
+            if (leg.legMoveTimer < 1.0) {
+                leg.legMoveTimer += dt / legMoveDuration;
+                vec3.lerp(footPosComp.position, leg.oldPos, leg.targetPos, leg.legMoveTimer);
+            }
 
 			// ---- Calculate foot peice size and rotation ----
 			let jointPos = vec3.scale(
