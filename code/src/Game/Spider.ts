@@ -23,6 +23,8 @@ class Leg {
 }
 
 export default class Spider {
+    speed: number;
+
 	private game: Game;
 
 	private bodyEntity: Entity;
@@ -37,6 +39,7 @@ export default class Spider {
 	private targetPos: vec3;
 
 	constructor(game: Game) {
+        this.speed = 6.0;
 		this.game = game;
 		this.targetPos = vec3.fromValues(0.0, 0.0, -25.0);
 
@@ -208,10 +211,10 @@ export default class Spider {
 			ray.setStartAndDir(top, vec3.add(vec3.create(), dir, vec3.fromValues(0.0, -1.0, 0.0)));
 			let rayResult = ECSUtils.RayCastAgainstEntityList(ray, collisionObjects, 4.0);
 			if (rayResult.eId > -1) {
-				vec3.scale(this.bodyMovComp.velocity, dir, rayResult.distance * 6.0);
-				this.bodyMovComp.velocity[1] += (2.0 - rayResult.distance) * 6.0;
+				vec3.scale(this.bodyMovComp.velocity, dir, rayResult.distance *  this.speed);
+				this.bodyMovComp.velocity[1] += (2.0 - rayResult.distance) *  this.speed;
 			} else {
-				this.bodyMovComp.accelerationDirection[1] = -5.0;
+				this.bodyMovComp.accelerationDirection[1] = -this.speed * 0.8;
 				ray.setStartAndDir(
 					vec3.scaleAndAdd(vec3.create(), this.parentPosComp.position, dir, 1.0),
 					vec3.add(vec3.create(), dir, vec3.fromValues(0.0, -1.0, 0.0))
