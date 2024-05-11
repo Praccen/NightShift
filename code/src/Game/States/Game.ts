@@ -12,11 +12,13 @@ import PointLightComponent from "../../Engine/ECS/Components/PointLightComponent
 import PositionComponent from "../../Engine/ECS/Components/PositionComponent";
 import PlayerController from "../PlayerController";
 import Spider from "../Spider";
+import Box from "../Box";
+import { COLOR } from "../Card";
 
 export default class Game extends State {
 	rendering: Rendering;
 	ecsManager: ECSManager;
-	private stateAccessible: StateAccessible;
+	stateAccessible: StateAccessible;
 
 	private overlayRendering: OverlayRendering;
 	private menuButton: Button;
@@ -27,6 +29,7 @@ export default class Game extends State {
 
 	private player: PlayerController;
 	private spider: Spider;
+	boxes: Map<number, Box>;
 
 	private pointerLockTimer: number;
 	private oWasPressed: boolean;
@@ -44,6 +47,7 @@ export default class Game extends State {
 
 	private constructor(sa: StateAccessible) {
 		super();
+
 		this.stateAccessible = sa;
 		this.objectPlacer = new ObjectPlacer(
 			this.stateAccessible.meshStore,
@@ -96,6 +100,14 @@ export default class Game extends State {
 		this.spider = new Spider(this);
 	}
 
+	initBoxes() {
+		this.boxes = new Map<number, Box>();
+		let objective_boxes = this.objectPlacer.getEntitiesOfType("Box Objective");
+		objective_boxes.forEach((box) => {
+			this.boxes.set(box.id, new Box(this, COLOR.BLUE, box));
+		});
+	}
+
 	createPointLight(position: vec3, castShadow: boolean, colour?: vec3) {
 		let pointLightEntity = this.ecsManager.createEntity();
 		let pointLightComp = new PointLightComponent(this.scene.getNewPointLight());
@@ -131,12 +143,15 @@ export default class Game extends State {
 			this.ecsManager,
 			this.stateAccessible.level
 		);
+		// Run first update right away to let placed objects init
+		this.ecsManager.update(0);
 
 		this.rendering.camera.setPosition(vec3.fromValues(0.0, 2.0, 0.0));
 		this.overlayRendering.setCamera(this.rendering.camera);
 
 		this.player.respawn();
 		this.spider.respawn();
+		this.initBoxes();
 	}
 
 	async init() {

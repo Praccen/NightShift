@@ -24,9 +24,9 @@ this.placements.set(
 	new Placement(
 		"Assets/objs/police_car.obj",
 		"Assets/objs/police_car.mtl",
-		"Assets/objs/police_car_spec.mtl",
+		"Assets/objs/police_car_spec.mtl"
 	)
-)
+);
 
 this.placements.set(
 	"Diamond",
@@ -36,7 +36,7 @@ this.placements.set(
 		"Assets/objs/Diamond.mtl",
 		null
 	)
-)
+);
 
 this.placements.set(
 	"Sphere",
@@ -46,7 +46,7 @@ this.placements.set(
 		"Assets/objs/sphere.mtl",
 		null
 	)
-)
+);
 
 this.placements.set(
 	"Box",
@@ -54,9 +54,19 @@ this.placements.set(
 		"Assets/objs/cube.obj",
 		"CSS:rgb(255,255,255)",
 		"CSS:rgb(100,100,100)",
-	    null //"Assets/textures/white.png",
+		null //"Assets/textures/white.png",
 	)
-)
+);
+
+this.placements.set(
+	"Box Objective",
+	new Placement(
+		"Assets/objs/cube.obj",
+		"CSS:rgb(50,50,50)",
+		"CSS:rgb(0,0,0)",
+		null //"CSS:rgb(25,25,25)",
+	)
+);
 
 this.placements.set(
 	"Box Gray",
@@ -66,7 +76,7 @@ this.placements.set(
 		"CSS:rgb(0,0,0)",
 		null //"CSS:rgb(25,25,25)",
 	)
-)
+);
 
 this.placements.set(
 	"Box Pink",
@@ -76,7 +86,7 @@ this.placements.set(
 		"CSS:rgb(0,0,0)",
 		null //"CSS:rgb(221, 137, 164)",
 	)
-)
+);
 
 this.placements.set(
 	"Box Green",
@@ -86,4 +96,4 @@ this.placements.set(
 		"CSS:rgb(0,0,0)",
 		null //"CSS:rgb(0, 255, 70)",
 	)
-)
+);

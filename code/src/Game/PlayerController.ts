@@ -7,6 +7,9 @@ import { input } from "./GameMachine";
 import Game from "./States/Game";
 import CollisionComponent from "../Engine/ECS/Components/CollisionComponent";
 import Card from "./Card";
+import { MousePicking } from "../Engine/Maths/MousePicking";
+import { ECSUtils } from "../Engine/Utils/ESCUtils";
+import Box from "./Box";
 
 const sensitivity = 45.0; // TODO: move to options, and add a slider in options menu.
 
@@ -22,8 +25,10 @@ export default class PlayerController {
 	private cards: Card[];
 	private selectedCard: number;
 	private wasRotated: boolean;
+	private wasPicked: boolean;
 	showCards: boolean;
 	private cardsToggled: boolean;
+	healthPoints: number;
 
 	constructor(game: Game) {
 		this.game = game;
@@ -194,6 +199,29 @@ export default class PlayerController {
 				this.wasRotated = true;
 			} else {
 				this.wasRotated = false;
+			}
+
+			// Pickup box
+			if (input.keys["E"]) {
+				if (!this.wasPicked) {
+					let objective_boxes =
+						this.game.objectPlacer.getEntitiesOfType("Box Objective");
+
+					let ray = MousePicking.GetRay(this.game.rendering.camera);
+					let rayCastResult = ECSUtils.RayCastAgainstEntityList(
+						ray,
+						objective_boxes
+					);
+					let selectedBox = this.game.boxes.get(rayCastResult.eId);
+					console.log(selectedBox);
+					if (selectedBox != undefined) {
+						selectedBox.pickedUp = true;
+						selectedBox.graphComp.bundle.graphicsObject.enabled = false;
+					}
+				}
+				this.wasPicked = true;
+			} else {
+				this.wasPicked = false;
 			}
 		}
 

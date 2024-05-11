@@ -6,7 +6,7 @@ import Entity from "../Engine/ECS/Entity";
 import PlayerController from "./PlayerController";
 import Game from "./States/Game";
 
-enum COLOR {
+export enum COLOR {
 	RED,
 	GREEN,
 	BLUE,
@@ -45,7 +45,7 @@ export default class Card {
 		let animationVec: vec3 = vec3.fromValues(1, 1, 1);
 		if (this.player.showCards) {
 			if (this.animationTime < 1.0) {
-				this.animationTime += dt;
+				this.animationTime += dt * 2.0;
 			}
 		} else {
 			if (this.animationTime > 0.0) {
