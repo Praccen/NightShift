@@ -45,7 +45,7 @@ export default class Spider {
 			new PositionComponent()
 		) as PositionComponent;
 		vec3.set(this.bodyPosComp.origin, 0.0, -0.5, 0.0);
-		vec3.set(this.bodyPosComp.scale, 2.0, 1.2, 4.0);
+		// vec3.set(this.bodyPosComp.scale, 2.0, 1.2, 4.0);
 		let bodyBoundingBoxComp = this.game.ecsManager.addComponent(
 			this.bodyEntity,
 			new BoundingBoxComponent(this.parentPosComp.matrix)
@@ -54,7 +54,7 @@ export default class Spider {
 			this.bodyEntity,
 			new GraphicsComponent(
 				this.game.rendering.scene.getNewMesh(
-					"Assets/objs/cube.obj",
+					"Assets/objs/SpiderBody.obj",
 					"CSS:rgb(221, 137, 164)",
 					"CSS:rgb(0,0,0)"
 				)

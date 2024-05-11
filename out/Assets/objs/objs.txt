@@ -10,3 +10,5 @@ shelf.mtl
 shelf.obj
 sphere.mtl
 sphere.obj
+SpiderBody.mtl
+SpiderBody.obj
