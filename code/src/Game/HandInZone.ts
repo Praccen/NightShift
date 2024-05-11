@@ -63,6 +63,7 @@ export default class Box {
 							vec3.set(box.moveComp.velocity, 0, 0, 0);
 							vec3.set(box.moveComp.constantAcceleration, 0, 0, 0);
 							this.game.boxesCollected += 1;
+							this.game.boxesCollectedCurrent += 1;
 							this.game.uncollectedBoxed.delete(box.entity.id);
 							console.log(this.game.boxesCollected);
 						}

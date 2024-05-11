@@ -13,10 +13,11 @@ import PositionComponent from "../../Engine/ECS/Components/PositionComponent";
 import PlayerController from "../PlayerController";
 import Spider from "../Spider";
 import Box from "../Box";
-import { COLOR } from "../Card";
+import Card, { COLOR } from "../Card";
 import { ECSUtils } from "../../Engine/Utils/ESCUtils";
 import Ray from "../../Engine/Physics/Shapes/Ray";
 import HandInZone from "../HandInZone";
+import { Utils } from "./Util";
 
 export default class Game extends State {
 	rendering: Rendering;
@@ -36,6 +37,8 @@ export default class Game extends State {
 	uncollectedBoxed: Map<number, Box>;
 	zone: HandInZone;
 	boxesCollected: number;
+	boxesCollectedCurrent: number;
+	keyArray: Array<number>;
 
 	private pointerLockTimer: number;
 	private oWasPressed: boolean;
@@ -99,23 +102,53 @@ export default class Game extends State {
 		this.player = new PlayerController(this);
 		this.spider = new Spider(this);
 		this.boxesCollected = 0;
+		this.boxesCollectedCurrent = 0;
+	}
+
+	colorBoxes() {
+		this.uncollectedBoxed.clear();
+		let size = this.keyArray.length - 1;
+		let randomIds = Utils.generateUniqueRandomNumbers(3, 0, size);
+		let boxId1 = randomIds[0];
+		let box1 = this.boxes.get(this.keyArray[boxId1]);
+		box1.color = this.player.cards[0].boxes[0].color;
+		box1.setColor();
+		this.uncollectedBoxed.set(box1.entity.id, box1);
+
+		let boxId2 = randomIds[1];
+		let box2 = this.boxes.get(this.keyArray[boxId2]);
+		box2.color = this.player.cards[1].boxes[0].color;
+		box2.setColor();
+		this.uncollectedBoxed.set(box2.entity.id, box2);
+
+		let boxId3 = randomIds[2];
+		let box3 = this.boxes.get(this.keyArray[boxId3]);
+		box3.color = this.player.cards[2].boxes[0].color;
+		box3.setColor();
+		this.uncollectedBoxed.set(box3.entity.id, box3);
+
+		// Remove from standard map and index array
+		// Remove in ascending order
+		randomIds.sort((a, b) => b - a);
+		this.boxes.delete(box1.entity.id);
+		this.boxes.delete(box2.entity.id);
+		this.boxes.delete(box3.entity.id);
+		this.keyArray.splice(randomIds[0], 1);
+		this.keyArray.splice(randomIds[1], 1);
+		this.keyArray.splice(randomIds[2], 1);
+		console.log(this.keyArray.length);
 	}
 
 	initBoxes() {
 		this.boxes = new Map<number, Box>();
+		this.keyArray = new Array<number>();
 		this.uncollectedBoxed = new Map<number, Box>();
 		let objective_boxes = this.objectPlacer.getEntitiesOfType("Box Objective");
-		let num = 0;
 		objective_boxes.forEach((box) => {
-			if (num < 3) {
-				this.uncollectedBoxed.set(
-					box.id,
-					new Box(this, this.player.cards[num++].boxes[0].color, box)
-				);
-			} else {
-				this.boxes.set(box.id, new Box(this, COLOR.BLUE, box));
-			}
+			this.boxes.set(box.id, new Box(this, COLOR.BLACK, box));
+			this.keyArray.push(box.id);
 		});
+		this.colorBoxes();
 	}
 
 	initZone() {
@@ -252,6 +285,17 @@ export default class Game extends State {
 		this.zone.update(dt);
 
 		this.ecsManager.update(dt);
+
+		if (this.boxesCollectedCurrent == 3) {
+			this.boxesCollectedCurrent = 0;
+			this.player.cards = new Array<Card>(3);
+			this.player.cards = [
+				new Card(this.player, this, 0),
+				new Card(this.player, this, 1),
+				new Card(this.player, this, 2),
+			];
+			this.colorBoxes();
+		}
 	}
 
 	prepareDraw(dt: number, updateCameraFocus: boolean = true): void {

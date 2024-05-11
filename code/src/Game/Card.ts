@@ -13,6 +13,7 @@ export enum COLOR {
 	ORANGE,
 	PINK,
 	PURPLE,
+	BLACK,
 }
 class Box {
 	color: COLOR;

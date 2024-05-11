@@ -28,32 +28,8 @@ export default class Box {
 		this.collected = false;
 		this.pickedUp = false;
 
-		let setColor: string = "CSS:rgb(255,255,255)";
-		switch (this.color) {
-			case COLOR.RED:
-				setColor = "CSS:rgb(255,0,0)";
-				break;
-			case COLOR.GREEN:
-				setColor = "CSS:rgb(0,255,0)";
-				break;
-			case COLOR.BLUE:
-				setColor = "CSS:rgb(0,0,255)";
-
-				break;
-			case COLOR.ORANGE:
-				setColor = "CSS:rgb(255,255,0)";
-
-				break;
-			case COLOR.PINK:
-				setColor = "CSS:rgb(0,0,0)";
-
-				break;
-			case COLOR.PURPLE:
-				setColor = "CSS:rgb(255,0,255)";
-				break;
-		}
 		this.graphComp = entity.getComponent(ComponentTypeEnum.GRAPHICS) as GraphicsComponent;
-		this.graphComp.bundle.diffuse = this.game.stateAccessible.textureStore.getTexture(setColor);
+		this.setColor();
 
 		this.posComp = entity.getComponent(ComponentTypeEnum.POSITION) as PositionComponent;
 		vec3.set(this.posComp.scale, 0.5, 0.5, 0.5);
@@ -84,5 +60,34 @@ export default class Box {
 				}
 			}
 		}
+	}
+
+	setColor() {
+		let setColor: string = "CSS:rgb(255,255,255)";
+		console.log(this.color);
+		switch (this.color) {
+			case COLOR.RED:
+				setColor = "CSS:rgb(255,0,0)";
+				break;
+			case COLOR.GREEN:
+				setColor = "CSS:rgb(0,255,0)";
+				break;
+			case COLOR.BLUE:
+				setColor = "CSS:rgb(0,0,255)";
+
+				break;
+			case COLOR.ORANGE:
+				setColor = "CSS:rgb(255,255,0)";
+
+				break;
+			case COLOR.PINK:
+				setColor = "CSS:rgb(252,15,192)";
+
+				break;
+			case COLOR.PURPLE:
+				setColor = "CSS:rgb(255,0,255)";
+				break;
+		}
+		this.graphComp.bundle.diffuse = this.game.stateAccessible.textureStore.getTexture(setColor);
 	}
 }
