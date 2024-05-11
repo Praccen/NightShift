@@ -180,7 +180,7 @@ export default class Game extends State {
 		// Initialize the Howl object
 		this.playPotato = new Howl({
 			src: ["Assets/audio/single_step.mp3"], // Replace with your sound file URL
-			volume: 1.0,
+			volume: 0.5,
 			spatial: true,
 			pos: [0, 0, 0], // Initial position in 3D space
 			panningModel: "HRTF", // HRTF for realistic 3D audio
