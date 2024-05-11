@@ -208,10 +208,10 @@ export default class Spider {
 			ray.setStartAndDir(top, vec3.add(vec3.create(), dir, vec3.fromValues(0.0, -1.0, 0.0)));
 			let rayResult = ECSUtils.RayCastAgainstEntityList(ray, collisionObjects, 4.0);
 			if (rayResult.eId > -1) {
-				vec3.scale(this.bodyMovComp.velocity, dir, rayResult.distance * 2.0);
-				this.bodyMovComp.velocity[1] += (2.0 - rayResult.distance) * 2.0;
+				vec3.scale(this.bodyMovComp.velocity, dir, rayResult.distance * 6.0);
+				this.bodyMovComp.velocity[1] += (2.0 - rayResult.distance) * 6.0;
 			} else {
-				this.bodyMovComp.accelerationDirection[1] = -3.0;
+				this.bodyMovComp.accelerationDirection[1] = -5.0;
 				ray.setStartAndDir(
 					vec3.scaleAndAdd(vec3.create(), this.parentPosComp.position, dir, 1.0),
 					vec3.add(vec3.create(), dir, vec3.fromValues(0.0, -1.0, 0.0))
