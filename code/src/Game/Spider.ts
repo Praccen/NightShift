@@ -38,12 +38,14 @@ export default class Spider {
 
 	private targetPos: vec3;
 	private playedSound: number;
+	private playingSound: boolean;
 
 	constructor(game: Game) {
 		this.speed = 6.0;
 		this.game = game;
 		this.targetPos = vec3.fromValues(0.0, 0.0, -25.0);
 		this.playedSound = 0;
+		this.playingSound = false;
 
 		this.bodyEntity = game.ecsManager.createEntity();
 		this.parentPosComp = this.game.ecsManager.addComponent(
@@ -203,6 +205,15 @@ export default class Spider {
 		let collisionObjects = this.game.objectPlacer.getEntitiesOfType("Box || Box Gray || Shelf");
 
 		if (vec3.squaredDistance(this.targetPos, this.parentPosComp.position) > 1.0) {
+			this.game.playStepping.pos(
+				this.parentPosComp.position[0],
+				this.parentPosComp.position[1],
+				this.parentPosComp.position[2]
+			);
+			if (!this.playingSound) {
+				this.game.playStepping.play();
+				this.playingSound = true;
+			}
 			let top = vec3.add(
 				vec3.create(),
 				this.parentPosComp.position,
@@ -250,6 +261,8 @@ export default class Spider {
 			);
 		} else {
 			vec3.zero(this.bodyMovComp.velocity);
+			this.game.playStepping.stop();
+			this.playingSound = false;
 		}
 
 		for (let leg of this.legs) {
@@ -310,8 +323,8 @@ export default class Spider {
 				this.playedSound += 1;
 				if (leg.legMoveTimer >= 1.0 && this.playedSound >= 100) {
 					this.playedSound = 0;
-					this.game.playPotato.pos(leg.targetPos[0], leg.targetPos[1], leg.targetPos[2]);
-					this.game.playPotato.play();
+					this.game.playStep.pos(leg.targetPos[0], leg.targetPos[1], leg.targetPos[2]);
+					this.game.playStep.play();
 				}
 			}
 

@@ -64,7 +64,6 @@ export default class Box {
 
 	setColor() {
 		let setColor: string = "CSS:rgb(255,255,255)";
-		console.log(this.color);
 		switch (this.color) {
 			case COLOR.RED:
 				setColor = "CSS:rgb(255,0,0)";

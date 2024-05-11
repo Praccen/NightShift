@@ -44,7 +44,8 @@ export default class Game extends State {
 	private pointerLockTimer: number;
 	private oWasPressed: boolean;
 
-	playPotato: Howl;
+	playStep: Howl;
+	playStepping: Howl;
 
 	public static getInstance(sa: StateAccessible): Game {
 		if (!Game.instance) {
@@ -178,9 +179,20 @@ export default class Game extends State {
 	async load() {
 		Howler.pos(0, 0, 0);
 		// Initialize the Howl object
-		this.playPotato = new Howl({
-			src: ["Assets/audio/single_step.mp3"], // Replace with your sound file URL
+		this.playStep = new Howl({
+			src: ["Assets/audio/single_step.mp3"],
 			volume: 0.5,
+			rate: 0.3,
+			spatial: true,
+			pos: [0, 0, 0], // Initial position in 3D space
+			panningModel: "HRTF", // HRTF for realistic 3D audio
+			refDistance: 1,
+			rolloffFactor: 1,
+		});
+		this.playStepping = new Howl({
+			src: ["Assets/audio/stepping.mp3"],
+			volume: 0.1,
+			rate: 0.1,
 			spatial: true,
 			pos: [0, 0, 0], // Initial position in 3D space
 			panningModel: "HRTF", // HRTF for realistic 3D audio
