@@ -103,7 +103,7 @@ export default class Card {
 			quat.rotateZ(posComp.rotation, posComp.rotation, (flush / 180) * Math.PI);
 			vec3.scale(right, right, offset);
 			let posVec: vec3 = vec3.create();
-			vec3.mul(posVec, vec3.fromValues(0.0, 1.7, 0), animationVec);
+			vec3.mul(posVec, vec3.fromValues(0.0, 1.6, 0), animationVec);
 			vec3.add(posComp.position, posComp.position, vec3.add(vec3.create(), right, posVec));
 		}
 	}
@@ -111,7 +111,11 @@ export default class Card {
 	createNewCardShape(box: Box, cardNr: number): Entity {
 		let cardEntity = this.game.ecsManager.createEntity();
 		let graphComp = new GraphicsComponent(
-			this.game.scene.getNewPhongQuad("CSS:rgb(255,255,255)", "CSS:rgb(0,0,0)", "CSS:rgb(255,255,255)")
+			this.game.scene.getNewPhongQuad(
+				"CSS:rgb(255,255,255)",
+				"CSS:rgb(0,0,0)",
+				"CSS:rgb(255,255,255)"
+			)
 		);
 		switch (box.color) {
 			case COLOR.RED:
