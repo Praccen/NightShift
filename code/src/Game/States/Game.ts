@@ -296,49 +296,49 @@ export default class Game extends State {
 			this.pointerLockTimer = 0.0;
 		}
 
-		if (input.keys["P"]) {
-			this.player.respawn();
-			if (this.spider != undefined) {
-				this.spider.respawn();
-			}
-		}
+		// if (input.keys["P"]) {
+		// 	this.player.respawn();
+		// 	if (this.spider != undefined) {
+		// 		this.spider.respawn();
+		// 	}
+		// }
 
-		if (input.keys["O"]) {
-			if (!this.oWasPressed) {
-				this.gotoState = StatesEnum.DEBUGMODE;
-				WebUtils.SetCookie("debug", "true");
-			}
-			this.oWasPressed = true;
-		} else {
-			this.oWasPressed = false;
-		}
+		// if (input.keys["O"]) {
+		// 	if (!this.oWasPressed) {
+		// 		this.gotoState = StatesEnum.DEBUGMODE;
+		// 		WebUtils.SetCookie("debug", "true");
+		// 	}
+		// 	this.oWasPressed = true;
+		// } else {
+		// 	this.oWasPressed = false;
+		// }
 
 		this.player.update(dt);
 
-		if (this.spider != undefined) {
-			if (this.player.showCards) {
-				this.spider.setTarget(this.player.positionComp.position);
-			}
+		// if (this.spider != undefined) {
+		// 	if (this.player.showCards) {
+		// 		this.spider.setTarget(this.player.positionComp.position);
+		// 	}
 
-			if (input.keys["Y"] || input.buttons.get("C")) {
-				let ray = new Ray();
-				ray.setStartAndDir(this.rendering.camera.getPosition(), this.rendering.camera.getDir());
-				let collisionObjects = this.objectPlacer.getEntitiesOfType("Box || Box Gray || Shelf");
-				let rayInfo = ECSUtils.RayCastAgainstEntityList(ray, collisionObjects);
-				if (rayInfo.eId > -1) {
-					this.spider.setTarget(
-						vec3.scaleAndAdd(
-							vec3.create(),
-							this.rendering.camera.getPosition(),
-							ray.getDir(),
-							rayInfo.distance
-						)
-					);
-				}
-			}
+		// 	if (input.keys["Y"] || input.buttons.get("C")) {
+		// 		let ray = new Ray();
+		// 		ray.setStartAndDir(this.rendering.camera.getPosition(), this.rendering.camera.getDir());
+		// 		let collisionObjects = this.objectPlacer.getEntitiesOfType("Box || Box Gray || Shelf");
+		// 		let rayInfo = ECSUtils.RayCastAgainstEntityList(ray, collisionObjects);
+		// 		if (rayInfo.eId > -1) {
+		// 			this.spider.setTarget(
+		// 				vec3.scaleAndAdd(
+		// 					vec3.create(),
+		// 					this.rendering.camera.getPosition(),
+		// 					ray.getDir(),
+		// 					rayInfo.distance
+		// 				)
+		// 			);
+		// 		}
+		// 	}
 
-			this.spider.update(dt);
-		}
+		// 	this.spider.update(dt);
+		// }
 
 		this.boxes.forEach((box) => box.update(dt));
 		this.uncollectedBoxed.forEach((box) => {
