@@ -17,7 +17,7 @@ const sensitivity = 45.0; // TODO: move to options, and add a slider in options 
 export default class PlayerController {
 	private game: Game;
 
-	private entity: Entity;
+	entity: Entity;
 	positionComp: PositionComponent;
 	private movComp: MovementComponent;
 

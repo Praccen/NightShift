@@ -379,8 +379,23 @@ export default class Spider {
 			quat.rotateZ(jointPosComp.rotation, jointPosComp.rotation, -pitch);
 			// -------------------------------------------------
 		}
+		
 		if (vec3.dist(this.parentPosComp.position, this.game.player.positionComp.position) <= 3.7) {
 			this.game.eaten = true;
+		}
+
+		// Update target pos if the player is within sight
+		let viewingPos = vec3.add(vec3.create(), this.parentPosComp.position, vec3.fromValues(0.0, 0.4, 0.0));
+		let playerDir = vec3.normalize(vec3.create(), vec3.sub(vec3.create(), this.game.player.positionComp.position, viewingPos));
+		if (vec3.dot(playerDir, this.spiderForward) > 0.0) {
+			let ray = new Ray();
+			ray.setStartAndDir(viewingPos, playerDir);
+			let shelvesAndPlayer = this.game.objectPlacer.getEntitiesOfType("Shelf");
+			shelvesAndPlayer.push(this.game.player.entity);
+			let rayHitInfo = ECSUtils.RayCastAgainstEntityList(ray, shelvesAndPlayer);
+			if (rayHitInfo.eId == this.game.player.entity.id) {
+				vec3.copy(this.targetPos, this.game.player.positionComp.position);
+			}
 		}
 	}
 }
