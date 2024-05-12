@@ -46,7 +46,7 @@ export default class Spider {
 	constructor(game: Game) {
 		this.speed = 3.0;
 		this.game = game;
-		this.targetPos = vec3.fromValues(0.0, 0.0, -25.0);
+		this.targetPos = vec3.fromValues(0.0, 0.0, 25.0);
 		this.playedSound = 0;
 		this.playingSound = false;
 
@@ -55,7 +55,7 @@ export default class Spider {
 			this.bodyEntity,
 			new PositionParentComponent()
 		) as PositionParentComponent;
-		vec3.set(this.parentPosComp.position, 0.0, 5.0, -20.0);
+		vec3.set(this.parentPosComp.position, 6.0, 5.0, 20.0);
 		this.bodyPosComp = this.game.ecsManager.addComponent(
 			this.bodyEntity,
 			new PositionComponent()
@@ -201,9 +201,9 @@ export default class Spider {
 	}
 
 	respawn() {
-		vec3.set(this.parentPosComp.position, 0.0, 5.0, -20.0);
+		vec3.set(this.parentPosComp.position, 6.0, 5.0, 20.0);
 		vec3.zero(this.bodyMovComp.velocity);
-		vec3.set(this.targetPos, 0.0, 0.0, -25.0);
+		vec3.set(this.targetPos, 0.0, 0.0, 25.0);
 	}
 
 	cleanUp() {
@@ -223,6 +223,7 @@ export default class Spider {
 	}
 
 	update(dt: number) {
+		console.log(this.parentPosComp.position);
 		let dir = vec3.sub(vec3.create(), this.targetPos, this.parentPosComp.position);
 		dir[1] = 0.0;
 		vec3.normalize(dir, dir);
@@ -379,14 +380,21 @@ export default class Spider {
 			quat.rotateZ(jointPosComp.rotation, jointPosComp.rotation, -pitch);
 			// -------------------------------------------------
 		}
-		
+
 		if (vec3.dist(this.parentPosComp.position, this.game.player.positionComp.position) <= 3.7) {
 			this.game.eaten = true;
 		}
 
 		// Update target pos if the player is within sight
-		let viewingPos = vec3.add(vec3.create(), this.parentPosComp.position, vec3.fromValues(0.0, 0.4, 0.0));
-		let playerDir = vec3.normalize(vec3.create(), vec3.sub(vec3.create(), this.game.player.positionComp.position, viewingPos));
+		let viewingPos = vec3.add(
+			vec3.create(),
+			this.parentPosComp.position,
+			vec3.fromValues(0.0, 0.4, 0.0)
+		);
+		let playerDir = vec3.normalize(
+			vec3.create(),
+			vec3.sub(vec3.create(), this.game.player.positionComp.position, viewingPos)
+		);
 		if (vec3.dot(playerDir, this.spiderForward) > 0.0) {
 			let ray = new Ray();
 			ray.setStartAndDir(viewingPos, playerDir);

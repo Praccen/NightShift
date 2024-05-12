@@ -155,7 +155,6 @@ export default class Game extends State {
 		this.keyArray.splice(randomIds[0], 1);
 		this.keyArray.splice(randomIds[1], 1);
 		this.keyArray.splice(randomIds[2], 1);
-		console.log(this.keyArray.length);
 	}
 
 	initBoxes() {
