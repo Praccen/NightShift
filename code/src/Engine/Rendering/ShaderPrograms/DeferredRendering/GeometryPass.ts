@@ -88,6 +88,7 @@ class GeometryPass extends ShaderProgram {
 		this.use();
 
 		this.setUniformLocation("modelMatrix");
+		this.setUniformLocation("normalMatrix");
 		this.setUniformLocation("viewProjMatrix");
 		this.setUniformLocation("textureMatrix");
 

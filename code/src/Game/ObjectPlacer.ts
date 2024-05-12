@@ -452,12 +452,12 @@ export default class ObjectPlacer {
 	}
 
 	onExit(e: BeforeUnloadEvent) {
-		if (this.downloadTransforms()) {
-			e.preventDefault();
-			e.returnValue = "";
-			return;
-		}
+		// if (this.downloadTransforms()) {
+		// 	e.preventDefault();
+		// 	e.returnValue = "";
+		// 	return;
+		// }
 
-		delete e["returnValue"];
+		// delete e["returnValue"];
 	}
 }

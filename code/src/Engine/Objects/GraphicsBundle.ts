@@ -67,7 +67,7 @@ export default class GraphicsBundle {
 				gl.uniformMatrix4fv(textureReturn[0], false, this.textureMatrix);
 			}
 			let normalReturn: [WebGLUniformLocation, boolean] =
-				this.graphicsObject.shaderProgram.getUniformLocation("normailMatrix");
+				this.graphicsObject.shaderProgram.getUniformLocation("normalMatrix");
 			if (normalReturn[1]) {
 				gl.uniformMatrix3fv(normalReturn[0], false, this.normalMatrix);
 			}
