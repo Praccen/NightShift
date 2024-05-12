@@ -37,7 +37,6 @@ export default class Game extends State {
 	private spider: Spider;
 	boxes: Map<number, Box>;
 	uncollectedBoxed: Map<number, Box>;
-	totalBoxes: number;
 	zone: HandInZone;
 	boxesCollected: number;
 	boxesCollectedCurrent: number;
@@ -77,7 +76,6 @@ export default class Game extends State {
 
 		this.pointerLockTimer = -1.0;
 		this.oWasPressed = true;
-		this.totalBoxes = 0;
 		this.gameTime = 90;
 
 		this.overlayRendering = new OverlayRendering();
@@ -251,6 +249,8 @@ export default class Game extends State {
 		}
 		this.initBoxes();
 		this.initZone();
+
+		this.stateAccessible.endTotalBoxes = 0;
 	}
 
 	async init() {
@@ -356,13 +356,11 @@ export default class Game extends State {
 		this.ecsManager.update(dt);
 
 		if (this.boxesCollectedCurrent == 3 && this.boxes.size >= 3) {
-			this.totalBoxes += 3;
-			if (this.totalBoxes >= 6) {
+			this.stateAccessible.endTotalBoxes += 3;
+			if (this.stateAccessible.endTotalBoxes >= 6) {
 				if (this.stateAccessible.level.includes("Level1")) {
 					this.gotoState = StatesEnum.INTRO2;
 				}
-				this.stateAccessible.endTotalBoxes += this.totalBoxes;
-				this.totalBoxes = 0;
 			}
 			this.boxesCollectedCurrent = 0;
 			this.ecsManager.removeEntity(this.player.cards[0].shape.id);
