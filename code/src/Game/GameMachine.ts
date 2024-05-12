@@ -40,6 +40,8 @@ export class StateAccessible {
 	restartGame: boolean;
 	localGame: boolean;
 	level: string;
+	endTotalBoxes: number = 0;
+	caughtBySpider: boolean;
 }
 
 export default class GameMachine extends StateMachine {
@@ -120,7 +122,7 @@ export default class GameMachine extends StateMachine {
 		this.addState(StatesEnum.MAINMENU, Menu, 1.0 / 60.0, new Menu(this.stateAccessible));
 		this.addState(StatesEnum.INTRO, Intro, 1.0 / 60.0, new Intro(this.stateAccessible));
 		this.addState(StatesEnum.INTRO2, IntroDay2, 1.0 / 60.0, new IntroDay2(this.stateAccessible));
-		this.addState(StatesEnum.END, End, 1.0 / 60.0, new End(this.stateAccessible, game));
+		this.addState(StatesEnum.END, End, 1.0 / 60.0, new End(this.stateAccessible));
 		this.addState(
 			StatesEnum.LEVELSELECT,
 			LevelSelect,

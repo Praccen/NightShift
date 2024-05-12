@@ -65,7 +65,6 @@ export default class Box {
 							this.game.boxesCollected += 1;
 							this.game.boxesCollectedCurrent += 1;
 							this.game.uncollectedBoxed.delete(box.entity.id);
-							console.log(this.game.boxesCollected);
 						}
 					}
 				}
