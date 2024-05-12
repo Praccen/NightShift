@@ -14,6 +14,7 @@ import OptionsMenu from "./States/OptionsMenu";
 import { WebUtils } from "../Engine/Utils/WebUtils";
 import { OverlayRendering } from "../Engine/Rendering/GUI/OverlayRendering";
 import LevelSelect from "./States/LevelSelect";
+import { Howler } from "howler";
 // Globals
 export let input = new Input();
 export let options = {
@@ -22,8 +23,8 @@ export let options = {
 	foldableGrass: false,
 	showFps: true,
 	grassDensity: 10000,
-	musicVolume: 0.05,
-	effectVolume: 0.05,
+	musicVolume: 0.2,
+	effectVolume: 0.2,
 };
 
 /**
@@ -55,6 +56,7 @@ export default class GameMachine extends StateMachine {
 			(this.stateAccessible.localGame = true),
 			this.stateAccessible.audioPlayer.setMusicVolume(options.musicVolume);
 		this.stateAccessible.audioPlayer.setSoundEffectVolume(options.effectVolume);
+		Howler.volume(options.effectVolume * 2.5);
 
 		// Add states
 		this.addState(

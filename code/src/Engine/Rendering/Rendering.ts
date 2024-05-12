@@ -243,10 +243,7 @@ export default class Rendering {
 		} else {
 			this.volumetricGodRayPass.outputBuffer = this.finishedFramebuffer;
 		}
-
 		this.volumetricGodRayPass.bindFramebuffers();
-
-		// this.finishedFramebuffer.bind(gl.DRAW_FRAMEBUFFER);
 
 		// Clear the output with the actual clear colour we have set
 		gl.clearColor(this.clearColour.r, this.clearColour.g, this.clearColour.b, this.clearColour.a);
@@ -280,9 +277,6 @@ export default class Rendering {
 		// ---- Particles ----
 		// this.particleRenderPass.draw(this.scene, this.camera);
 		// -------------------
-
-		// Setup appropriate post processing framebuffer (or to finished directly)
-		
 
 		// ---- Volumetric God Rays ----
 		this.volumetricGodRayPass.draw(this.scene, this.camera);

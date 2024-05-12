@@ -181,22 +181,22 @@ export default class Game extends State {
 		// Initialize the Howl object
 		this.playStep = new Howl({
 			src: ["Assets/audio/single_step.mp3"],
-			volume: 0.5,
+			volume: 1.0,
 			rate: 0.3,
 			spatial: true,
 			pos: [0, 0, 0], // Initial position in 3D space
 			panningModel: "HRTF", // HRTF for realistic 3D audio
-			refDistance: 1,
+			refDistance: 10,
 			rolloffFactor: 1,
 		});
 		this.playStepping = new Howl({
 			src: ["Assets/audio/stepping.mp3"],
-			volume: 0.1,
+			volume: 0.2,
 			rate: 0.1,
 			spatial: true,
 			pos: [0, 0, 0], // Initial position in 3D space
 			panningModel: "HRTF", // HRTF for realistic 3D audio
-			refDistance: 1,
+			refDistance: 10,
 			rolloffFactor: 1,
 		});
 
@@ -325,10 +325,12 @@ export default class Game extends State {
 		}
 
 		Howler.pos(
-			this.player.positionComp.position[0],
-			this.player.positionComp.position[1],
-			this.player.positionComp.position[2]
+			...this.rendering.camera.getPosition()
 		);
+
+		Howler.orientation(
+			...this.rendering.camera.getDir()
+		)
 	}
 
 	prepareDraw(dt: number, updateCameraFocus: boolean = true): void {
