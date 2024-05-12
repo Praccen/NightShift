@@ -32,6 +32,10 @@ If you are ever in the need of money again
 don't hesitate to sign up for a night shift or two!
 
 FINAL PAYCHECK:
+PAYCHECK:
+Boxes___________  ${game.totalBoxes} * $100
+TOTAL:
+$${game.totalBoxes * 100}
 `;
 		} else {
 			introText.textString = `*after the vicious attack from that monster your
@@ -42,7 +46,11 @@ But don't worry, they said it is not venomous and I've
 already payed for the hospital bill. It will be
 coming out of your salary though.. See you around!
 
-FINAL PAYCHECK:
+PAYCHECK:
+Boxes___________  ${game.totalBoxes} * $100
+Hospital bills__ -$200
+TOTAL:
+$${game.totalBoxes * 100 - 200}
 
 `;
 		}

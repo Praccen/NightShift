@@ -12,41 +12,41 @@ export default class Intro extends State {
 		this.sa = sa;
 		this.overlayRendering = new OverlayRendering();
 
-        let introDiv = this.overlayRendering.getNewDiv();
-        introDiv.getElement().style.width = "80%";
-        introDiv.getElement().style.height = "60%";
-        introDiv.getElement().style.backgroundColor = "gray";
+		let introDiv = this.overlayRendering.getNewDiv();
+		introDiv.getElement().style.width = "80%";
+		introDiv.getElement().style.height = "60%";
+		introDiv.getElement().style.backgroundColor = "gray";
 		introDiv.getElement().style.opacity = "70%";
 		introDiv.position[0] = 0.5;
 		introDiv.position[1] = 0.4;
-        introDiv.center = true;
+		introDiv.center = true;
 		introDiv.getElement().style.borderRadius = "10px";
 		introDiv.getElement().style.overflowY = "auto";
-        introDiv.getElement().style.overflowWrap = "break-word";
+		introDiv.getElement().style.overflowWrap = "break-word";
 
-    
-        let introText = this.overlayRendering.getNew2DText(introDiv);
-        introText.textString = 
-`Hello! Welcome to your new job as a personal shopper.
+		let introText = this.overlayRendering.getNew2DText(introDiv);
+		introText.textString = `Hello! Welcome to your new job as a personal shopper.
 You will get orders of three boxes to pick up at a time.
 		
 Look at the orders by pressing C.
 
 Go get matching boxes and put them in the delivery zone.
+
+
 		`;
 
-        let playButton = this.overlayRendering.getNewButton();
-        playButton.position[0] = 0.5;
-        playButton.position[1] = 0.8;
-        playButton.center = true;
-        playButton.textString = "Start";
+		let playButton = this.overlayRendering.getNewButton();
+		playButton.position[0] = 0.5;
+		playButton.position[1] = 0.8;
+		playButton.center = true;
+		playButton.textString = "Start";
 
-        let self = this;
-        playButton.onClick(function () {
-            self.gotoState = StatesEnum.GAME;
-            self.sa.level = "Assets/placements/Level1.txt";
-            self.sa.restartGame = true;
-        });
+		let self = this;
+		playButton.onClick(function () {
+			self.gotoState = StatesEnum.GAME;
+			self.sa.level = "Assets/placements/Level1.txt";
+			self.sa.restartGame = true;
+		});
 
 		let backButton = this.overlayRendering.getNewButton();
 		backButton.position[0] = 0.5;

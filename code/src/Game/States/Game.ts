@@ -330,7 +330,7 @@ export default class Game extends State {
 
 		if (this.boxesCollectedCurrent == 3 && this.boxes.size >= 3) {
 			this.totalBoxes += 3;
-			if (this.totalBoxes >= 9) {
+			if (this.totalBoxes >= 1) {
 				this.totalBoxes = 0;
 				if (this.stateAccessible.level.includes("Level1")) {
 					this.gotoState = StatesEnum.INTRO2;
