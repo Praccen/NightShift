@@ -350,13 +350,11 @@ export default class Game extends State {
 
 		this.ecsManager.update(dt);
 
-		if (this.boxesCollectedCurrent == 1 && this.boxes.size >= 3) {
+		if (this.boxesCollectedCurrent == 3 && this.boxes.size >= 3) {
 			this.totalBoxes += 3;
-			if (this.totalBoxes >= 1) {
+			if (this.totalBoxes >= 6) {
 				if (this.stateAccessible.level.includes("Level1")) {
 					this.gotoState = StatesEnum.INTRO2;
-				} else if (this.stateAccessible.level.includes("Level2")) {
-					this.gotoState = StatesEnum.END;
 				}
 				this.stateAccessible.endTotalBoxes += this.totalBoxes;
 				this.totalBoxes = 0;

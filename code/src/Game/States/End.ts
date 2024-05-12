@@ -64,9 +64,9 @@ coming out of your salary though.. See you around!
 
 PAYCHECK:
 Boxes___________  ${this.sa.endTotalBoxes} * $100
-Hospital bills__ -$200
+Hospital bills__ -$600
 TOTAL:
-$${this.sa.endTotalBoxes * 100 - 200}`;
+$${this.sa.endTotalBoxes * 100 - 600}`;
 		}
 	}
 
