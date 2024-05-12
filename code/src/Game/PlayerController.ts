@@ -158,7 +158,7 @@ export default class PlayerController {
 			}
 
 			// Look at cards
-			if (input.keys["C"]) {
+			if (input.keys["C"] || input.buttons.get("B")) {
 				if (!this.cardsToggled) {
 					this.showCards = this.showCards ? false : true;
 				}
@@ -200,16 +200,7 @@ export default class PlayerController {
 							}
 						}
 					} else {
-						vec3.add(
-							this.selectedBox.moveComp.velocity,
-							this.selectedBox.moveComp.velocity,
-							vec3.scale(
-								vec3.create(),
-								vec3.add(vec3.create(), forward, vec3.fromValues(0, 1, 0)),
-								7.0
-							)
-						);
-						this.selectedBox.pickedUp = false;
+						this.selectedBox.throwBox(forward)
 						this.isHoldingBox = false;
 					}
 				}

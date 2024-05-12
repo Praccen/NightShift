@@ -44,14 +44,13 @@ export default class Box {
 
 	update(dt: number) {
 		if (this.pickedUp) {
-			if (this.collComp == undefined) {
-				this.collComp = new CollisionComponent();
-				this.game.ecsManager.addComponent(this.entity, this.collComp);
-				this.collComp.mass = 5.0;
-				this.collComp.isStatic = false;
-				this.moveComp.constantAcceleration = vec3.fromValues(0.0, -9.8, 0.0);
+			if (this.collComp != undefined) {
+				this.game.ecsManager.removeComponent(this.entity, ComponentTypeEnum.COLLISION);
+				this.collComp = null;
+				vec3.zero(this.moveComp.constantAcceleration);
+				vec3.zero(this.moveComp.velocity);
 			}
-			vec3.set(this.moveComp.velocity, 0, 0, 0);
+
 			let forward = vec3.clone(this.game.rendering.camera.getDir());
 			let camPos = vec3.clone(this.game.rendering.camera.getPosition());
 			if (this.posComp != undefined) {
@@ -63,6 +62,28 @@ export default class Box {
 				}
 			}
 		}
+	}
+
+	throwBox(forward) {
+		vec3.add(
+			this.moveComp.velocity,
+			this.moveComp.velocity,
+			vec3.scale(
+				vec3.create(),
+				vec3.add(vec3.create(), forward, vec3.fromValues(0, 1, 0)),
+				7.0
+			)
+		);
+
+		if (this.collComp == undefined) {
+			this.collComp = new CollisionComponent();
+			this.game.ecsManager.addComponent(this.entity, this.collComp);
+			this.collComp.mass = 5.0;
+			this.collComp.isStatic = false;
+			this.moveComp.constantAcceleration = vec3.fromValues(0.0, -9.8, 0.0);
+		}
+
+		this.pickedUp = false;
 	}
 
 	setColor() {

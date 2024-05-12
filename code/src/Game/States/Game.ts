@@ -316,7 +316,7 @@ export default class Game extends State {
 		this.player.update(dt);
 
 		if (this.spider != undefined) {
-			if (input.keys["Q"] || input.buttons.get("B")) {
+			if (this.player.showCards) {
 				this.spider.setTarget(this.player.positionComp.position);
 			}
 
