@@ -1,10 +1,11 @@
-import { mat4, vec3 } from "gl-matrix";
+import { mat3, mat4, vec3 } from "gl-matrix";
 import { gl } from "../../main";
 import Texture from "../Rendering/Textures/Texture";
 import GraphicsObject from "./GraphicsObjects/GraphicsObject";
 
 export default class GraphicsBundle {
 	modelMatrix: mat4;
+	normalMatrix: mat3;
 	textureMatrix: mat4;
 
 	diffuse: Texture;
@@ -37,6 +38,7 @@ export default class GraphicsBundle {
 		this.emissionColor = vec3.fromValues(0.0, 0.0, 0.0);
 
 		this.modelMatrix = mat4.create();
+		this.normalMatrix = mat3.create();
 		this.textureMatrix = mat4.create();
 		this.indexed = indexed;
 
@@ -64,6 +66,11 @@ export default class GraphicsBundle {
 				if (modelReturn[1]) {
 					gl.uniformMatrix4fv(modelReturn[0], false, this.modelMatrix);
 				}
+			}
+			let normalReturn: [WebGLUniformLocation, boolean] =
+				this.graphicsObject.shaderProgram.getUniformLocation("normalMatrix");
+			if (normalReturn[1]) {
+				gl.uniformMatrix3fv(normalReturn[0], false, this.normalMatrix);
 			}
 			let textureReturn: [WebGLUniformLocation, boolean] =
 				this.graphicsObject.shaderProgram.getUniformLocation("textureMatrix");

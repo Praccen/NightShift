@@ -11,6 +11,7 @@ layout (location = 3) in mat4 modelMatrix;
 
 uniform mat4 viewProjMatrix;
 uniform mat4 textureMatrix;
+uniform mat3 normalMatrix;
 
 out vec3 fragPos;
 out vec3 fragNormal;
@@ -19,11 +20,6 @@ out vec2 texCoords;
 void main() {
     vec4 worldPos = modelMatrix * vec4(inPosition, 1.0);
     texCoords = vec2(textureMatrix * vec4(inTexCoords, 0.0, 1.0));
-
-    // Calculate normal matrix, should be done on CPU but I can't be bothered with implementing inverse of a matrix and don't want to find a good lib atm. Have found a lib now TODO: Move this to CPU
-    mat3 normalMatrix = mat3(modelMatrix);
-    normalMatrix = inverse(normalMatrix);
-    normalMatrix = transpose(normalMatrix);
 
     fragNormal = normalize(normalMatrix * inNormal);
     fragPos = worldPos.xyz;

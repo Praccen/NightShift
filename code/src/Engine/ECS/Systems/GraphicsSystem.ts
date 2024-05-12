@@ -5,7 +5,7 @@ import PositionComponent from "../Components/PositionComponent";
 import PointLightComponent from "../Components/PointLightComponent";
 import PositionParentComponent from "../Components/PositionParentComponent";
 import { ECSUtils } from "../../Utils/ESCUtils";
-import { mat4, vec3 } from "gl-matrix";
+import { mat3, mat4, vec3 } from "gl-matrix";
 import Mesh from "../../Objects/GraphicsObjects/Mesh";
 
 export default class GraphicsSystem extends System {
@@ -25,8 +25,10 @@ export default class GraphicsSystem extends System {
 			if (graphComp && posComp) {
 				if (!graphComp.bundle.indexed) {
 					graphComp.bundle.modelMatrix = posComp.matrix;
+					mat3.normalFromMat4(graphComp.bundle.normalMatrix, graphComp.bundle.modelMatrix);
 				} else {
 					(<Mesh>graphComp.bundle.graphicsObject).setModelData(posComp.matrix);
+					mat3.normalFromMat4(graphComp.bundle.normalMatrix, graphComp.bundle.modelMatrix);
 				}
 			}
 
