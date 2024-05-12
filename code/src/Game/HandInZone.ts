@@ -56,14 +56,19 @@ export default class Box {
 				box.color == this.game.player.cards[2].boxes[0].color
 			) {
 				if (this.posComp != undefined && box.posComp != undefined) {
-					if (vec3.dist(this.posComp.position, box.posComp.position) < 1.5) {
-						if (vec3.length(box.moveComp.velocity) == 0.0) {
-							box.collComp.isStatic = true;
+					if (vec3.dist(vec3.mul(vec3.create(), this.posComp.position, vec3.fromValues(0.0, 1.0, 0.0)), vec3.mul(vec3.create(), box.posComp.position, vec3.fromValues(0.0, 1.0, 0.0))) < 1.5) {
+						box.pickedUp = false;
+						vec3.mul(box.moveComp.velocity, box.moveComp.velocity, vec3.fromValues(0.0, 1.0, 0.0))
+						if (vec3.squaredLength(box.moveComp.velocity) < 0.0001) {
+							if (box.collComp != undefined) {
+								box.collComp.isStatic = true;
+							}
 							box.collected = true;
 							vec3.set(box.moveComp.velocity, 0, 0, 0);
 							vec3.set(box.moveComp.constantAcceleration, 0, 0, 0);
 							this.game.boxesCollected += 1;
 							this.game.boxesCollectedCurrent += 1;
+							this.game.ecsManager.removeEntity(box.entity.id);
 							this.game.uncollectedBoxed.delete(box.entity.id);
 						}
 					}
