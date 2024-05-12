@@ -77,7 +77,7 @@ export default class ObjectPlacer {
 	}
 
 	async reload(placementsFile: string = "Assets/placements/Placements.txt"): Promise<void> {
-		this.downloadTransforms();
+		// this.downloadTransforms();
 
 		if (this.ecsManager && this.game) {
 			for (let ep of this.entityPlacements) {

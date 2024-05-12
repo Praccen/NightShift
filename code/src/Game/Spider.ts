@@ -11,6 +11,7 @@ import { ECSUtils } from "../Engine/Utils/ESCUtils";
 import Ray from "../Engine/Physics/Shapes/Ray";
 import PositionParentComponent from "../Engine/ECS/Components/PositionParentComponent";
 import PointLightComponent from "../Engine/ECS/Components/PointLightComponent";
+import { Howler } from "howler";
 
 const legMoveDuration: number = 0.1;
 
@@ -200,6 +201,18 @@ export default class Spider {
 		vec3.set(this.parentPosComp.position, 0.0, 5.0, -20.0);
 		vec3.zero(this.bodyMovComp.velocity);
 		vec3.set(this.targetPos, 0.0, 0.0, -25.0);
+	}
+
+	cleanUp() {
+		this.game.ecsManager.removeEntity(this.bodyEntity.id);
+
+		for (let leg of this.legs) {
+			this.game.ecsManager.removeEntity(leg.anchor.id);
+			this.game.ecsManager.removeEntity(leg.joint.id);
+			this.game.ecsManager.removeEntity(leg.foot.id);
+		}
+
+		Howler.stop();
 	}
 
 	setTarget(targetPos: ReadonlyVec3) {

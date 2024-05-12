@@ -218,6 +218,10 @@ export default class Game extends State {
 		vec3.set(dirLight.direction, -0.2, -0.9, 0.4);
 		vec3.copy(dirLight.colour, colour);
 
+		if (this.spider != undefined) {
+			this.spider.cleanUp();
+		}
+
 		this.spider = null;
 
 		await this.objectPlacer.load(this.scene, this.ecsManager, this.stateAccessible.level);
