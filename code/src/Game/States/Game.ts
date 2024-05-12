@@ -19,6 +19,7 @@ import Ray from "../../Engine/Physics/Shapes/Ray";
 import HandInZone from "../HandInZone";
 import { Utils } from "./Util";
 import { Howler, Howl } from "howler";
+import TextObject2D from "../../Engine/Rendering/GUI/Objects/Text/TextObject2D";
 
 export default class Game extends State {
 	rendering: Rendering;
@@ -36,7 +37,7 @@ export default class Game extends State {
 	private spider: Spider;
 	boxes: Map<number, Box>;
 	uncollectedBoxed: Map<number, Box>;
-	totalBoxes: number = 0;
+	totalBoxes: number;
 	zone: HandInZone;
 	boxesCollected: number;
 	boxesCollectedCurrent: number;
@@ -49,6 +50,10 @@ export default class Game extends State {
 	playStepping: Howl;
 
 	eaten: boolean = false;
+
+	gameTime: number;
+
+	private timeDisplay: TextObject2D;
 
 	public static getInstance(sa: StateAccessible): Game {
 		if (!Game.instance) {
@@ -72,8 +77,17 @@ export default class Game extends State {
 
 		this.pointerLockTimer = -1.0;
 		this.oWasPressed = true;
+		this.totalBoxes = 0;
+		this.gameTime = 90;
 
 		this.overlayRendering = new OverlayRendering();
+
+		this.timeDisplay = this.overlayRendering.getNew2DText();
+		this.timeDisplay.position[0] = 0.45;
+		this.timeDisplay.position[1] = 0.01;
+		this.timeDisplay.size = 18;
+		this.timeDisplay.scaleWithWindow = false;
+		this.timeDisplay.getElement().style.color = "lime";
 
 		this.menuButton = this.overlayRendering.getNewButton();
 		this.menuButton.position[0] = 0.9;
@@ -262,8 +276,6 @@ export default class Game extends State {
 		}
 		input.touchUsed = false;
 		input.drawTouchControls();
-		this.stateAccessible.caughtBySpider = false;
-		this.stateAccessible.endTotalBoxes = 0;
 	}
 
 	onExit(e: BeforeUnloadEvent) {
@@ -357,6 +369,13 @@ export default class Game extends State {
 				new Card(this.player, this, 2),
 			];
 			this.colorBoxes();
+		}
+		if (this.stateAccessible.level.includes("Level2")) {
+			this.gameTime -= dt;
+			this.timeDisplay.textString = "Time left:" + Math.round(this.gameTime) + "";
+			if (this.gameTime <= 0) {
+				this.gotoState = StatesEnum.END;
+			}
 		}
 
 		Howler.pos(...this.rendering.camera.getPosition());

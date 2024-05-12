@@ -28,19 +28,6 @@ export default class End extends State {
 		this.introDiv.getElement().style.overflowWrap = "break-word";
 		this.introText = this.overlayRendering.getNew2DText(this.introDiv);
 
-		let playButton = this.overlayRendering.getNewButton();
-		playButton.position[0] = 0.5;
-		playButton.position[1] = 0.8;
-		playButton.center = true;
-		playButton.textString = "Start";
-
-		let self = this;
-		playButton.onClick(function () {
-			self.gotoState = StatesEnum.GAME;
-			self.sa.level = "Assets/placements/Level2.txt";
-			self.sa.restartGame = true;
-		});
-
 		let backButton = this.overlayRendering.getNewButton();
 		backButton.position[0] = 0.5;
 		backButton.position[1] = 0.9;
@@ -48,7 +35,7 @@ export default class End extends State {
 		backButton.textString = "Back";
 
 		backButton.onClick(function () {
-			self.gotoState = StatesEnum.MAINMENU;
+			this.gotoState = StatesEnum.MAINMENU;
 		});
 	}
 
