@@ -34,6 +34,9 @@ difference from the day shift!
 ...Except for a minor pest problem but you will do fine!
 		
 Remember, you can look at the orders by pressing C.
+They will automatically be lit up. However, the pest does 
+seem to be attracted to the light, so maybe don't look at
+them for too long at a time.
 Go get matching boxes and put them in the delivery zone.
 		`;
 
