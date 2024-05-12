@@ -341,11 +341,16 @@ export default class Game extends State {
 		}
 
 		this.boxes.forEach((box) => box.update(dt));
-		this.uncollectedBoxed.forEach((box) => {box.update(dt); vec3.set(box.graphComp.bundle.emissionColor, 0.0, 0.0, 0.0);});
+		this.uncollectedBoxed.forEach((box) => {
+			box.update(dt);
+			vec3.set(box.graphComp.bundle.emissionColor, 0.0, 0.0, 0.0);
+		});
 		if (this.player.showCards) {
-			this.uncollectedBoxed.forEach((box) => {box.setColor()});
+			this.uncollectedBoxed.forEach((box) => {
+				box.setColor();
+			});
 		}
-		
+
 		this.zone.update(dt);
 
 		this.ecsManager.update(dt);
@@ -360,6 +365,9 @@ export default class Game extends State {
 				this.totalBoxes = 0;
 			}
 			this.boxesCollectedCurrent = 0;
+			this.ecsManager.removeEntity(this.player.cards[0].shapes[0].id);
+			this.ecsManager.removeEntity(this.player.cards[1].shapes[0].id);
+			this.ecsManager.removeEntity(this.player.cards[2].shapes[0].id);
 			this.player.cards = new Array<Card>(3);
 			this.player.cards = [
 				new Card(this.player, this, 0),

@@ -181,9 +181,7 @@ export default class PlayerController {
 			if (input.keys["E"]) {
 				if (!this.wasPicked) {
 					if (!this.isHoldingBox) {
-						this.showCards = false;
 						let objective_boxes = this.game.objectPlacer.getEntitiesOfType("Box Objective");
-
 						let ray = new Ray();
 						ray.setStartAndDir(
 							this.game.rendering.camera.getPosition(),
@@ -196,6 +194,7 @@ export default class PlayerController {
 						}
 						if (this.selectedBox != undefined && rayCastResult.distance! < 2.0) {
 							if (!this.selectedBox.collected) {
+								this.showCards = false;
 								this.selectedBox.pickedUp = true;
 								this.isHoldingBox = true;
 							}
