@@ -2,14 +2,15 @@ import { gl } from "../../../main";
 import ShaderProgram from "./ShaderProgram";
 
 const cubeVertexShaderSrc: string = `#version 300 es
-layout (location = 0) in vec2 inVertexPosition;
-layout (location = 1) in vec2 inTexCoords;
+layout (location = 0) in vec3 inPosition;
 layout (location = 2) in vec3 inNormal;
+layout (location = 1) in vec2 inTexCoords;
 
 // Instanced attributes starts here
 layout (location = 3) in mat4 modelMatrix;
 
 uniform mat4 viewProjMatrix;
+uniform mat4 textureMatrix;
 
 out vec3 fragPos;
 out vec3 fragNormal;
