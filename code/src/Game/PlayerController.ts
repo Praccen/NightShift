@@ -175,7 +175,7 @@ export default class PlayerController {
 		// Look at cards
 		this.showCardsCooldown -= dt;
 		if (
-			(input.keys["C"] || input.buttons.get("B")) &&
+			(input.keys["C"] || input.buttons.get("B") || input.mouseRightClicked) &&
 			!this.isHoldingBox &&
 			this.showCardsCooldown <= 0
 		) {
@@ -199,7 +199,7 @@ export default class PlayerController {
 		}
 
 		// Pickup box
-		if (input.keys["E"]) {
+		if (input.keys["E"] || input.buttons.get("C") || input.mouseClicked) {
 			if (!this.wasPicked) {
 				if (!this.isHoldingBox) {
 					let objective_boxes = this.game.objectPlacer.getEntitiesOfType("Box Objective");

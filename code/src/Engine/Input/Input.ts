@@ -34,6 +34,7 @@ export default class Input {
 	private buttonRadius: number;
 	private aButton: TextObject2D;
 	private bButton: TextObject2D;
+	private cButton: TextObject2D;
 
 	private mouseMovementSinceLast: vec2;
 
@@ -179,12 +180,22 @@ export default class Input {
 		this.bButton = new TextObject2D();
 		this.bButton.center = true;
 		this.bButton.scaleWithWindow = true;
-		this.bButton.position[0] = 0.75;
+		this.bButton.position[0] = 0.65;
 		this.bButton.position[1] = 0.55;
 		this.bButton.size = 1920 * this.buttonRadius * 2.0;
 		this.bButton.textString = "🔵";
 		this.bButton.getElement().style.opacity = "50%";
 		this.bButton.setHidden(true);
+
+		this.cButton = new TextObject2D();
+		this.cButton.center = true;
+		this.cButton.scaleWithWindow = true;
+		this.cButton.position[0] = 0.8;
+		this.cButton.position[1] = 0.5;
+		this.cButton.size = 1920 * this.buttonRadius * 2.0;
+		this.cButton.textString = "🟢";
+		this.cButton.getElement().style.opacity = "50%";
+		this.cButton.setHidden(true);
 	}
 
 	mouseMoveCallBack(event: MouseEvent) {
@@ -235,6 +246,10 @@ export default class Input {
 			paddingX + width * this.bButton.position[0],
 			paddingY + height * this.bButton.position[1]
 		); // In pixels
+		let cButtonCenter = vec2.fromValues(
+			paddingX + width * this.cButton.position[0],
+			paddingY + height * this.cButton.position[1]
+		); // In pixels
 
 		for (let touch of touches) {
 			let touchPos = vec2.fromValues(touch.clientX, touch.clientY);
@@ -256,6 +271,16 @@ export default class Input {
 					this.bButton.position[1] = (touchPos[1] - paddingY) / height;
 				} else {
 					this.buttons.set("B", true);
+				}
+				continue;
+			}
+
+			if (vec2.dist(touchPos, cButtonCenter) < this.buttonRadius * width) {
+				if (this.repositionTouchControls) {
+					this.cButton.position[0] = (touchPos[0] - paddingX) / width;
+					this.cButton.position[1] = (touchPos[1] - paddingY) / height;
+				} else {
+					this.buttons.set("C", true);
 				}
 				continue;
 			}
@@ -372,6 +397,7 @@ export default class Input {
 		this.joystickRightCenter.setHidden(!this.touchUsed);
 		this.aButton.setHidden(!this.touchUsed);
 		this.bButton.setHidden(!this.touchUsed);
+		this.cButton.setHidden(!this.touchUsed);
 		if (this.touchUsed) {
 			this.joystickLeftCenter.position[0] =
 				this.joystickLeftBorder.position[0] +
@@ -394,6 +420,7 @@ export default class Input {
 			this.joystickRightCenter.draw();
 			this.aButton.draw();
 			this.bButton.draw();
+			this.cButton.draw();
 		}
 	}
 }
