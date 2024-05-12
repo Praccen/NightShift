@@ -8,6 +8,7 @@ export enum StatesEnum {
 	DEBUGMODE,
 	LEVELSELECT,
 	INTRO,
+	INTRO2,
 }
 
 export default class State {

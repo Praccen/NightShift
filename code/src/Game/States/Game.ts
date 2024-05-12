@@ -36,6 +36,7 @@ export default class Game extends State {
 	private spider: Spider;
 	boxes: Map<number, Box>;
 	uncollectedBoxed: Map<number, Box>;
+	totalBoxes: number = 0;
 	zone: HandInZone;
 	boxesCollected: number;
 	boxesCollectedCurrent: number;
@@ -292,15 +293,13 @@ export default class Game extends State {
 			this.oWasPressed = false;
 		}
 
-		
-
 		this.player.update(dt);
 
 		if (this.spider != undefined) {
 			if (input.keys["Q"] || input.buttons.get("B")) {
 				this.spider.setTarget(this.player.positionComp.position);
 			}
-	
+
 			if (input.keys["Y"] || input.buttons.get("C")) {
 				let ray = new Ray();
 				ray.setStartAndDir(this.rendering.camera.getPosition(), this.rendering.camera.getDir());
@@ -328,6 +327,11 @@ export default class Game extends State {
 		this.ecsManager.update(dt);
 
 		if (this.boxesCollectedCurrent == 3 && this.boxes.size >= 3) {
+			this.totalBoxes += 3;
+			if (this.totalBoxes >= 3) {
+				this.totalBoxes = 0;
+				this.gotoState = StatesEnum.INTRO2;
+			}
 			this.boxesCollectedCurrent = 0;
 			this.player.cards = new Array<Card>(3);
 			this.player.cards = [
@@ -338,13 +342,9 @@ export default class Game extends State {
 			this.colorBoxes();
 		}
 
-		Howler.pos(
-			...this.rendering.camera.getPosition()
-		);
+		Howler.pos(...this.rendering.camera.getPosition());
 
-		Howler.orientation(
-			...this.rendering.camera.getDir()
-		)
+		Howler.orientation(...this.rendering.camera.getDir());
 	}
 
 	prepareDraw(dt: number, updateCameraFocus: boolean = true): void {

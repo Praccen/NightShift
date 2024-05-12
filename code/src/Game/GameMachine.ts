@@ -16,6 +16,7 @@ import { OverlayRendering } from "../Engine/Rendering/GUI/OverlayRendering";
 import LevelSelect from "./States/LevelSelect";
 import { Howler } from "howler";
 import Intro from "./States/Intro";
+import IntroDay2 from "./States/IntroDay2";
 // Globals
 export let input = new Input();
 export let options = {
@@ -116,12 +117,8 @@ export default class GameMachine extends StateMachine {
 	createGameStates() {
 		let game = Game.getInstance(this.stateAccessible);
 		this.addState(StatesEnum.MAINMENU, Menu, 1.0 / 60.0, new Menu(this.stateAccessible));
-		this.addState(
-			StatesEnum.INTRO,
-			Intro,
-			1.0 / 60.0,
-			new Intro(this.stateAccessible)
-		);
+		this.addState(StatesEnum.INTRO, Intro, 1.0 / 60.0, new Intro(this.stateAccessible));
+		this.addState(StatesEnum.INTRO2, Intro, 1.0 / 60.0, new IntroDay2(this.stateAccessible));
 		this.addState(
 			StatesEnum.LEVELSELECT,
 			LevelSelect,
