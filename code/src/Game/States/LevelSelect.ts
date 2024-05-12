@@ -3,7 +3,7 @@ import State, { StatesEnum } from "../../Engine/States/State";
 import { StateAccessible } from "../GameMachine";
 import Game from "./Game";
 
-const numLevels = 1;
+const numLevels = 2;
 
 export default class LevelSelect extends State {
 	private overlayRendering: OverlayRendering;

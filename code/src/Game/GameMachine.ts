@@ -15,7 +15,7 @@ import { WebUtils } from "../Engine/Utils/WebUtils";
 import { OverlayRendering } from "../Engine/Rendering/GUI/OverlayRendering";
 import LevelSelect from "./States/LevelSelect";
 import { Howler } from "howler";
-import Intro from "./States/Into";
+import Intro from "./States/Intro";
 // Globals
 export let input = new Input();
 export let options = {
@@ -121,6 +121,12 @@ export default class GameMachine extends StateMachine {
 			Intro,
 			1.0 / 60.0,
 			new Intro(this.stateAccessible)
+		);
+		this.addState(
+			StatesEnum.LEVELSELECT,
+			LevelSelect,
+			1.0 / 60.0,
+			new LevelSelect(this.stateAccessible)
 		);
 		this.addState(
 			StatesEnum.OPTIONS,

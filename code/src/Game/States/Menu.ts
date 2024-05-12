@@ -27,10 +27,10 @@ export default class Menu extends State {
 		resumeButton.position[0] = 0.5;
 		resumeButton.position[1] = 0.4;
 		resumeButton.center = true;
-		resumeButton.textString = "Resume";
+		resumeButton.textString = "Level Select";
 
 		resumeButton.onClick(function () {
-			self.gotoState = StatesEnum.GAME;
+			self.gotoState = StatesEnum.LEVELSELECT;
 		});
 
 		let optionsButton = this.overlayRendering.getNewButton();

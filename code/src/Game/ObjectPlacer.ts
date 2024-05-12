@@ -118,7 +118,38 @@ export default class ObjectPlacer {
 					}
 					if (t.startsWith("Placement:")) {
 						currentPlacementType = t.substring("Placement:".length);
-					} else {
+					} 
+					else if (t.startsWith("DirectionalLight:Colour")) {
+						let colourVals = t.split("=")[1].trim().split(",");
+						if (colourVals.length >= 3) {
+							vec3.set(this.game.scene.getDirectionalLight().colour, parseFloat(colourVals[0].trim()), parseFloat(colourVals[1].trim()), parseFloat(colourVals[2].trim()));
+						}
+					}
+					else if (t.startsWith("DirectionalLight:AmbientMultiplier")) {
+						this.game.scene.getDirectionalLight().ambientMultiplier = parseFloat(t.split("=")[1].trim());
+					}
+					else if (t.startsWith("Skybox")) {
+						if (t.split("=")[1].trim() == "None") {
+							this.game.rendering.setSkybox(null);
+						}
+						else {
+							this.game.rendering.setSkybox(t.split("=")[1].trim());
+						}
+					}
+					else if (t.startsWith("ClearColour")) {
+						let colourVals = t.split("=")[1].trim().split(",");
+						if (colourVals.length >= 3) {
+							this.game.rendering.clearColour.r = parseFloat(colourVals[0].trim());
+							this.game.rendering.clearColour.g = parseFloat(colourVals[1].trim());
+							this.game.rendering.clearColour.b = parseFloat(colourVals[2].trim());
+						}
+					}
+					else if (t.startsWith("Spider")) {
+						if (t.split("=")[1].trim() == "Yes") {
+							this.game.initSpider();
+						}
+					}
+					else {
 						let [p, s, r, o] = t.split("|");
 
 						this.placeObject(

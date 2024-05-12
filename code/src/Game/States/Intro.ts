@@ -21,14 +21,19 @@ export default class Intro extends State {
 		introDiv.position[1] = 0.4;
         introDiv.center = true;
 		introDiv.getElement().style.borderRadius = "10px";
-        introDiv.getElement().style.height = "60%";
 		introDiv.getElement().style.overflowY = "auto";
         introDiv.getElement().style.overflowWrap = "break-word";
 
     
         let introText = this.overlayRendering.getNew2DText(introDiv);
-        introText.getElement().style.width = "90%";
-        introText.textString = "Hello! Welcome to your new job as a personal shopper. Well, as in you are a person who fetches the items that get ordered.";
+        introText.textString = 
+`Hello! Welcome to your new job as a personal shopper.
+You will get orders of three boxes to pick up at a time.
+		
+Look at the orders by pressing C.
+
+Go get matching boxes and put them in the delivery zone.
+		`;
 
         let playButton = this.overlayRendering.getNewButton();
         playButton.position[0] = 0.5;

@@ -104,7 +104,7 @@ export default class Game extends State {
 		// this.createPointLight(vec3.fromValues(10.0, 0.0, 15.0), true, vec3.fromValues(0.8, 2.0, 0.0));
 
 		this.player = new PlayerController(this);
-		this.spider = new Spider(this);
+		this.spider = null;
 		this.boxesCollected = 0;
 		this.boxesCollectedCurrent = 0;
 	}
@@ -160,6 +160,10 @@ export default class Game extends State {
 		this.zone = new HandInZone(this, COLOR.GREEN, zoneObj[0]);
 	}
 
+	initSpider() {
+		this.spider = new Spider(this);
+	}
+
 	createPointLight(position: vec3, castShadow: boolean, colour?: vec3) {
 		let pointLightEntity = this.ecsManager.createEntity();
 		let pointLightComp = new PointLightComponent(this.scene.getNewPointLight());
@@ -207,11 +211,11 @@ export default class Game extends State {
 		this.rendering.clearColour.b = colour[2];
 
 		let dirLight = this.scene.getDirectionalLight();
-		dirLight.ambientMultiplier = 0.06;
+		dirLight.ambientMultiplier = 0.5;
 		vec3.set(dirLight.direction, -0.2, -0.9, 0.4);
 		vec3.copy(dirLight.colour, colour);
 
-		this.rendering.setSkybox("Assets/textures/skyboxes/NightSky");
+		this.spider = null;
 
 		await this.objectPlacer.load(this.scene, this.ecsManager, this.stateAccessible.level);
 		// Run first update right away to let placed objects init
@@ -221,7 +225,9 @@ export default class Game extends State {
 		this.overlayRendering.setCamera(this.rendering.camera);
 
 		this.player.respawn();
-		this.spider.respawn();
+		if (this.spider != undefined) {
+			this.spider.respawn();
+		}
 		this.initBoxes();
 		this.initZone();
 	}
@@ -271,7 +277,9 @@ export default class Game extends State {
 
 		if (input.keys["P"]) {
 			this.player.respawn();
-			this.spider.respawn();
+			if (this.spider != undefined) {
+				this.spider.respawn();
+			}
 		}
 
 		if (input.keys["O"]) {
@@ -284,29 +292,35 @@ export default class Game extends State {
 			this.oWasPressed = false;
 		}
 
-		if (input.keys["Q"] || input.buttons.get("B")) {
-			this.spider.setTarget(this.player.positionComp.position);
-		}
-
-		if (input.keys["Y"] || input.buttons.get("C")) {
-			let ray = new Ray();
-			ray.setStartAndDir(this.rendering.camera.getPosition(), this.rendering.camera.getDir());
-			let collisionObjects = this.objectPlacer.getEntitiesOfType("Box || Box Gray || Shelf");
-			let rayInfo = ECSUtils.RayCastAgainstEntityList(ray, collisionObjects);
-			if (rayInfo.eId > -1) {
-				this.spider.setTarget(
-					vec3.scaleAndAdd(
-						vec3.create(),
-						this.rendering.camera.getPosition(),
-						ray.getDir(),
-						rayInfo.distance
-					)
-				);
-			}
-		}
+		
 
 		this.player.update(dt);
-		this.spider.update(dt);
+
+		if (this.spider != undefined) {
+			if (input.keys["Q"] || input.buttons.get("B")) {
+				this.spider.setTarget(this.player.positionComp.position);
+			}
+	
+			if (input.keys["Y"] || input.buttons.get("C")) {
+				let ray = new Ray();
+				ray.setStartAndDir(this.rendering.camera.getPosition(), this.rendering.camera.getDir());
+				let collisionObjects = this.objectPlacer.getEntitiesOfType("Box || Box Gray || Shelf");
+				let rayInfo = ECSUtils.RayCastAgainstEntityList(ray, collisionObjects);
+				if (rayInfo.eId > -1) {
+					this.spider.setTarget(
+						vec3.scaleAndAdd(
+							vec3.create(),
+							this.rendering.camera.getPosition(),
+							ray.getDir(),
+							rayInfo.distance
+						)
+					);
+				}
+			}
+
+			this.spider.update(dt);
+		}
+
 		this.boxes.forEach((box) => box.update(dt));
 		this.uncollectedBoxed.forEach((box) => box.update(dt));
 		this.zone.update(dt);

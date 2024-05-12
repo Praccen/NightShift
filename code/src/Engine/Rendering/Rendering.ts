@@ -183,10 +183,15 @@ export default class Rendering {
 		this.bloomRenderPass.setResolution(x, y);
 	}
 
-	setSkybox(path: string) {
-		this.skyboxRenderPass.setSkybox(this.textureStore.getCubeMap(path));
-		// this.skyboxRenderPass.setSkybox(this.scene.pointLights[0].pointShadowDepthMap);
-		this.useSkybox = true;
+	setSkybox(path?: string) {
+		if (path != undefined) {
+			this.skyboxRenderPass.setSkybox(this.textureStore.getCubeMap(path));
+			// this.skyboxRenderPass.setSkybox(this.scene.pointLights[0].pointShadowDepthMap);
+			this.useSkybox = true;
+		}
+		else {
+			this.useSkybox = false;
+		}
 	}
 
 	private takeScreenshot(screenshotName: string) {
