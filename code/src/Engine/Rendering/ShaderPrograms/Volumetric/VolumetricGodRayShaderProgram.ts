@@ -16,6 +16,7 @@ out vec3 fragPos;
 flat out float numberPlanes;
 flat out float fogMD;
 flat out int instanceID;
+flat out vec3 camPos;
 
 void main() {
 	float recalculatedMaxDepth = fogMaxDistance * cos(fov/2.0); // Get the length along hypothenuse when closest is fogMaxDistance and angle is fov/2
@@ -29,6 +30,7 @@ void main() {
 	numberPlanes = numPlanes;
 	fogMD = fogMaxDistance;
 	instanceID = gl_InstanceID;
+	camPos = cameraPos;
 	
     fragPos = worldPos;
     gl_Position = viewProjMatrix * vec4(worldPos, 1.0);
@@ -106,6 +108,7 @@ in vec3 fragPos;
 flat in float numberPlanes;
 flat in float fogMD;
 flat in int instanceID;
+flat in vec3 camPos;
 
 uniform sampler2D depthMap;
 uniform samplerCube pointDepthMaps[NR_POINT_SHADOWS];
@@ -230,11 +233,7 @@ float CalcShadow(vec4 lightSpaceFragPos) {
 vec4 CalcDirectionalLight(DirectionalLight light, vec4 lightSpaceFragPos) {
 	float shadow = CalcShadow(lightSpaceFragPos);
 	float strength = 0.015 * (1.0 - shadow);
-	// if (shadow > 0.0 && shadow < 1.0) {
-	// 	strength = 0.3; // PCF gave partly in shadow, make god rays
-	// }
-	vec4 lighting = vec4(light.colour, strength);
-	return lighting;
+	return vec4(light.colour, strength);
 }
 
 void main()

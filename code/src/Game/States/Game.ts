@@ -200,15 +200,15 @@ export default class Game extends State {
 			rolloffFactor: 1,
 		});
 
-		let colour = vec3.fromValues(0.1, 0.1, 0.15);
+		let colour = vec3.fromValues(0.15, 0.15, 0.15);
 		// let colour = vec3.fromValues(0.0, 0.0, 0.0);
 		this.rendering.clearColour.r = colour[0];
 		this.rendering.clearColour.g = colour[1];
 		this.rendering.clearColour.b = colour[2];
 
 		let dirLight = this.scene.getDirectionalLight();
-		dirLight.ambientMultiplier = 0.1;
-		vec3.set(dirLight.direction, 0.2, -0.9, -0.4);
+		dirLight.ambientMultiplier = 0.06;
+		vec3.set(dirLight.direction, -0.2, -0.9, 0.4);
 		vec3.copy(dirLight.colour, colour);
 
 		this.rendering.setSkybox("Assets/textures/skyboxes/NightSky");
