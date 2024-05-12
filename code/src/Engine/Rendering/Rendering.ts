@@ -235,7 +235,18 @@ export default class Rendering {
 
 		// Geometry pass over, start rendering to the particle framebuffer
 		// this.particleFramebuffer.bind(gl.DRAW_FRAMEBUFFER);
-		this.finishedFramebuffer.bind(gl.DRAW_FRAMEBUFFER);
+		if (this.useBloom) {
+			this.volumetricGodRayPass.outputBuffer =
+				this.bloomExtractionInputFramebuffer;
+		} else if (this.useCrt) {
+			this.volumetricGodRayPass.outputBuffer = this.crtFramebuffer;
+		} else {
+			this.volumetricGodRayPass.outputBuffer = this.finishedFramebuffer;
+		}
+
+		this.volumetricGodRayPass.bindFramebuffers();
+
+		// this.finishedFramebuffer.bind(gl.DRAW_FRAMEBUFFER);
 
 		// Clear the output with the actual clear colour we have set
 		gl.clearColor(this.clearColour.r, this.clearColour.g, this.clearColour.b, this.clearColour.a);
@@ -271,14 +282,7 @@ export default class Rendering {
 		// -------------------
 
 		// Setup appropriate post processing framebuffer (or to finished directly)
-		// if (this.useBloom) {
-		// 	this.volumetricGodRayPass.outputBuffer =
-		// 		this.bloomExtractionInputFramebuffer;
-		// } else if (this.useCrt) {
-		// 	this.volumetricGodRayPass.outputBuffer = this.crtFramebuffer;
-		// } else {
-		// 	this.volumetricGodRayPass.outputBuffer = this.finishedFramebuffer;
-		// }
+		
 
 		// ---- Volumetric God Rays ----
 		this.volumetricGodRayPass.draw(this.scene, this.camera);

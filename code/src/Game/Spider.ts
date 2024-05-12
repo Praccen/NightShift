@@ -43,7 +43,7 @@ export default class Spider {
 	private playingSound: boolean;
 
 	constructor(game: Game) {
-		this.speed = 6.0;
+		this.speed = 3.0;
 		this.game = game;
 		this.targetPos = vec3.fromValues(0.0, 0.0, -25.0);
 		this.playedSound = 0;

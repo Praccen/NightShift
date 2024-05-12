@@ -19,7 +19,7 @@ export default class VolumetricGodRayPass {
 		this.directionalDepthMap = directionalDepthMap;
 	}
 
-	private bindFramebuffers() {
+	bindFramebuffers() {
 		// Render result to screen or to crt framebuffer if doing crt effect after this.
 		if (this.outputBuffer == undefined) {
 			gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, null); // Render directly to screen
@@ -29,7 +29,7 @@ export default class VolumetricGodRayPass {
 	}
 
 	draw(scene: Scene, camera: Camera) {
-		// this.bindFramebuffers();
+		this.bindFramebuffers();
 		volumetricGodRayShaderProgram.use();
 		gl.enable(gl.BLEND);
 		gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
