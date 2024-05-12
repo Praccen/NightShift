@@ -132,19 +132,19 @@ export default class Game extends State {
 		let randomIds = Utils.generateUniqueRandomNumbers(3, 0, size);
 		let boxId1 = randomIds[0];
 		let box1 = this.boxes.get(this.keyArray[boxId1]);
-		box1.color = this.player.cards[0].boxes[0].color;
+		box1.color = this.player.cards[0].box.color;
 		box1.setColor();
 		this.uncollectedBoxed.set(box1.entity.id, box1);
 
 		let boxId2 = randomIds[1];
 		let box2 = this.boxes.get(this.keyArray[boxId2]);
-		box2.color = this.player.cards[1].boxes[0].color;
+		box2.color = this.player.cards[1].box.color;
 		box2.setColor();
 		this.uncollectedBoxed.set(box2.entity.id, box2);
 
 		let boxId3 = randomIds[2];
 		let box3 = this.boxes.get(this.keyArray[boxId3]);
-		box3.color = this.player.cards[2].boxes[0].color;
+		box3.color = this.player.cards[2].box.color;
 		box3.setColor();
 		this.uncollectedBoxed.set(box3.entity.id, box3);
 
@@ -365,9 +365,9 @@ export default class Game extends State {
 				this.totalBoxes = 0;
 			}
 			this.boxesCollectedCurrent = 0;
-			this.ecsManager.removeEntity(this.player.cards[0].shapes[0].id);
-			this.ecsManager.removeEntity(this.player.cards[1].shapes[0].id);
-			this.ecsManager.removeEntity(this.player.cards[2].shapes[0].id);
+			this.ecsManager.removeEntity(this.player.cards[0].shape.id);
+			this.ecsManager.removeEntity(this.player.cards[1].shape.id);
+			this.ecsManager.removeEntity(this.player.cards[2].shape.id);
 			this.player.cards = new Array<Card>(3);
 			this.player.cards = [
 				new Card(this.player, this, 0),

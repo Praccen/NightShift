@@ -23,8 +23,8 @@ class Box {
 }
 
 export default class Card {
-	boxes: Array<Box>;
-	shapes: Array<Entity>;
+	box: Box;
+	shape: Entity;
 	position: vec3;
 	player: PlayerController;
 	game: Game;
@@ -32,12 +32,8 @@ export default class Card {
 
 	constructor(player: PlayerController, game: Game, cardNr: number) {
 		this.game = game;
-		this.boxes = [new Box(), new Box(), new Box()];
-		this.shapes = [
-			this.createNewCardShape(this.boxes[0], cardNr),
-			this.createNewCardShape(this.boxes[1], 1),
-			this.createNewCardShape(this.boxes[2], 2),
-		];
+		this.box = new Box();
+		this.shape = this.createNewCardShape(this.box, cardNr);
 		this.player = player;
 		this.animationTime = 0.0;
 	}
@@ -60,7 +56,7 @@ export default class Card {
 			this.animationTime
 		);
 
-		let graphComp = this.shapes[0].getComponent(ComponentTypeEnum.GRAPHICS) as GraphicsComponent;
+		let graphComp = this.shape.getComponent(ComponentTypeEnum.GRAPHICS) as GraphicsComponent;
 		if (graphComp != undefined) {
 			if (this.animationTime < 0.9) {
 				graphComp.bundle.enabled = false;
@@ -75,7 +71,7 @@ export default class Card {
 		let right = vec3.clone(this.game.rendering.camera.getRight());
 		forward[1] = 0.0;
 		vec3.normalize(forward, forward);
-		let posComp = this.shapes[0].getComponent(ComponentTypeEnum.POSITION) as PositionComponent;
+		let posComp = this.shape.getComponent(ComponentTypeEnum.POSITION) as PositionComponent;
 		if (posComp != undefined) {
 			let offsetY: number = 0.0;
 			let offset: number = 0.0;

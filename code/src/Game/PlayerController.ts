@@ -30,6 +30,7 @@ export default class PlayerController {
 	private isHoldingBox: boolean;
 	private selectedBox: Box;
 	showCards: boolean;
+	showCardsCooldown: number;
 	private cardsToggled: boolean;
 	healthPoints: number;
 
@@ -40,6 +41,7 @@ export default class PlayerController {
 		this.selectedCard = 0;
 		this.wasRotated = true;
 		this.showCards = false;
+		this.showCardsCooldown = 0;
 		this.cardsToggled = true;
 		this.wasPicked = true;
 		this.isHoldingBox = false;
@@ -158,9 +160,15 @@ export default class PlayerController {
 			}
 
 			// Look at cards
-			if ((input.keys["C"] || input.buttons.get("B")) && !this.isHoldingBox) {
+			this.showCardsCooldown -= dt;
+			if (
+				(input.keys["C"] || input.buttons.get("B")) &&
+				!this.isHoldingBox &&
+				this.showCardsCooldown <= 0
+			) {
 				if (!this.cardsToggled) {
 					this.showCards = this.showCards ? false : true;
+					this.showCardsCooldown = 0.5;
 				}
 				this.cardsToggled = true;
 			} else {
@@ -218,7 +226,6 @@ export default class PlayerController {
 		// Jumping
 		if (input.keys[" "] || input.buttons.get("A")) {
 			this.movComp.jumpRequested = true;
-			this.movComp.jumpAllowed = true;
 		} else {
 			this.movComp.jumpRequested = false;
 		}
