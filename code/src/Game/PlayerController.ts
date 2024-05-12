@@ -24,14 +24,14 @@ export default class PlayerController {
 	private mouseMovement: vec2;
 	jawPitch: vec2;
 	cards: Card[];
-	private selectedCard: number;
-	private wasRotated: boolean;
-	private wasPicked: boolean;
-	private isHoldingBox: boolean;
-	private selectedBox: Box;
+	selectedCard: number;
+	wasRotated: boolean;
+	wasPicked: boolean;
+	isHoldingBox: boolean;
+	selectedBox: Box;
 	showCards: boolean;
 	showCardsCooldown: number;
-	private cardsToggled: boolean;
+	cardsToggled: boolean;
 	healthPoints: number;
 
 	constructor(game: Game) {

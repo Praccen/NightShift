@@ -361,6 +361,13 @@ export default class Game extends State {
 					this.gotoState = StatesEnum.INTRO2;
 				}
 			}
+			this.player.selectedCard = 0;
+			this.player.wasRotated = true;
+			this.player.showCards = false;
+			this.player.showCardsCooldown = 0;
+			this.player.cardsToggled = true;
+			this.player.wasPicked = true;
+			this.player.isHoldingBox = false;
 			this.boxesCollectedCurrent = 0;
 			this.ecsManager.removeEntity(this.player.cards[0].shape.id);
 			this.ecsManager.removeEntity(this.player.cards[1].shape.id);
