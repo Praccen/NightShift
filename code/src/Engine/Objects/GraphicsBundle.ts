@@ -15,11 +15,14 @@ export default class GraphicsBundle {
 
 	graphicsObject: GraphicsObject;
 	enabled: boolean;
+	indexed: boolean = false;
+	indexedIdx = 0;
 
 	constructor(
 		diffuse: Texture,
 		specular: Texture,
 		graphicsObject: GraphicsObject,
+		indexed: boolean = false,
 		emissionMap?: Texture
 	) {
 		this.diffuse = diffuse;
@@ -35,6 +38,7 @@ export default class GraphicsBundle {
 
 		this.modelMatrix = mat4.create();
 		this.textureMatrix = mat4.create();
+		this.indexed = indexed;
 
 		this.graphicsObject = graphicsObject;
 		this.enabled = true;
@@ -54,10 +58,12 @@ export default class GraphicsBundle {
 			if (emissionColorU[1]) {
 				gl.uniform3fv(emissionColorU[0], this.emissionColor);
 			}
-			let modelReturn: [WebGLUniformLocation, boolean] =
-				this.graphicsObject.shaderProgram.getUniformLocation("modelMatrix");
-			if (modelReturn[1]) {
-				gl.uniformMatrix4fv(modelReturn[0], false, this.modelMatrix);
+			if (!this.indexed) {
+				let modelReturn: [WebGLUniformLocation, boolean] =
+					this.graphicsObject.shaderProgram.getUniformLocation("modelMatrix");
+				if (modelReturn[1]) {
+					gl.uniformMatrix4fv(modelReturn[0], false, this.modelMatrix);
+				}
 			}
 			let textureReturn: [WebGLUniformLocation, boolean] =
 				this.graphicsObject.shaderProgram.getUniformLocation("textureMatrix");
@@ -65,7 +71,11 @@ export default class GraphicsBundle {
 				gl.uniformMatrix4fv(textureReturn[0], false, this.textureMatrix);
 			}
 
-			this.graphicsObject.draw();
+			if (!this.indexed) {
+				this.graphicsObject.draw();
+			} else {
+				this.graphicsObject.drawInstanced();
+			}
 		}
 	}
 }

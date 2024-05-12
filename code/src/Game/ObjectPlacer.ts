@@ -14,6 +14,7 @@ import { WebUtils } from "../Engine/Utils/WebUtils";
 import Game from "./States/Game";
 import { ECSUtils } from "../Engine/Utils/ESCUtils";
 import { quat, vec3 } from "gl-matrix";
+import { instancedCubeShaderProgram } from "../Engine/Rendering/ShaderPrograms/InstancedCubeShaderProgram";
 
 class Placement {
 	modelPath: string;
@@ -23,6 +24,7 @@ class Placement {
 	sizeMultiplier: number;
 	addCollision: boolean;
 	saveToTransforms: boolean;
+	indexed: boolean;
 
 	constructor(
 		modelPath: string,
@@ -30,7 +32,8 @@ class Placement {
 		specularTexturePath: string,
 		emissionTexturePath: string,
 		addCollision: boolean = true,
-		saveToTransform: boolean = true
+		saveToTransform: boolean = true,
+		indexed: boolean = false
 	) {
 		this.modelPath = modelPath;
 		this.diffuseTexturePath = diffuseTexturePath;
@@ -38,6 +41,7 @@ class Placement {
 		this.emissionTexturePath = emissionTexturePath;
 		this.addCollision = addCollision;
 		this.saveToTransforms = saveToTransform;
+		this.indexed = indexed;
 	}
 }
 
@@ -204,8 +208,12 @@ export default class ObjectPlacer {
 		let mesh = this.scene.getNewMesh(
 			placement.modelPath,
 			placement.diffuseTexturePath,
-			placement.specularTexturePath
+			placement.specularTexturePath,
+			placement.indexed
 		);
+		if (placement.indexed) {
+			mesh.graphicsObject.shaderProgram = instancedCubeShaderProgram;
+		}
 
 		let graComp = new GraphicsComponent(mesh);
 		this.ecsManager.addComponent(entity, graComp);

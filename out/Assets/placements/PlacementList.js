@@ -61,7 +61,9 @@ this.placements.set(
 		"CSS:rgb(255,255,255)",
 		"CSS:rgb(0,0,0)",
 		null, //"CSS:rgb(25,25,25)",
-		false
+		false,
+		true,
+		true
 	)
 );
 

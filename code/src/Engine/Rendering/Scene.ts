@@ -13,6 +13,7 @@ import { lightingPass } from "./ShaderPrograms/DeferredRendering/LightingPass";
 import { grassShaderProgram } from "./ShaderPrograms/GrassShaderProgram";
 import { particleShaderProgram } from "./ShaderPrograms/ParticleShaderProgram";
 import ShaderProgram from "./ShaderPrograms/ShaderProgram";
+import InstancedMesh from "../Objects/GraphicsObjects/InstancedMesh";
 
 export default class Scene {
 	// ---- Graphics objects ----
@@ -32,6 +33,8 @@ export default class Scene {
 	// ---- Skybox ----
 	skybox: Skybox;
 	// ----------------
+
+	instancedIdx: number = -1;
 
 	private textureStore: TextureStore;
 	private meshStore: MeshStore;
@@ -62,6 +65,7 @@ export default class Scene {
 					this.textureStore.getTexture(diffusePath),
 					this.textureStore.getTexture(specularPath),
 					new PhongQuad(geometryPass),
+					false,
 					this.textureStore.getTexture(emissionMap)
 				)
 			);
@@ -78,16 +82,37 @@ export default class Scene {
 		}
 	}
 
-	getNewMesh(meshPath: string, diffusePath: string, specularPath: string): GraphicsBundle {
-		const length = this.graphicBundles.push(
-			new GraphicsBundle(
-				this.textureStore.getTexture(diffusePath),
-				this.textureStore.getTexture(specularPath),
-				this.meshStore.getMesh(meshPath)
-			)
-		);
-
-		return this.graphicBundles[length - 1];
+	getNewMesh(
+		meshPath: string,
+		diffusePath: string,
+		specularPath: string,
+		indexed: boolean = false
+	): GraphicsBundle {
+		if (!indexed) {
+			const length = this.graphicBundles.push(
+				new GraphicsBundle(
+					this.textureStore.getTexture(diffusePath),
+					this.textureStore.getTexture(specularPath),
+					this.meshStore.getMesh(meshPath)
+				)
+			);
+			return this.graphicBundles[length - 1];
+		} else {
+			if (this.instancedIdx != -1) {
+				return this.graphicBundles[this.instancedIdx];
+			} else {
+				const length = this.graphicBundles.push(
+					new GraphicsBundle(
+						this.textureStore.getTexture(diffusePath),
+						this.textureStore.getTexture(specularPath),
+						this.meshStore.getMesh(meshPath),
+						indexed
+					)
+				);
+				this.instancedIdx = length - 1;
+				return this.graphicBundles[length - 1];
+			}
+		}
 	}
 
 	getNewHeightMap(

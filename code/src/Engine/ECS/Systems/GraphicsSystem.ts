@@ -6,6 +6,7 @@ import PointLightComponent from "../Components/PointLightComponent";
 import PositionParentComponent from "../Components/PositionParentComponent";
 import { ECSUtils } from "../../Utils/ESCUtils";
 import { mat4, vec3 } from "gl-matrix";
+import Mesh from "../../Objects/GraphicsObjects/Mesh";
 
 export default class GraphicsSystem extends System {
 	constructor() {
@@ -22,7 +23,11 @@ export default class GraphicsSystem extends System {
 			let posParentComp = <PositionParentComponent>e.getComponent(ComponentTypeEnum.POSITIONPARENT);
 
 			if (graphComp && posComp) {
-				graphComp.bundle.modelMatrix = posComp.matrix;
+				if (!graphComp.bundle.indexed) {
+					graphComp.bundle.modelMatrix = posComp.matrix;
+				} else {
+					(<Mesh>graphComp.bundle.graphicsObject).setModelData(posComp.matrix);
+				}
 			}
 
 			let pointLightComp = <PointLightComponent>e.getComponent(ComponentTypeEnum.POINTLIGHT);

@@ -2,14 +2,23 @@ import GraphicsObject from "./GraphicsObject";
 import ShaderProgram from "../../Rendering/ShaderPrograms/ShaderProgram";
 import Triangle from "../../Physics/Shapes/Triangle";
 import { gl } from "../../../main";
-import { vec3 } from "gl-matrix";
+import { mat4, vec3 } from "gl-matrix";
 
 export default class Mesh extends GraphicsObject {
 	// Protected
 	protected vertices: Float32Array;
+	private instanceVBO: WebGLBuffer;
+	currentIdx: number = 0;
 
 	constructor(shaderProgram: ShaderProgram, vertices: Float32Array) {
 		super(shaderProgram);
+
+		this.bindVAO();
+		this.instanceVBO = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.instanceVBO);
+		gl.bufferData(gl.ARRAY_BUFFER, 342 * 16 * 4, gl.STATIC_DRAW);
+		shaderProgram.setupInstancedVertexAttributePointers();
+		this.unbindVAO();
 
 		this.vertices = vertices;
 		this.setVertexData(this.vertices);
@@ -37,8 +46,30 @@ export default class Mesh extends GraphicsObject {
 		return returnArr;
 	}
 
+	setModelData(model: mat4): boolean {
+		let modelArray = new Float32Array(model);
+		this.bufferSubDataUpdate(this.currentIdx++ * 16, modelArray);
+		return true;
+	}
+	bufferSubDataUpdate(start: number, data: Float32Array): boolean {
+		if (start < 0 || start + data.length > 342 * 16) {
+			return false;
+		}
+		this.bindVAO();
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.instanceVBO);
+		gl.bufferSubData(gl.ARRAY_BUFFER, start * 4, data);
+		this.unbindVAO();
+		return true;
+	}
+
 	draw() {
 		this.bindVAO();
 		gl.drawArrays(gl.TRIANGLES, 0, this.vertices.length / 8);
+	}
+	drawInstanced() {
+		this.bindVAO();
+		gl.drawArraysInstanced(gl.TRIANGLES, 0, 3, 342);
+		this.unbindVAO();
+		this.currentIdx = 0;
 	}
 }

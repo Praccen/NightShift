@@ -89,10 +89,13 @@ export default class Spider {
 		collisionComp.mass = 100.0;
 		collisionComp.isImmovable = true;
 
-        let pointLightComp = this.game.ecsManager.addComponent(this.bodyEntity, new PointLightComponent(this.game.scene.getNewPointLight())) as PointLightComponent;
-        pointLightComp.pointLight.castShadow = true;
-        vec3.set(pointLightComp.pointLight.colour, 0.8, 0.0, 0.0);
-        vec3.set(pointLightComp.posOffset, 0.0, 2.5, 0.0);
+		let pointLightComp = this.game.ecsManager.addComponent(
+			this.bodyEntity,
+			new PointLightComponent(this.game.scene.getNewPointLight())
+		) as PointLightComponent;
+		pointLightComp.pointLight.castShadow = true;
+		vec3.set(pointLightComp.pointLight.colour, 0.8, 0.0, 0.0);
+		vec3.set(pointLightComp.posOffset, 0.0, 2.5, 0.0);
 
 		// let positionDisplayEntity = game.ecsManager.createEntity();
 		// this.game.ecsManager.addComponent(positionDisplayEntity, this.parentPosComp);

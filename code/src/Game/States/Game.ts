@@ -183,21 +183,11 @@ export default class Game extends State {
 			src: ["Assets/audio/single_step.mp3"],
 			volume: 0.5,
 			rate: 0.3,
-			spatial: true,
-			pos: [0, 0, 0], // Initial position in 3D space
-			panningModel: "HRTF", // HRTF for realistic 3D audio
-			refDistance: 1,
-			rolloffFactor: 1,
 		});
 		this.playStepping = new Howl({
 			src: ["Assets/audio/stepping.mp3"],
 			volume: 0.1,
 			rate: 0.1,
-			spatial: true,
-			pos: [0, 0, 0], // Initial position in 3D space
-			panningModel: "HRTF", // HRTF for realistic 3D audio
-			refDistance: 1,
-			rolloffFactor: 1,
 		});
 
 		let colour = vec3.fromValues(0.1, 0.1, 0.15);

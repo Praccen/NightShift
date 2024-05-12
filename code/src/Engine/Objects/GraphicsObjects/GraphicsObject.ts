@@ -69,4 +69,7 @@ export default class GraphicsObject {
 	draw() {
 		// Can this be virtual?
 	}
+	drawInstanced() {
+		// Can this be virtual?
+	}
 }
