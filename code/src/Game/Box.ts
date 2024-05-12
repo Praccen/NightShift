@@ -44,9 +44,9 @@ export default class Box {
 
 	update(dt: number) {
 		if (this.pickedUp) {
-			if (this.posComp == undefined) {
-				// TODO temp disable
-				this.collComp = this.entity.getComponent(ComponentTypeEnum.COLLISION) as CollisionComponent;
+			if (this.collComp == undefined) {
+				this.collComp = new CollisionComponent();
+				this.game.ecsManager.addComponent(this.entity, this.collComp);
 				this.collComp.mass = 5.0;
 				this.collComp.isStatic = false;
 				this.moveComp.constantAcceleration = vec3.fromValues(0.0, -9.8, 0.0);
