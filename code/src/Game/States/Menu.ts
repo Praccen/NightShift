@@ -20,7 +20,7 @@ export default class Menu extends State {
 
 		let self = this;
 		startButton.onClick(function () {
-			self.gotoState = StatesEnum.LEVELSELECT;
+			self.gotoState = StatesEnum.INTRO;
 		});
 
 		let resumeButton = this.overlayRendering.getNewButton();

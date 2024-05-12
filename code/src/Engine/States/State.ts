@@ -7,6 +7,7 @@ export enum StatesEnum {
 	GAME,
 	DEBUGMODE,
 	LEVELSELECT,
+	INTRO,
 }
 
 export default class State {
