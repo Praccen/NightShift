@@ -35,7 +35,8 @@ export default class End extends State {
 		backButton.textString = "Back";
 
 		backButton.onClick(function () {
-			this.gotoState = StatesEnum.MAINMENU;
+			window.location.reload();
+			// this.gotoState = StatesEnum.MAINMENU;
 		});
 	}
 
