@@ -48,6 +48,8 @@ export default class Game extends State {
 	playStep: Howl;
 	playStepping: Howl;
 
+	caughtBySpider: boolean = false;
+
 	public static getInstance(sa: StateAccessible): Game {
 		if (!Game.instance) {
 			Game.instance = new Game(sa);
@@ -328,9 +330,13 @@ export default class Game extends State {
 
 		if (this.boxesCollectedCurrent == 3 && this.boxes.size >= 3) {
 			this.totalBoxes += 3;
-			if (this.totalBoxes >= 3) {
+			if (this.totalBoxes >= 9) {
 				this.totalBoxes = 0;
-				this.gotoState = StatesEnum.INTRO2;
+				if (this.stateAccessible.level.includes("Level1")) {
+					this.gotoState = StatesEnum.INTRO2;
+				} else if (this.stateAccessible.level.includes("Level2")) {
+					this.gotoState = StatesEnum.END;
+				}
 			}
 			this.boxesCollectedCurrent = 0;
 			this.player.cards = new Array<Card>(3);

@@ -9,6 +9,7 @@ export enum StatesEnum {
 	LEVELSELECT,
 	INTRO,
 	INTRO2,
+	END,
 }
 
 export default class State {
