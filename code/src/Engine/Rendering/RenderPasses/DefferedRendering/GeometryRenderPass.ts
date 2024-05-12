@@ -5,6 +5,7 @@ import { geometryPass } from "../../ShaderPrograms/DeferredRendering/GeometryPas
 import { grassShaderProgram } from "../../ShaderPrograms/GrassShaderProgram";
 import Texture from "../../Textures/Texture";
 import Scene from "../../Scene";
+import { instancedCubeShaderProgram } from "../../ShaderPrograms/InstancedCubeShaderProgram";
 
 export default class GeometryRenderPass {
 	outputFramebuffer: Framebuffer;
@@ -50,6 +51,10 @@ export default class GeometryRenderPass {
 			(Date.now() - applicationStartTime) * 0.001
 		);
 
-		scene.renderGrass(grassShaderProgram, true);
+		scene.renderGrass(instancedCubeShaderProgram, true);
+
+		instancedCubeShaderProgram.use();
+		camera.bindViewProjMatrix(instancedCubeShaderProgram.getUniformLocation("viewProjMatrix")[0]);
+		scene.renderInstanced(instancedCubeShaderProgram, true);
 	}
 }

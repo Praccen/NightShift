@@ -19,6 +19,7 @@ export default class Scene {
 	// ---- Graphics objects ----
 	private graphicBundles: Array<GraphicsBundle>;
 	private grassSpawners: Array<GraphicsBundle>;
+	private instancedBundle: GraphicsBundle = undefined;
 	// --------------------------
 
 	// ---- Lights ----
@@ -33,8 +34,6 @@ export default class Scene {
 	// ---- Skybox ----
 	skybox: Skybox;
 	// ----------------
-
-	instancedIdx: number = -1;
 
 	private textureStore: TextureStore;
 	private meshStore: MeshStore;
@@ -98,19 +97,16 @@ export default class Scene {
 			);
 			return this.graphicBundles[length - 1];
 		} else {
-			if (this.instancedIdx != -1) {
-				return this.graphicBundles[this.instancedIdx];
+			if (this.instancedBundle != undefined) {
+				return this.instancedBundle;
 			} else {
-				const length = this.graphicBundles.push(
-					new GraphicsBundle(
-						this.textureStore.getTexture(diffusePath),
-						this.textureStore.getTexture(specularPath),
-						this.meshStore.getMesh(meshPath),
-						indexed
-					)
+				this.instancedBundle = new GraphicsBundle(
+					this.textureStore.getTexture(diffusePath),
+					this.textureStore.getTexture(specularPath),
+					this.meshStore.getMesh(meshPath),
+					indexed
 				);
-				this.instancedIdx = length - 1;
-				return this.graphicBundles[length - 1];
+				return this.instancedBundle;
 			}
 		}
 	}
@@ -193,6 +189,12 @@ export default class Scene {
 		for (let bundle of this.grassSpawners) {
 			bundle.graphicsObject.shaderProgram = shaderProgram;
 			bundle.draw(bindSpecialTextures);
+		}
+	}
+	renderInstanced(shaderProgram: ShaderProgram, bindSpecialTextures: boolean = true) {
+		if (this.instancedBundle != undefined) {
+			this.instancedBundle.graphicsObject.shaderProgram = shaderProgram;
+			this.instancedBundle.draw(bindSpecialTextures);
 		}
 	}
 }
