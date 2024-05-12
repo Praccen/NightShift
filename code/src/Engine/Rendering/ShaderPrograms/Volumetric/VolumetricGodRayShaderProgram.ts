@@ -191,7 +191,7 @@ vec4 CalcPointLight(PointLight light, vec3 fragmentPos) {
 
 		// attenuation = attenuation * abs(((numberPlanes / 2.0) - float(instanceID))) * 0.05;
 
-		return vec4(light.colour * attenuation, 0.03);
+		return vec4(light.colour * attenuation, 0.2);
 	} 
 	return vec4(0.0, 0.0, 0.0, 0.0);
 }

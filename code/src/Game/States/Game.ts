@@ -200,7 +200,7 @@ export default class Game extends State {
 			rolloffFactor: 1,
 		});
 
-		let colour = vec3.fromValues(0.15, 0.15, 0.15);
+		let colour = vec3.fromValues(0.25, 0.25, 0.25);
 		// let colour = vec3.fromValues(0.0, 0.0, 0.0);
 		this.rendering.clearColour.r = colour[0];
 		this.rendering.clearColour.g = colour[1];

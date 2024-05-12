@@ -1,4 +1,4 @@
-import { ReadonlyVec3, quat, vec3 } from "gl-matrix";
+import { ReadonlyVec3, mat4, quat, vec3 } from "gl-matrix";
 import { ComponentTypeEnum } from "../Engine/ECS/Components/Component";
 import PositionComponent from "../Engine/ECS/Components/PositionComponent";
 import Entity from "../Engine/ECS/Entity";
@@ -32,6 +32,7 @@ export default class Spider {
 	private bodyPosComp: PositionComponent;
 	private parentPosComp: PositionParentComponent;
 	private bodyMovComp: MovementComponent;
+	private pointLightComp: PointLightComponent;
 	private legs: Array<Leg>;
 	private spiderForward: vec3;
 	private spiderUp: vec3;
@@ -68,7 +69,7 @@ export default class Spider {
 			new GraphicsComponent(
 				this.game.rendering.scene.getNewMesh(
 					"Assets/objs/SpiderBody.obj",
-					"CSS:rgb(0,0,0)",
+					"CSS:rgb(30,30,30)",
 					"CSS:rgb(0,0,0)"
 				)
 			)
@@ -89,10 +90,10 @@ export default class Spider {
 		collisionComp.mass = 100.0;
 		collisionComp.isImmovable = true;
 
-        let pointLightComp = this.game.ecsManager.addComponent(this.bodyEntity, new PointLightComponent(this.game.scene.getNewPointLight())) as PointLightComponent;
-        pointLightComp.pointLight.castShadow = true;
-        vec3.set(pointLightComp.pointLight.colour, 0.8, 0.0, 0.0);
-        vec3.set(pointLightComp.posOffset, 0.0, 2.5, 0.0);
+        this.pointLightComp = this.game.ecsManager.addComponent(this.bodyEntity, new PointLightComponent(this.game.scene.getNewPointLight())) as PointLightComponent;
+        this.pointLightComp.pointLight.castShadow = true;
+        vec3.set(this.pointLightComp.pointLight.colour, 1.0, 0.0, 0.0);
+        vec3.set(this.pointLightComp.posOffset, 0.0, 0.0, 2.7);
 
 		// let positionDisplayEntity = game.ecsManager.createEntity();
 		// this.game.ecsManager.addComponent(positionDisplayEntity, this.parentPosComp);
@@ -190,7 +191,7 @@ export default class Spider {
 			leg.legMoveTimer = 1.0;
 		}
 
-		this.spiderForward = vec3.fromValues(0.0, 0.0, -1.0);
+		this.spiderForward = vec3.fromValues(0.0, 0.0, 1.0);
 		this.spiderUp = vec3.fromValues(0.0, 1.0, 0.0);
 		this.spiderRight = vec3.fromValues(1.0, 0.0, 0.0);
 	}
@@ -210,7 +211,7 @@ export default class Spider {
 		vec3.normalize(dir, dir);
 		let collisionObjects = this.game.objectPlacer.getEntitiesOfType("Box || Box Gray || Shelf");
 
-		if (vec3.squaredDistance(this.targetPos, this.parentPosComp.position) > 1.0) {
+		if (vec3.squaredDistance(this.targetPos, this.parentPosComp.position) > 2.0) {
 			this.game.playStepping.pos(
 				this.parentPosComp.position[0],
 				this.parentPosComp.position[1],

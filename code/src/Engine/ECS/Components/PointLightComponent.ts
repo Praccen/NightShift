@@ -8,7 +8,7 @@ import { Component, ComponentTypeEnum } from "./Component";
 
 export default class PointLightComponent extends Component {
 	pointLight: PointLight;
-	posOffset: vec3;
+	posOffset: vec3; // This is in local space of the entity, so this will be multiplied with whatever transformation matrices in effect
 
 	constructor(pointLight: PointLight) {
 		super(ComponentTypeEnum.POINTLIGHT);

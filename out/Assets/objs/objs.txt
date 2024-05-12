@@ -10,5 +10,4 @@ roof.obj
 shelf.obj
 sphere.mtl
 sphere.obj
-SpiderBody.mtl
 SpiderBody.obj

@@ -19,20 +19,14 @@ export default class GraphicsSystem extends System {
 
 			let graphComp = <GraphicsComponent>e.getComponent(ComponentTypeEnum.GRAPHICS);
 
-			let posParentComp = <PositionParentComponent>e.getComponent(ComponentTypeEnum.POSITIONPARENT);
-
 			if (graphComp && posComp) {
 				graphComp.bundle.modelMatrix = posComp.matrix;
 			}
 
 			let pointLightComp = <PointLightComponent>e.getComponent(ComponentTypeEnum.POINTLIGHT);
 
-			if (pointLightComp && (posComp || posParentComp)) {
-				vec3.add(
-					pointLightComp.pointLight.position,
-					ECSUtils.CalculatePosition(e),
-					pointLightComp.posOffset
-				);
+			if (pointLightComp && (posComp)) {
+				vec3.transformMat4(pointLightComp.pointLight.position, pointLightComp.posOffset, posComp.matrix);
 			}
 		}
 	}
