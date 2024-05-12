@@ -354,11 +354,12 @@ export default class Input {
 
 				if (gp.buttons[0].value > 0.5) {
 					this.buttons.set("A", true);
-					console.log("Pressed A");
 				}
 				if (gp.buttons[1].value > 0.5) {
 					this.buttons.set("B", true);
-					console.log("Pressed B");
+				}
+				if (gp.buttons[2].value > 0.5) {
+					this.buttons.set("C", true);
 				}
 			}
 		}

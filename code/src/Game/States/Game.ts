@@ -288,7 +288,7 @@ export default class Game extends State {
 			this.spider.setTarget(this.player.positionComp.position);
 		}
 
-		if (input.keys["Y"]) {
+		if (input.keys["Y"] || input.buttons.get("C")) {
 			let ray = new Ray();
 			ray.setStartAndDir(this.rendering.camera.getPosition(), this.rendering.camera.getDir());
 			let collisionObjects = this.objectPlacer.getEntitiesOfType("Box || Box Gray || Shelf");
