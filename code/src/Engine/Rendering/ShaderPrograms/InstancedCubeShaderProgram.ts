@@ -118,6 +118,6 @@ class InstancedCubeShaderProgram extends ShaderProgram {
 
 export let instancedCubeShaderProgram: InstancedCubeShaderProgram = null;
 
-export let createParticleShaderProgram = function () {
+export let createInstancedCubeShaderProgram = function () {
 	instancedCubeShaderProgram = new InstancedCubeShaderProgram();
 };

@@ -17,6 +17,7 @@ import { createBlurTransparency } from "./Engine/Rendering/ShaderPrograms/PostPr
 import { glMatrix } from "gl-matrix";
 import { createPointShadowPass } from "./Engine/Rendering/ShaderPrograms/ShadowMapping/PointShadowPass";
 import { createVolumetricGodRayShaderProgram } from "./Engine/Rendering/ShaderPrograms/Volumetric/VolumetricGodRayShaderProgram";
+import { createInstancedCubeShaderProgram } from "./Engine/Rendering/ShaderPrograms/InstancedCubeShaderProgram";
 
 // Globals
 export let gl: WebGL2RenderingContext;
@@ -111,6 +112,7 @@ function createShaders() {
 	createSimpleShaderProgram();
 	createSkyboxShaderProgram();
 	createVolumetricGodRayShaderProgram();
+	createInstancedCubeShaderProgram();
 }
 
 let gameMachine: GameMachine;
