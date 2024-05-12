@@ -66,30 +66,25 @@ export default class Box {
 	}
 
 	setColor() {
-		let setColor: string = "CSS:rgb(255,255,255)";
 		switch (this.color) {
 			case COLOR.RED:
-				setColor = "CSS:rgb(255,0,0)";
+				this.graphComp.bundle.emissionColor = vec3.fromValues(1, 0, 0);
 				break;
 			case COLOR.GREEN:
-				setColor = "CSS:rgb(0,255,0)";
+				this.graphComp.bundle.emissionColor = vec3.fromValues(0, 1, 0);
 				break;
 			case COLOR.BLUE:
-				setColor = "CSS:rgb(0,0,255)";
-
+				this.graphComp.bundle.emissionColor = vec3.fromValues(0, 0, 1);
 				break;
 			case COLOR.ORANGE:
-				setColor = "CSS:rgb(255,255,0)";
-
+				this.graphComp.bundle.emissionColor = vec3.fromValues(1, 1, 0);
 				break;
 			case COLOR.PINK:
-				setColor = "CSS:rgb(252,15,192)";
-
+				this.graphComp.bundle.emissionColor = vec3.fromValues(1, 0, 0.5);
 				break;
 			case COLOR.PURPLE:
-				setColor = "CSS:rgb(255,0,255)";
+				this.graphComp.bundle.emissionColor = vec3.fromValues(0.5, 0, 1);
 				break;
 		}
-		this.graphComp.bundle.diffuse = this.game.stateAccessible.textureStore.getTexture(setColor);
 	}
 }

@@ -329,7 +329,11 @@ export default class Game extends State {
 		}
 
 		this.boxes.forEach((box) => box.update(dt));
-		this.uncollectedBoxed.forEach((box) => box.update(dt));
+		this.uncollectedBoxed.forEach((box) => {box.update(dt); vec3.set(box.graphComp.bundle.emissionColor, 0.0, 0.0, 0.0);});
+		if (this.player.showCards) {
+			this.uncollectedBoxed.forEach((box) => {box.setColor()});
+		}
+		
 		this.zone.update(dt);
 
 		this.ecsManager.update(dt);

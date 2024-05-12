@@ -188,7 +188,7 @@ export default class PlayerController {
 							this.game.rendering.camera.getPosition(),
 							this.game.rendering.camera.getDir()
 						);
-						let rayCastResult = ECSUtils.RayCastAgainstEntityList(ray, objective_boxes);
+						let rayCastResult = ECSUtils.RayCastAgainstEntityList(ray, objective_boxes, 2.0);
 						this.selectedBox = this.game.uncollectedBoxed.get(rayCastResult.eId);
 						if (this.selectedBox == undefined) {
 							this.selectedBox = this.game.boxes.get(rayCastResult.eId);

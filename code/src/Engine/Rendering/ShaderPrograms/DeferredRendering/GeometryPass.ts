@@ -75,6 +75,9 @@ void main() {
 	else if (emissionValue > 0.0) {
 		gEmission.rgb = emissionMapValues;
 	}
+	else if (emissionColor.r > 0.0 || emissionColor.g > 0.0 || emissionColor.b > 0.0) {
+		gEmission.rgb = emissionColor.rgb;
+	}
     gColourSpec.a = texture(material.specular, texCoords).r;
 	
 	gPosition.rgb = fragPos;

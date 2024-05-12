@@ -111,7 +111,7 @@ export default class Card {
 	createNewCardShape(box: Box, cardNr: number): Entity {
 		let cardEntity = this.game.ecsManager.createEntity();
 		let graphComp = new GraphicsComponent(
-			this.game.scene.getNewPhongQuad("CSS:rgb(0,0,0)", "CSS:rgb(0,0,0)", "CSS:rgb(255,255,255)")
+			this.game.scene.getNewPhongQuad("CSS:rgb(255,255,255)", "CSS:rgb(0,0,0)", "CSS:rgb(255,255,255)")
 		);
 		switch (box.color) {
 			case COLOR.RED:
@@ -127,10 +127,10 @@ export default class Card {
 				graphComp.bundle.emissionColor = vec3.fromValues(1, 1, 0);
 				break;
 			case COLOR.PINK:
-				graphComp.bundle.emissionColor = vec3.fromValues(1, 0, 0);
+				graphComp.bundle.emissionColor = vec3.fromValues(1, 0, 0.5);
 				break;
 			case COLOR.PURPLE:
-				graphComp.bundle.emissionColor = vec3.fromValues(1, 0, 1);
+				graphComp.bundle.emissionColor = vec3.fromValues(0.5, 0, 1);
 				break;
 		}
 		switch (cardNr) {
