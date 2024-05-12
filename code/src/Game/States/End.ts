@@ -26,6 +26,7 @@ export default class End extends State {
 		this.introDiv.getElement().style.borderRadius = "10px";
 		this.introDiv.getElement().style.overflowY = "auto";
 		this.introDiv.getElement().style.overflowWrap = "break-word";
+		this.introText = this.overlayRendering.getNew2DText(this.introDiv);
 
 		let playButton = this.overlayRendering.getNewButton();
 		playButton.position[0] = 0.5;
@@ -54,7 +55,6 @@ export default class End extends State {
 	async init() {
 		this.overlayRendering.show();
 		document.exitPointerLock();
-		this.introText = this.overlayRendering.getNew2DText(this.introDiv);
 		if (!this.sa.caughtBySpider) {
 			this.introText.textString = `Great job once again! No problem, right?
 
@@ -65,13 +65,12 @@ FINAL PAYCHECK:
 PAYCHECK:
 Boxes___________  ${this.sa.endTotalBoxes} * $100
 TOTAL:
-$${this.sa.endTotalBoxes * 100}
-`;
+$${this.sa.endTotalBoxes * 100}`;
 		} else {
 			this.introText.textString = `*after the vicious attack from that monster your
 wake up in the hospital, you boss standing over you*
 
-Ouf, that bite looks ROUGH! Sorry about that!
+Ouf, that bite looks ROUGH, so sorry about that!
 But don't worry, they said it is not venomous and I've
 already payed for the hospital bill. It will be
 coming out of your salary though.. See you around!
@@ -80,14 +79,13 @@ PAYCHECK:
 Boxes___________  ${this.sa.endTotalBoxes} * $100
 Hospital bills__ -$200
 TOTAL:
-$${this.sa.endTotalBoxes * 100 - 200}
-
-`;
+$${this.sa.endTotalBoxes * 100 - 200}`;
 		}
 	}
 
 	reset() {
 		this.overlayRendering.hide();
+		this.introText.textString = "";
 	}
 
 	update(dt: number) {}

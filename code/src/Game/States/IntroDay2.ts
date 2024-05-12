@@ -41,7 +41,7 @@ Go get matching boxes and put them in the delivery zone.
 		playButton.position[0] = 0.5;
 		playButton.position[1] = 0.8;
 		playButton.center = true;
-		playButton.textString = "Start";
+		playButton.textString = "Accept";
 
 		let self = this;
 		playButton.onClick(function () {
@@ -54,7 +54,7 @@ Go get matching boxes and put them in the delivery zone.
 		backButton.position[0] = 0.5;
 		backButton.position[1] = 0.9;
 		backButton.center = true;
-		backButton.textString = "Back";
+		backButton.textString = "Decline";
 
 		backButton.onClick(function () {
 			self.gotoState = StatesEnum.MAINMENU;

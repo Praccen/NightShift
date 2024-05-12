@@ -48,7 +48,7 @@ export default class Game extends State {
 	playStep: Howl;
 	playStepping: Howl;
 
-	caughtBySpider: boolean = false;
+	eaten: boolean = false;
 
 	public static getInstance(sa: StateAccessible): Game {
 		if (!Game.instance) {
@@ -262,6 +262,8 @@ export default class Game extends State {
 		}
 		input.touchUsed = false;
 		input.drawTouchControls();
+		this.stateAccessible.caughtBySpider = false;
+		this.stateAccessible.endTotalBoxes = 0;
 	}
 
 	onExit(e: BeforeUnloadEvent) {
@@ -332,9 +334,9 @@ export default class Game extends State {
 
 		this.ecsManager.update(dt);
 
-		if (this.boxesCollectedCurrent == 3 && this.boxes.size >= 3) {
+		if (this.boxesCollectedCurrent == 1 && this.boxes.size >= 3) {
 			this.totalBoxes += 3;
-			if (this.totalBoxes >= 9) {
+			if (this.totalBoxes >= 1) {
 				if (this.stateAccessible.level.includes("Level1")) {
 					this.gotoState = StatesEnum.INTRO2;
 				} else if (this.stateAccessible.level.includes("Level2")) {
@@ -356,6 +358,10 @@ export default class Game extends State {
 		Howler.pos(...this.rendering.camera.getPosition());
 
 		Howler.orientation(...this.rendering.camera.getDir());
+		if (this.eaten) {
+			this.stateAccessible.caughtBySpider = true;
+			this.gotoState = StatesEnum.END;
+		}
 	}
 
 	prepareDraw(dt: number, updateCameraFocus: boolean = true): void {

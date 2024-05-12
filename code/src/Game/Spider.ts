@@ -91,10 +91,13 @@ export default class Spider {
 		collisionComp.mass = 100.0;
 		collisionComp.isImmovable = true;
 
-        this.pointLightComp = this.game.ecsManager.addComponent(this.bodyEntity, new PointLightComponent(this.game.scene.getNewPointLight())) as PointLightComponent;
-        this.pointLightComp.pointLight.castShadow = true;
-        vec3.set(this.pointLightComp.pointLight.colour, 1.0, 0.0, 0.0);
-        vec3.set(this.pointLightComp.posOffset, 0.0, 0.0, 2.7);
+		this.pointLightComp = this.game.ecsManager.addComponent(
+			this.bodyEntity,
+			new PointLightComponent(this.game.scene.getNewPointLight())
+		) as PointLightComponent;
+		this.pointLightComp.pointLight.castShadow = true;
+		vec3.set(this.pointLightComp.pointLight.colour, 1.0, 0.0, 0.0);
+		vec3.set(this.pointLightComp.posOffset, 0.0, 0.0, 2.7);
 
 		// let positionDisplayEntity = game.ecsManager.createEntity();
 		// this.game.ecsManager.addComponent(positionDisplayEntity, this.parentPosComp);
@@ -375,6 +378,9 @@ export default class Spider {
 			quat.rotateY(jointPosComp.rotation, jointPosComp.rotation, -yaw);
 			quat.rotateZ(jointPosComp.rotation, jointPosComp.rotation, -pitch);
 			// -------------------------------------------------
+		}
+		if (vec3.dist(this.parentPosComp.position, this.game.player.positionComp.position) <= 3.7) {
+			this.game.eaten = true;
 		}
 	}
 }
