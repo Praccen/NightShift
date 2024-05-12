@@ -19,7 +19,7 @@ export default class LevelSelect extends State {
 			level1Button.position[0] = 0.5;
 			level1Button.position[1] = 0.2 + i * 0.1;
 			level1Button.center = true;
-			level1Button.textString = "Level " + i;
+			level1Button.textString = ["Day Shift", "Night Shift"][i - 1];
 
 			let self = this;
 			level1Button.onClick(function () {
