@@ -158,7 +158,7 @@ export default class PlayerController {
 			}
 
 			// Look at cards
-			if (input.keys["C"] || input.buttons.get("B")) {
+			if ((input.keys["C"] || input.buttons.get("B")) && !this.isHoldingBox) {
 				if (!this.cardsToggled) {
 					this.showCards = this.showCards ? false : true;
 				}
@@ -181,6 +181,7 @@ export default class PlayerController {
 			if (input.keys["E"]) {
 				if (!this.wasPicked) {
 					if (!this.isHoldingBox) {
+						this.showCards = false;
 						let objective_boxes = this.game.objectPlacer.getEntitiesOfType("Box Objective");
 
 						let ray = new Ray();
@@ -200,7 +201,7 @@ export default class PlayerController {
 							}
 						}
 					} else {
-						this.selectedBox.throwBox(forward)
+						this.selectedBox.throwBox(forward);
 						this.isHoldingBox = false;
 					}
 				}
