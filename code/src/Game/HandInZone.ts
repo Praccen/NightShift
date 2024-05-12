@@ -56,7 +56,7 @@ export default class Box {
 				box.color == this.game.player.cards[2].boxes[0].color
 			) {
 				if (this.posComp != undefined && box.posComp != undefined) {
-					if (vec3.dist(vec3.mul(vec3.create(), this.posComp.position, vec3.fromValues(0.0, 1.0, 0.0)), vec3.mul(vec3.create(), box.posComp.position, vec3.fromValues(0.0, 1.0, 0.0))) < 1.5) {
+					if (vec3.dist(vec3.mul(vec3.create(), this.posComp.position, vec3.fromValues(1.0, 0.0, 1.0)), vec3.mul(vec3.create(), box.posComp.position, vec3.fromValues(1.0, 0.0, 1.0))) < 1.5) {
 						box.pickedUp = false;
 						vec3.mul(box.moveComp.velocity, box.moveComp.velocity, vec3.fromValues(0.0, 1.0, 0.0))
 						if (vec3.squaredLength(box.moveComp.velocity) < 0.0001) {

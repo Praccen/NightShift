@@ -54,11 +54,11 @@ export default class Box {
 			let forward = vec3.clone(this.game.rendering.camera.getDir());
 			let camPos = vec3.clone(this.game.rendering.camera.getPosition());
 			if (this.posComp != undefined) {
-				let walls = this.game.objectPlacer.getEntitiesOfType("Box Gray");
+				let walls = this.game.objectPlacer.getEntitiesOfType("Box Gray || Shelf");
 				if (walls != undefined) {
-					vec3.copy(this.posComp.position, camPos);
-					let time = ECSUtils.CalculateCollisionTime(this.entity, forward, walls, 1.0);
-					vec3.scaleAndAdd(this.posComp.position, camPos, forward, Math.min(time.time, 1.0));
+					vec3.add(this.posComp.position, camPos, vec3.fromValues(0.0, -1.0, 0.0));
+					let time = ECSUtils.CalculateCollisionTime(this.entity, forward, walls, 2.0);
+					vec3.scaleAndAdd(this.posComp.position, this.posComp.position, forward, Math.min(time.time, 2.0));
 				}
 			}
 		}
