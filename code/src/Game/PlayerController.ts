@@ -165,70 +165,70 @@ export default class PlayerController {
 			if (input.keys["D"]) {
 				vec3.add(accVec, accVec, right);
 			}
-
-			// Look at cards
-			this.showCardsCooldown -= dt;
-			if (
-				(input.keys["C"] || input.buttons.get("B")) &&
-				!this.isHoldingBox &&
-				this.showCardsCooldown <= 0
-			) {
-				if (!this.cardsToggled) {
-					this.showCards = this.showCards ? false : true;
-					this.showCardsCooldown = 0.5;
-				}
-				this.cardsToggled = true;
-			} else {
-				this.cardsToggled = false;
-			}
-
-			// Rotate cards
-			if (input.keys["R"]) {
-				if (!this.wasRotated) {
-					this.selectedCard = (this.selectedCard % this.cards.length) + 1;
-				}
-				this.wasRotated = true;
-			} else {
-				this.wasRotated = false;
-			}
-
-			// Pickup box
-			if (input.keys["E"]) {
-				if (!this.wasPicked) {
-					if (!this.isHoldingBox) {
-						let objective_boxes = this.game.objectPlacer.getEntitiesOfType("Box Objective");
-						let ray = new Ray();
-						ray.setStartAndDir(
-							this.game.rendering.camera.getPosition(),
-							this.game.rendering.camera.getDir()
-						);
-						let rayCastResult = ECSUtils.RayCastAgainstEntityList(ray, objective_boxes, 2.0);
-						this.selectedBox = this.game.uncollectedBoxed.get(rayCastResult.eId);
-						if (this.selectedBox == undefined) {
-							this.selectedBox = this.game.boxes.get(rayCastResult.eId);
-						}
-						if (this.selectedBox != undefined && rayCastResult.distance! < 2.0) {
-							if (!this.selectedBox.collected) {
-								this.showCards = false;
-								this.selectedBox.pickedUp = true;
-								this.isHoldingBox = true;
-							}
-						}
-					} else {
-						this.selectedBox.throwBox(forward);
-						this.isHoldingBox = false;
-					}
-				}
-				this.wasPicked = true;
-			} else {
-				this.wasPicked = false;
-			}
 		}
 
 		if (vec3.sqrLen(accVec) > 1.0) {
 			vec3.normalize(accVec, accVec);
 		}
 		vec3.copy(this.movComp.accelerationDirection, accVec);
+
+		// Look at cards
+		this.showCardsCooldown -= dt;
+		if (
+			(input.keys["C"] || input.buttons.get("B")) &&
+			!this.isHoldingBox &&
+			this.showCardsCooldown <= 0
+		) {
+			if (!this.cardsToggled) {
+				this.showCards = this.showCards ? false : true;
+				this.showCardsCooldown = 0.5;
+			}
+			this.cardsToggled = true;
+		} else {
+			this.cardsToggled = false;
+		}
+
+		// Rotate cards
+		if (input.keys["R"]) {
+			if (!this.wasRotated) {
+				this.selectedCard = (this.selectedCard % this.cards.length) + 1;
+			}
+			this.wasRotated = true;
+		} else {
+			this.wasRotated = false;
+		}
+
+		// Pickup box
+		if (input.keys["E"]) {
+			if (!this.wasPicked) {
+				if (!this.isHoldingBox) {
+					let objective_boxes = this.game.objectPlacer.getEntitiesOfType("Box Objective");
+					let ray = new Ray();
+					ray.setStartAndDir(
+						this.game.rendering.camera.getPosition(),
+						this.game.rendering.camera.getDir()
+					);
+					let rayCastResult = ECSUtils.RayCastAgainstEntityList(ray, objective_boxes, 2.0);
+					this.selectedBox = this.game.uncollectedBoxed.get(rayCastResult.eId);
+					if (this.selectedBox == undefined) {
+						this.selectedBox = this.game.boxes.get(rayCastResult.eId);
+					}
+					if (this.selectedBox != undefined && rayCastResult.distance! < 2.0) {
+						if (!this.selectedBox.collected) {
+							this.showCards = false;
+							this.selectedBox.pickedUp = true;
+							this.isHoldingBox = true;
+						}
+					}
+				} else {
+					this.selectedBox.throwBox(forward);
+					this.isHoldingBox = false;
+				}
+			}
+			this.wasPicked = true;
+		} else {
+			this.wasPicked = false;
+		}
 
 		// Jumping
 		if (input.keys[" "] || input.buttons.get("A")) {

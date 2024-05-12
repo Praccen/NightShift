@@ -62,6 +62,9 @@ export default class Box {
 							vec3.mul(vec3.create(), box.posComp.position, vec3.fromValues(1.0, 0.0, 1.0))
 						) < 1.5
 					) {
+						if (box.pickedUp) {
+							this.game.player.isHoldingBox = false;
+						}
 						box.pickedUp = false;
 						vec3.mul(box.moveComp.velocity, box.moveComp.velocity, vec3.fromValues(0.0, 1.0, 0.0));
 						if (vec3.squaredLength(box.moveComp.velocity) < 0.0001) {
