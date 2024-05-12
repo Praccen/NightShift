@@ -17,7 +17,7 @@ export default class DirectionalShadowRenderPass {
 	constructor() {
 		// ---- Shadow mapping ----
 		this.shadowResolution = 4096;
-		this.shadowOffset = 20.0;
+		this.shadowOffset = 40.0;
 		this.shadowBuffer = new Framebuffer(
 			this.shadowResolution,
 			this.shadowResolution,

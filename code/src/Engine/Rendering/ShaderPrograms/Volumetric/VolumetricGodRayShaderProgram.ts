@@ -52,12 +52,16 @@ class VolumetricGodRaysShaderProgram extends ShaderProgram {
 		this.setUniformLocation("fogMaxDistance");
 		this.setUniformLocation("numPlanes");
 		this.setUniformLocation("fov");
+		this.setUniformLocation("depthMap");
+
+		gl.uniform1i(this.getUniformLocation("depthMap")[0], 0);
+		
 
 		this.setUniformLocation("nrOfPointLights");
 
 		for (let i = 0; i < pointShadowsToAllocate; i++) {
 			this.setUniformLocation("pointDepthMaps[" + i + "]");
-			gl.uniform1i(this.getUniformLocation("pointDepthMaps[" + i + "]")[0], i);
+			gl.uniform1i(this.getUniformLocation("pointDepthMaps[" + i + "]")[0], i + 1);
 		}
 
 		for (let i = 0; i < pointLightsToAllocate; i++) {
@@ -70,6 +74,11 @@ class VolumetricGodRaysShaderProgram extends ShaderProgram {
 
 			this.setUniformLocation("pointLights[" + i + "].pointDepthMapIndex");
 		}
+
+		this.setUniformLocation("directionalLight.direction");
+		this.setUniformLocation("directionalLight.colour");
+		this.setUniformLocation("directionalLight.ambientMultiplier");
+		this.setUniformLocation("lightSpaceMatrix");
 	}
 
 	setupVertexAttributePointers(): void {
@@ -98,6 +107,7 @@ flat in float numberPlanes;
 flat in float fogMD;
 flat in int instanceID;
 
+uniform sampler2D depthMap;
 uniform samplerCube pointDepthMaps[NR_POINT_SHADOWS];
 
 struct PointLight {
@@ -117,6 +127,8 @@ struct DirectionalLight {
 	float ambientMultiplier;
 };
 
+uniform DirectionalLight directionalLight;
+uniform mat4 lightSpaceMatrix;
 uniform PointLight pointLights[NR_POINT_LIGHTS];
 uniform int nrOfPointLights;
 
@@ -163,8 +175,7 @@ float CalcPointShadow(PointLight light, vec3 fragmentPos) {
     // now get current linear depth as the length between the fragment and light position
     float currentDepth = length(fragToLight);
     // now test for shadows
-    float bias = 0.0;
-    float shadow = currentDepth -  bias > closestDepth ? 1.0 : 0.0;
+    float shadow = currentDepth > closestDepth ? 1.0 : 0.0;
 
     return shadow;
 }
@@ -182,10 +193,62 @@ vec4 CalcPointLight(PointLight light, vec3 fragmentPos) {
 	return vec4(0.0, 0.0, 0.0, 0.0);
 }
 
+float CalcShadow(vec4 lightSpaceFragPos) {
+	// perform perspective divide
+    vec3 projCoords = lightSpaceFragPos.xyz / lightSpaceFragPos.w;
+
+    // transform to [0,1] range
+    projCoords = projCoords * 0.5 + 0.5;
+
+	if (projCoords.z > 1.0) {
+		return 0.0;
+	}
+
+    // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
+    float closestDepth = texture(depthMap, projCoords.xy).r; 
+
+    // get depth of current fragment from light's perspective
+    float currentDepth = projCoords.z;
+
+    // check whether current frag pos is in shadow	
+	float shadow = 0.0;
+	ivec2 textureSize = textureSize(depthMap, 0);
+	vec2 texelSize = vec2(1.0 / float(textureSize.x), 1.0 / float(textureSize.y));
+	for(int x = -1; x <= 1; ++x)
+	{
+		for(int y = -1; y <= 1; ++y)
+		{
+			float pcfDepth = texture(depthMap, projCoords.xy + vec2(x, y) * texelSize).r; 
+			shadow += currentDepth > pcfDepth ? 1.0 : 0.0;
+		}    
+	}
+	shadow = shadow / 9.0;
+
+    return shadow;
+}
+
+vec4 CalcDirectionalLight(DirectionalLight light, vec4 lightSpaceFragPos) {
+	float shadow = CalcShadow(lightSpaceFragPos);
+	float strength = 0.015 * (1.0 - shadow);
+	// if (shadow > 0.0 && shadow < 1.0) {
+	// 	strength = 0.3; // PCF gave partly in shadow, make god rays
+	// }
+	vec4 lighting = vec4(light.colour, strength);
+	return lighting;
+}
+
 void main()
 {
     vec4 result = vec4(0.0, 0.0, 0.0, 0.0);
 	int effectedCounter = 0;
+	
+	vec4 lightSpaceFragPos = (lightSpaceMatrix * vec4(fragPos, 1.0f));
+	vec4 dirLightResult = CalcDirectionalLight(directionalLight, lightSpaceFragPos);
+	if (dirLightResult.a > 0.0) {
+		effectedCounter++;
+		result += dirLightResult;
+	}
+
 	for (int i = 0; i < nrOfPointLights; i++) {
 		vec4 lightResult = CalcPointLight(pointLights[i], fragPos);
 		if (lightResult.a > 0.0) {

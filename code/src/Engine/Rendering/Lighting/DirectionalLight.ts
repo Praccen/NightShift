@@ -9,27 +9,21 @@ export default class DirectionalLight {
 
 	lightProjectionBoxSideLength: number;
 
-	private gl: WebGL2RenderingContext;
-	private shaderProgram: ShaderProgram;
-
-	constructor(gl: WebGL2RenderingContext, shaderProgram: ShaderProgram) {
-		gl = gl;
-		this.shaderProgram = shaderProgram;
-
+	constructor() {
 		this.direction = vec3.fromValues(0.0, -1.0, -0.5);
 		this.colour = vec3.fromValues(0.2, 0.2, 0.2);
 		this.ambientMultiplier = 0.1;
 		this.lightProjectionBoxSideLength = 60.0;
 	}
 
-	bind() {
+	bind(shaderProgram: ShaderProgram) {
 		gl.uniform3fv(
-			this.shaderProgram.getUniformLocation("directionalLight.direction")[0],
+			shaderProgram.getUniformLocation("directionalLight.direction")[0],
 			vec3.normalize(this.direction, this.direction)
 		);
-		gl.uniform3fv(this.shaderProgram.getUniformLocation("directionalLight.colour")[0], this.colour);
+		gl.uniform3fv(shaderProgram.getUniformLocation("directionalLight.colour")[0], this.colour);
 		gl.uniform1f(
-			this.shaderProgram.getUniformLocation("directionalLight.ambientMultiplier")[0],
+			shaderProgram.getUniformLocation("directionalLight.ambientMultiplier")[0],
 			this.ambientMultiplier
 		);
 	}

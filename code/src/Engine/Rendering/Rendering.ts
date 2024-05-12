@@ -114,7 +114,7 @@ export default class Rendering {
 		// ----------------
 
 		// ---- Volumetric God Rays ----
-		this.volumetricGodRayPass = new VolumetricGodRayPass();
+		this.volumetricGodRayPass = new VolumetricGodRayPass(this.directionalShadowRenderPass.shadowBuffer.depthTexture);
 		// -----------------------------
 
 		// ---- Post processing ----

@@ -284,7 +284,7 @@ export default class Game extends State {
 			this.oWasPressed = false;
 		}
 
-		if (input.keys["Q"]) {
+		if (input.keys["Q"] || input.buttons.get("B")) {
 			this.spider.setTarget(this.player.positionComp.position);
 		}
 

@@ -46,7 +46,7 @@ export default class Scene {
 		// --------------------------
 
 		// ---- Lighting ----
-		this.directionalLight = new DirectionalLight(gl, lightingPass);
+		this.directionalLight = new DirectionalLight();
 		this.pointLights = new Array<PointLight>();
 		// ------------------
 
