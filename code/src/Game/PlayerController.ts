@@ -90,6 +90,13 @@ export default class PlayerController {
 		vec3.set(this.movComp.velocity, 0.0, 0.0, 0.0);
 		this.setCameraDirection(vec3.fromValues(0.0, 0.0, -1.0));
 		vec2.zero(this.mouseMovement);
+		this.selectedCard = 0;
+		this.wasRotated = true;
+		this.showCards = false;
+		this.showCardsCooldown = 0;
+		this.cardsToggled = true;
+		this.wasPicked = true;
+		this.isHoldingBox = false;
 	}
 
 	private setCameraDirection(direction: vec3) {
