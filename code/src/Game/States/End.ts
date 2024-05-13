@@ -37,6 +37,7 @@ export default class End extends State {
 		let self = this;
 		backButton.onClick(function () {
 			self.gotoState = StatesEnum.MAINMENU;
+			window.location.reload();
 		});
 	}
 
