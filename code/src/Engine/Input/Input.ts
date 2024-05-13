@@ -173,7 +173,7 @@ export default class Input {
 		this.aButton.position[0] = 0.65;
 		this.aButton.position[1] = 0.8;
 		this.aButton.size = 1920 * this.buttonRadius * 2.0;
-		this.aButton.textString = "🔴";
+		this.aButton.textString = "🟢";
 		this.aButton.getElement().style.opacity = "50%";
 		this.aButton.setHidden(true);
 
@@ -193,7 +193,7 @@ export default class Input {
 		this.cButton.position[0] = 0.8;
 		this.cButton.position[1] = 0.5;
 		this.cButton.size = 1920 * this.buttonRadius * 2.0;
-		this.cButton.textString = "🟢";
+		this.cButton.textString = "🔴";
 		this.cButton.getElement().style.opacity = "50%";
 		this.cButton.setHidden(true);
 	}

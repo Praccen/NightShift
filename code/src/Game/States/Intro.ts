@@ -25,13 +25,16 @@ export default class Intro extends State {
 		introDiv.getElement().style.overflowWrap = "break-word";
 
 		let introText = this.overlayRendering.getNew2DText(introDiv);
-		introText.textString = `Hello! Welcome to your new job as a personal shopper.
+		introText.textString = `Hello! Welcome to your new job as a shopping assistant.
 You will get orders of three boxes to pick up at a time.
 		
-Look at the orders by pressing C.
+Look at the orders by pressing [C]/🖱(right)/🔴.
 
 Go get matching boxes and put them in the delivery zone.
 
+You pick up and throw boxes on [E]/🖱(left)/🔵.
+
+Because jumping is fun, you can do that on [Space]/🟢.
 
 		`;
 
