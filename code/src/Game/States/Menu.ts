@@ -2,6 +2,7 @@ import { OverlayRendering } from "../../Engine/Rendering/GUI/OverlayRendering";
 import State, { StatesEnum } from "../../Engine/States/State";
 import { gl } from "../../main";
 import { StateAccessible } from "../GameMachine";
+import { Howler } from "howler";
 
 export default class Menu extends State {
 	private overlayRendering: OverlayRendering;
@@ -59,6 +60,7 @@ export default class Menu extends State {
 		document.exitPointerLock();
 		gl.clearColor(0.0, 0.0, 0.0, 0.0);
 		gl.clear(gl.COLOR_BUFFER_BIT);
+		Howler.stop();
 	}
 
 	reset() {
